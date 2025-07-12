@@ -1,21 +1,11 @@
-FROM php:8.4-fpm
+FROM phpdockerio/php:8.4-fpm
 
-ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN apt-get update \
+    && apt-get -y --no-install-recommends install \
+        php8.4-mysql \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-RUN apt-get update && apt-get install -y \
-    git unzip libicu-dev libpq-dev libzip-dev zip \
-    && docker-php-ext-install intl pdo pdo_mysql zip
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-WORKDIR "/application"
-
-COPY . .
-
-RUN composer install
-
-RUN mkdir -p /var/www/html/var/cache /var/www/html/var/log \
-    && chown -R www-data:www-data /var/www/html/var \
-    && chmod -R 775 /var/www/html/var
-
-USER www-data
+RUN mkdir -p var/cache/prod var/cache/dev var/cache/test var/log \
+   && chown -R www-data:www-data var/ \
+   && chmod -R ug+rwX var/

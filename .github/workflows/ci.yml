@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-php-cs-fixer:
+    name: PHP CS Fixer & PHPUnit (Symfony)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/backend-symfony
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Run PHP CS Fixer
+        run: |
+          composer global require friendsofphp/php-cs-fixer
+          PHP_CS_FIXER_IGNORE_ENV=1 ~/.composer/vendor/bin/php-cs-fixer fix --dry-run --diff src
+  backend-php-psalm:
+    name: PHP Psalm (Symfony)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/backend-symfony
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Run Psalm
+        run: ./bin/psalm --output-format=github
