@@ -83,3 +83,12 @@ jobs:
                   else
                     sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
                   fi
+
+            - name: Run migrations
+              run: |
+                  DOCKER_CMD="cd ${{ secrets.SSH_PATH }} && docker compose exec -T php-fpm ./bin/console doctrine:migrations:migrate -vvv"
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  else
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  fi
