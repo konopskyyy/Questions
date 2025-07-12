@@ -47,12 +47,6 @@ jobs:
             - name: Install sshpass
               run: sudo apt-get update && sudo apt-get install -y sshpass
 
-            - name: Prepare environment variables
-              run: |
-                  echo "APP_ENV=prod" > .env.local
-                  echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env.local
-                  echo "APP_PORT=${{ secrets.APP_PORT }}" >> .env.local
-
             - name: Rsync files to server (excluding var)
               run: |
                   set -e
