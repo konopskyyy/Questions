@@ -53,20 +53,21 @@ jobs:
               run: |
                   echo "APP_ENV=prod" > .env.local
                   echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env.local
+                  echo "APP_PORT=${{ secrets.APP_PORT }}" >> .env.local
                   # Dodaj inne zmienne środowiskowe według potrzeb
 
             - name: Rsync files to server (excluding var)
               run: |
-                  rsync -avz --delete --exclude 'var' ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+                  rsync -avz --delete --exclude 'var' -e "ssh -p ${{ secrets.SSH_PORT }}" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
 
             - name: Create var/cache and var/log on server
               run: |
-                  ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.SSH_PATH }}/var/cache ${{ secrets.SSH_PATH }}/var/log"
+                  ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.SSH_PATH }}/var/cache ${{ secrets.SSH_PATH }}/var/log"
 
             - name: Docker Compose up on server
               run: |
-                  ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.SSH_PATH }} && docker compose up -d"
+                  ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.SSH_PATH }} && docker compose up -d"
 
             - name: Composer install in php-fpm container
               run: |
-                  ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.SSH_PATH }} && docker compose exec -T php-fpm composer install --no-interaction --prefer-dist"
+                  ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.SSH_PATH }} && docker compose exec -T php-fpm composer install --no-interaction --prefer-dist"
