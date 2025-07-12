@@ -44,30 +44,48 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Set up SSH key
-              uses: webfactory/ssh-agent@v0.9.0
-              with:
-                  ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            - name: Install sshpass
+              run: sudo apt-get update && sudo apt-get install -y sshpass
 
             - name: Prepare environment variables
               run: |
                   echo "APP_ENV=prod" > .env.local
                   echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env.local
                   echo "APP_PORT=${{ secrets.APP_PORT }}" >> .env.local
-                  # Dodaj inne zmienne środowiskowe według potrzeb
 
             - name: Rsync files to server (excluding var)
               run: |
-                  rsync -avz --delete --exclude 'var' -e "ssh -p ${{ secrets.SSH_PORT }}" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+                  set -e
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    echo "Połączenie przez klucz SSH działa."
+                    rsync -avz --delete --exclude 'var' -e "ssh -p ${{ secrets.SSH_PORT }}" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+                  else
+                    echo "Klucz SSH nie działa, próbuję przez hasło."
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -avz --delete --exclude 'var' -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+                  fi
 
             - name: Create var/cache and var/log on server
               run: |
-                  ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.SSH_PATH }}/var/cache ${{ secrets.SSH_PATH }}/var/log"
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.SSH_PATH }}/var/cache ${{ secrets.SSH_PATH }}/var/log"
+                  else
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.SSH_PATH }}/var/cache ${{ secrets.SSH_PATH }}/var/log"
+                  fi
 
             - name: Docker Compose up on server
               run: |
-                  ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.SSH_PATH }} && docker compose up -d"
+                  DOCKER_CMD="cd ${{ secrets.SSH_PATH }} && docker compose up -d"
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  else
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  fi
 
             - name: Composer install in php-fpm container
               run: |
-                  ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.SSH_PATH }} && docker compose exec -T php-fpm composer install --no-interaction --prefer-dist"
+                  DOCKER_CMD="cd ${{ secrets.SSH_PATH }} && docker compose exec -T php-fpm composer install --no-interaction --prefer-dist"
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  else
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  fi
