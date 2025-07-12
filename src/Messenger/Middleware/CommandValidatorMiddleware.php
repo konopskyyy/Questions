@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Messenger\Middleware;
+
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
+use Symfony\Component\Messenger\Middleware\StackInterface;
+
+class CommandValidatorMiddleware implements MiddlewareInterface
+{
+    public function __construct(private ContainerInterface $validators)
+    {
+    }
+
+    #[\Override]
+    public function handle(Envelope $envelope, StackInterface $stack): Envelope
+    {
+        $message = $envelope->getMessage();
+        $messageClass = get_class($message);
+        $validatorClass = $messageClass.'Validator';
+
+        if ($this->validators->has($validatorClass)) {
+            $validator = $this->validators->get($validatorClass);
+            $reflection = new \ReflectionClass($validatorClass);
+            $attributes = $reflection->getAttributes(AsMessageValidator::class);
+            if (empty($attributes)) {
+                throw new \LogicException("Validator $validatorClass must have #[AsMessageValidator] attribute.");
+            }
+            $validator->validate($message);
+        }
+
+        return $stack->next()->handle($envelope, $stack);
+    }
+}

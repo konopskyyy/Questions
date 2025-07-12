@@ -1,0 +1,34 @@
+POST http://localhost:8081/api/questions
+Content-Type: application/json
+Accept: application/json
+
+{
+  "body": "Przykładowe pytanie?",
+  "type": "single",
+  "status": "draft",
+  "images": [
+    {"name": "img1", "url": "http://example.com/img1.jpg"}
+  ],
+  "tags": [
+    {"name": "tag1", "description": "desc1"}
+  ],
+  "metadata": {
+    "createdBy": "test-user"
+  },
+  "tips": [
+    {"body": "Podpowiedź 1"}
+  ],
+  "urls": [
+    {"url": "http://example.com"}
+  ]
+}
+
+> {%
+client.global.set("question_id", response.body.id);
+%}
+
+### Pobierz pytanie po UUID
+GET http://localhost:8081/api/questions/{{question_id}}
+Content-Type: application/json
+Accept: application/json
+

@@ -1,0 +1,29 @@
+<?php
+
+namespace App\MessageHandler;
+
+use App\Factory\QuestionFactory;
+use App\Message\CreateQuestionCommand;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Uid\Uuid;
+
+#[AsMessageHandler]
+class CreateQuestionCommandHandler
+{
+    public function __construct(private EntityManagerInterface $em)
+    {
+    }
+
+    public function __invoke(CreateQuestionCommand $command): Uuid
+    {
+        // TODO przerobic na wtrzykiwana fabryke
+        $question = QuestionFactory::createFromDto($command->dto);
+        $this->em->persist($question);
+        $this->em->flush();
+        /** @var Uuid $id */
+        $id = $question->getId();
+
+        return $id;
+    }
+}

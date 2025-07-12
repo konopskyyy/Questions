@@ -1,0 +1,25 @@
+framework:
+    workflows:
+        question:
+            type: 'state_machine'
+            marking_store:
+                property: 'status'
+            supports:
+                - App\Entity\Question
+            places:
+                - draft
+                - accepted
+                - for_verification
+            transitions:
+                to_verification:
+                    from: draft
+                    to: for_verification
+                accept:
+                    from: for_verification
+                    to: accepted
+                revert:
+                    from: for_verification
+                    to: draft
+                unaccept:
+                    from: accepted
+                    to: for_verification

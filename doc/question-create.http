@@ -1,0 +1,32 @@
+POST http://localhost:8081/api/questions
+Content-Type: application/json
+Accept: application/json
+
+{
+  "body": "What is the capital of France?",
+  "type": "single_choice",
+  "status": "draft",
+  "images": [
+    {"name": "paris.jpg", "url": "https://example.com/paris.jpg"},
+    {"name": "eiffel.jpg", "url": "https://example.com/eiffel.jpg"},
+    {"name": "louvre.jpg", "url": "https://example.com/louvre.jpg"}
+  ],
+  "metadata": {
+    "createdBy": "admin"
+  },
+  "tags": [
+    {"name": "geography", "description": "Geography questions"},
+    {"name": "europe", "description": "European topics"},
+    {"name": "capital", "description": "Capital cities"}
+  ],
+  "tips": [
+    {"description": "It's a famous European city."},
+    {"description": "The Eiffel Tower is located here."},
+    {"description": "It starts with the letter P."}
+  ],
+  "urls": [
+    {"description": "Wikipedia", "url": "https://en.wikipedia.org/wiki/Paris"},
+    {"description": "Official website", "url": "https://www.paris.fr/"},
+    {"description": "Travel guide", "url": "https://www.lonelyplanet.com/france/paris"}
+  ]
+}
