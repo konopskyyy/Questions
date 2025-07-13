@@ -47,15 +47,24 @@ jobs:
             - name: Install sshpass
               run: sudo apt-get update && sudo apt-get install -y sshpass
 
-            - name: Rsync files to server (excluding var)
+            - name: Rsync files to server (excluding var and .env)
               run: |
                   set -e
                   if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
                     echo "Połączenie przez klucz SSH działa."
-                    rsync -avz --delete --exclude 'var' -e "ssh -p ${{ secrets.SSH_PORT }}" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+                    rsync -avz --delete --exclude 'var' --exclude '.env' -e "ssh -p ${{ secrets.SSH_PORT }}" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
                   else
                     echo "Klucz SSH nie działa, próbuję przez hasło."
-                    sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -avz --delete --exclude 'var' -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -avz --delete --exclude 'var' --exclude '.env' -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+                  fi
+
+            - name: Create .env file on server
+              run: |
+                  ENV_CMD="cd ${{ secrets.SSH_PATH }} && echo \"DATABASE_URL=${{ secrets.DATABASE_URL }}\nAPP_ENV=prod\" > .env"
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$ENV_CMD"
+                  else
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$ENV_CMD"
                   fi
 
             - name: Create var/cache and var/log on server
