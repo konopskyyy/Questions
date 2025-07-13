@@ -1,10 +1,7 @@
-<li>
-    <a
-        href="{{ admin.generateObjectUrl('accept', object) }}"
-        title="Akceptuj"
-        class="sonata-action-element"
-    >
-        <i class="fa fa-check"></i>
-        {{ 'Akceptuj'|trans({}, 'SonataAdminBundle') }}
-    </a>
-</li>
+{% if object.id %}
+    <li>
+        <a href="{{ admin.generateObjectUrl('accept', object) }}" title="Akceptuj" class="sonata-action-element">
+            <i class="fa fa-check"></i>{{ 'Akceptuj'|trans({}, 'SonataAdminBundle') }}
+        </a>
+    </li>
+{% endif %}

@@ -1,10 +1,14 @@
 ###> symfony/framework-bundle ###
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/var/
 /vendor/
+/.idea/
 ###< symfony/framework-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
+
+.env

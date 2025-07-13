@@ -1,0 +1,109 @@
+name: CI
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+
+jobs:
+    backend-php-cs-fixer:
+        name: PHP CS Fixer & PHPUnit (Symfony)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.4'
+            - name: Create .env file for fixer
+              run: |
+                  printf 'DATABASE_URL=test\nAPP_ENV=test\n' > .env
+            - name: Install Composer dependencies
+              run: composer install --no-interaction --prefer-dist
+            - name: Run PHP CS Fixer
+              run: |
+                  composer global require friendsofphp/php-cs-fixer
+                  PHP_CS_FIXER_IGNORE_ENV=1 ~/.composer/vendor/bin/php-cs-fixer fix --dry-run --diff src
+
+    backend-php-psalm:
+        name: PHP Psalm (Symfony)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.4'
+            - name: Create .env file for psalm
+              run: |
+                  printf 'DATABASE_URL=test\nAPP_ENV=test\n' > .env
+            - name: Install Composer dependencies
+              run: composer install --no-interaction --prefer-dist
+            - name: Run Psalm
+              run: ./bin/psalm --output-format=github
+
+    deploy:
+        name: Deploy to server
+        runs-on: ubuntu-latest
+        needs: [backend-php-cs-fixer, backend-php-psalm]
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install sshpass
+              run: sudo apt-get update && sudo apt-get install -y sshpass
+
+            - name: Rsync files to server (excluding var and .env)
+              run: |
+                  set -e
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    echo "Połączenie przez klucz SSH działa."
+                    rsync -avz --delete --exclude 'var' --exclude '.env' -e "ssh -p ${{ secrets.SSH_PORT }}" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+                  else
+                    echo "Klucz SSH nie działa, próbuję przez hasło."
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -avz --delete --exclude 'var' --exclude '.env' -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+                  fi
+
+            - name: Create .env file on server
+              run: |
+                  ENV_CMD="cd ${{ secrets.SSH_PATH }} && printf 'DATABASE_URL=%s\nAPP_ENV=prod\n' \"${{ secrets.DATABASE_URL }}\" > .env"
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$ENV_CMD"
+                  else
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$ENV_CMD"
+                  fi
+
+            - name: Create var/cache and var/log on server
+              run: |
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.SSH_PATH }}/var/cache ${{ secrets.SSH_PATH }}/var/log"
+                  else
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.SSH_PATH }}/var/cache ${{ secrets.SSH_PATH }}/var/log"
+                  fi
+
+            - name: Docker Compose up on server
+              run: |
+                  DOCKER_CMD="cd ${{ secrets.SSH_PATH }} && docker compose up -d"
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  else
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  fi
+
+            - name: Composer install in php-fpm container
+              run: |
+                  DOCKER_CMD="cd ${{ secrets.SSH_PATH }} && docker compose exec -T php-fpm composer install --no-interaction --prefer-dist"
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  else
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  fi
+
+            - name: Run migrations
+              run: |
+                  DOCKER_CMD="cd ${{ secrets.SSH_PATH }} && docker compose exec -T php-fpm ./bin/console doctrine:migrations:migrate -vvv"
+                  if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
+                    ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  else
+                    sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
+                  fi
