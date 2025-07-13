@@ -16,10 +16,9 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.4'
-            - name: Create empty .env file
+            - name: Create .env file for fixer
               run: |
-                  touch .env
-                  echo "DATABASE_URL=test" > .env
+                  printf 'DATABASE_URL=test\nAPP_ENV=test\n' > .env
             - name: Install Composer dependencies
               run: composer install --no-interaction --prefer-dist
             - name: Run PHP CS Fixer
@@ -36,10 +35,9 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.4'
-            - name: Create empty .env file
+            - name: Create .env file for psalm
               run: |
-                  touch .env
-                  echo "DATABASE_URL=test" > .env
+                  printf 'DATABASE_URL=test\nAPP_ENV=test\n' > .env
             - name: Install Composer dependencies
               run: composer install --no-interaction --prefer-dist
             - name: Run Psalm
@@ -68,7 +66,7 @@ jobs:
 
             - name: Create .env file on server
               run: |
-                  ENV_CMD="cd ${{ secrets.SSH_PATH }} && echo \"DATABASE_URL=${{ secrets.DATABASE_URL }}\nAPP_ENV=prod\" > .env"
+                  ENV_CMD="cd ${{ secrets.SSH_PATH }} && printf 'DATABASE_URL=%s\nAPP_ENV=prod\n' \"${{ secrets.DATABASE_URL }}\" > .env"
                   if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
                     ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$ENV_CMD"
                   else
