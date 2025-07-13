@@ -40,3 +40,13 @@ services:
         class: App\Question\Admin\QuestionTagAdmin
         tags:
             - { name: sonata.admin, model_class: App\Question\Entity\QuestionTag, controller: ~, manager_type: orm, group: admin, label: 'Question Tag' }
+
+    _instanceof:
+        App\Common\Middleware\AsMessageValidator:
+            tags: [ 'app.message_validator' ]
+
+    App\Question\Application\:
+        resource: '../src/Question/Application/**/*Validator.php'
+        tags: [ 'app.message_validator' ]
+
+    #todo zrobic to bardziej elegancko

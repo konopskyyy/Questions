@@ -16,7 +16,6 @@ class AcceptQuestionCommandValidator
 
     public function validate(AcceptQuestionCommand $command): void
     {
-        throw new \Exception('test');
         $question = $this->questionRepository->find($command->questionId);
 
         if ($question->getStatus() != QuestionStatus::DRAFT->value) {
