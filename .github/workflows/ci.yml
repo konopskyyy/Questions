@@ -37,7 +37,9 @@ jobs:
               with:
                   php-version: '8.4'
             - name: Create empty .env file
-              run: touch .env
+              run: |
+                  touch .env
+                  echo "DATABASE_URL=test" > .env
             - name: Install Composer dependencies
               run: composer install --no-interaction --prefer-dist
             - name: Run Psalm
