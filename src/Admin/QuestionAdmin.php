@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Entity\QuestionMetadata;
+use App\Enum\QuestionType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -13,6 +14,7 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class QuestionAdmin extends AbstractAdmin
 {
@@ -22,8 +24,7 @@ final class QuestionAdmin extends AbstractAdmin
             ->add('id')
             ->add('body')
             ->add('type')
-            ->add('status')
-        ;
+            ->add('status');
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -62,18 +63,21 @@ final class QuestionAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         parent::configureRoutes($collection);
-        $collection->add('accept', $this->getRouterIdParameter().'/accept');
+        $collection->add('accept', $this->getRouterIdParameter() . '/accept');
     }
 
     protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('body')
-            ->add('type')
-            ->add('status')
+            ->add('type', ChoiceType::class, [
+                'choices' => $this->getQuestionTypeChoices(),
+                'label' => 'Type',
+            ])
             ->add('metadata', ModelType::class, [
-                'required' => false,
                 'class' => QuestionMetadata::class,
+                'required' => false,
+                'label' => 'Metadata',
             ])
             ->add('images', CollectionType::class, [
                 'by_reference' => false,
@@ -106,8 +110,7 @@ final class QuestionAdmin extends AbstractAdmin
                 'edit' => 'inline',
                 'inline' => 'table',
                 'admin_code' => 'admin.question_url',
-            ])
-        ;
+            ]);
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -119,8 +122,7 @@ final class QuestionAdmin extends AbstractAdmin
             ->add('status')
             ->add('metadata.createdAt', null, [
                 'label' => 'Created At',
-            ])
-        ;
+            ]);
     }
 
     // todo te 2 metody moze juz niepotrzebne
@@ -146,5 +148,13 @@ final class QuestionAdmin extends AbstractAdmin
         }
 
         return 'accepted' !== $status;
+    }
+
+    private function getQuestionTypeChoices(): array
+    {
+        return array_combine(
+            array_map(fn(QuestionType $type) => ucfirst(strtolower($type->name)), QuestionType::cases()),
+            array_map(fn(QuestionType $type) => $type->value, QuestionType::cases())
+        );
     }
 }

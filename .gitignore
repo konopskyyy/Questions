@@ -3,7 +3,6 @@
 /public/bundles/
 /var/
 /vendor/
-/.idea/
 ###< symfony/framework-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###

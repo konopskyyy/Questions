@@ -1,4 +1,4 @@
-POST http://localhost:8081/api/questions
+POST http://localhost:2001/api/questions
 Content-Type: application/json
 Accept: application/json
 
@@ -28,7 +28,7 @@ client.global.set("question_id", response.body.id);
 %}
 
 ### Pobierz pytanie po UUID
-GET http://localhost:8081/api/questions/{{question_id}}
+GET http://localhost:2001/api/questions/{{question_id}}
 Content-Type: application/json
 Accept: application/json
 
