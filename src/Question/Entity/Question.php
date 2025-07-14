@@ -68,6 +68,7 @@ abstract class Question
     public function setBody(string $body): static
     {
         $this->body = $body;
+
         return $this;
     }
 
@@ -79,6 +80,7 @@ abstract class Question
     public function setStatus(QuestionStatus|string $status): static
     {
         $this->status = $status instanceof QuestionStatus ? $status->value : $status;
+
         return $this;
     }
 
@@ -93,6 +95,7 @@ abstract class Question
             $this->images->add($image);
             $image->setQuestion($this);
         }
+
         return $this;
     }
 
@@ -103,6 +106,7 @@ abstract class Question
                 $image->setQuestion(null);
             }
         }
+
         return $this;
     }
 
@@ -114,6 +118,7 @@ abstract class Question
     public function setMetadata(?QuestionMetadata $metadata): static
     {
         $this->metadata = $metadata;
+
         return $this;
     }
 
@@ -127,12 +132,14 @@ abstract class Question
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
         }
+
         return $this;
     }
 
     public function removeTag(QuestionTag $tag): static
     {
         $this->tags->removeElement($tag);
+
         return $this;
     }
 
@@ -147,6 +154,7 @@ abstract class Question
             $this->tips->add($tip);
             $tip->setQuestion($this);
         }
+
         return $this;
     }
 
@@ -157,6 +165,7 @@ abstract class Question
                 $tip->setQuestion(null);
             }
         }
+
         return $this;
     }
 
@@ -171,6 +180,7 @@ abstract class Question
             $this->urls->add($url);
             $url->setQuestion($this);
         }
+
         return $this;
     }
 
@@ -181,6 +191,16 @@ abstract class Question
                 $url->setQuestion(null);
             }
         }
+
         return $this;
+    }
+
+    public function getType(): string
+    {
+        return match (get_class($this)) {
+            OpenQuestion::class => 'open',
+            ClosedQuestion::class => 'closed',
+            default => 'unknown',
+        };
     }
 }
