@@ -6,6 +6,7 @@ namespace App\Question\Admin;
 
 use App\Question\Entity\Enum\QuestionType;
 use App\Question\Entity\QuestionMetadata;
+use App\Question\Entity\QuestionTag;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -89,13 +90,13 @@ final class QuestionAdmin extends AbstractAdmin
                 'inline' => 'table',
                 'admin_code' => 'admin.question_image',
             ])
-            ->add('tags', CollectionType::class, [
-                'by_reference' => false,
+            ->add('tags', ModelType::class, [
+                'class' => QuestionTag::class,
+                'multiple' => true,
                 'required' => false,
-            ], [
-                'edit' => 'inline',
-                'inline' => 'table',
-                'admin_code' => 'admin.question_tag',
+                'label' => 'Tags',
+                // opcjonalnie:
+                'property' => 'name', // jeśli chcesz wyświetlać nazwę taga
             ])
             ->add('tips', CollectionType::class, [
                 'by_reference' => false,
