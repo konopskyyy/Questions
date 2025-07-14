@@ -5,7 +5,7 @@ framework:
             marking_store:
                 property: 'status'
             supports:
-                - App\Entity\Question
+                - App\Question\Entity\Question
             places:
                 - draft
                 - accepted

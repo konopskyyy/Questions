@@ -16,7 +16,7 @@ framework:
         buses:
             messenger.bus.default:
                 middleware:
-                    - App\Messenger\Middleware\CommandValidatorMiddleware
+                    - App\Common\Middleware\CommandValidatorMiddleware
 
 # when@test:
 #    framework:

@@ -1,10 +1,10 @@
-POST http://localhost:8081/api/questions
+POST http://localhost:2001/api/questions
 Content-Type: application/json
 Accept: application/json
 
 {
   "body": "What is the capital of France?",
-  "type": "single_choice",
+  "type": "open",
   "status": "draft",
   "images": [
     {"name": "paris.jpg", "url": "https://example.com/paris.jpg"},
@@ -15,9 +15,7 @@ Accept: application/json
     "createdBy": "admin"
   },
   "tags": [
-    {"name": "geography", "description": "Geography questions"},
-    {"name": "europe", "description": "European topics"},
-    {"name": "capital", "description": "Capital cities"}
+    "docker"
   ],
   "tips": [
     {"description": "It's a famous European city."},

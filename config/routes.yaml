@@ -1,5 +1,10 @@
-controllers:
+question_controllers:
     resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+        path: ../src/Question/Controller/
+        namespace: App\Question\Controller
+    type: attribute
+question_admin_controllers:
+    resource:
+        path: ../src/Question/Controller/Admin/
+        namespace: App\Question\Controller\Admin
     type: attribute

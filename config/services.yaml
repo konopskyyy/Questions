@@ -1,58 +1,52 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
 services:
-    # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autowire: true
+        autoconfigure: true
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
+    # Automatyczne rejestrowanie wszystkich klas jako serwisów
     App\:
         resource: '../src/'
+        tags: ['!attribute']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-
+    # Rejestracja adminów Sonaty
     admin.question:
-        class: App\Admin\QuestionAdmin
+        class: App\Question\Admin\QuestionAdmin
         tags:
-            - { name: sonata.admin, model_class: App\Entity\Question, controller: ~, manager_type: orm, group: admin, label: Question }
+            - { name: sonata.admin, model_class: App\Question\Entity\Question, controller: ~, manager_type: orm, group: admin, label: Question }
 
     admin.question_tip:
-        class: App\Admin\QuestionTipAdmin
+        class: App\Question\Admin\QuestionTipAdmin
         tags:
-            - { name: sonata.admin, model_class: App\Entity\QuestionTip, controller: ~, manager_type: orm, group: admin, label: 'Question Tip' }
+            - { name: sonata.admin, model_class: App\Question\Entity\QuestionTip, controller: ~, manager_type: orm, group: admin, label: 'Question Tip' }
 
     admin.question_url:
-        class: App\Admin\QuestionUrlAdmin
+        class: App\Question\Admin\QuestionUrlAdmin
         tags:
-            - { name: sonata.admin, model_class: App\Entity\QuestionUrl, controller: ~, manager_type: orm, group: admin, label: 'Question Url' }
+            - { name: sonata.admin, model_class: App\Question\Entity\QuestionUrl, controller: ~, manager_type: orm, group: admin, label: 'Question Url' }
 
     admin.question_image:
-        class: App\Admin\QuestionImageAdmin
+        class: App\Question\Admin\QuestionImageAdmin
         tags:
-            - { name: sonata.admin, model_class: App\Entity\QuestionImage, controller: ~, manager_type: orm, group: admin, label: 'Question Image' }
+            - { name: sonata.admin, model_class: App\Question\Entity\QuestionImage, controller: ~, manager_type: orm, group: admin, label: 'Question Image' }
 
     admin.question_metadata:
-        class: App\Admin\QuestionMetadataAdmin
+        class: App\Question\Admin\QuestionMetadataAdmin
         tags:
-            - { name: sonata.admin, model_class: App\Entity\QuestionMetadata, controller: ~, manager_type: orm, group: admin, label: 'Question Metadata' }
+            - { name: sonata.admin, model_class: App\Question\Entity\QuestionMetadata, controller: ~, manager_type: orm, group: admin, label: 'Question Metadata' }
 
     admin.question_tag:
-        class: App\Admin\QuestionTagAdmin
+        class: App\Question\Admin\QuestionTagAdmin
         tags:
-            - { name: sonata.admin, model_class: App\Entity\QuestionTag, controller: ~, manager_type: orm, group: admin, label: 'Question Tag' }
+            - { name: sonata.admin, model_class: App\Question\Entity\QuestionTag, controller: ~, manager_type: orm, group: admin, label: 'Question Tag' }
 
-    App\Message\:
-        resource: '../src/Message/*Validator.php'
-        tags: ['app.message_validator']
+    _instanceof:
+        App\Common\Middleware\AsMessageValidator:
+            tags: [ 'app.message_validator' ]
 
-    App\Messenger\Middleware\CommandValidatorMiddleware:
-        arguments:
-            $validators: !tagged_locator { tag: 'app.message_validator', index_by: 'class' }
+    App\Question\Application\:
+        resource: '../src/Question/Application/**/*Validator.php'
+        tags: [ 'app.message_validator' ]
+
+    #todo zrobic to bardziej elegancko

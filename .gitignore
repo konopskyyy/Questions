@@ -3,7 +3,6 @@
 /public/bundles/
 /var/
 /vendor/
-/.idea/
 ###< symfony/framework-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###
@@ -12,3 +11,8 @@
 ###< friendsofphp/php-cs-fixer ###
 
 .env
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###
