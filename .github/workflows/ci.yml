@@ -18,7 +18,7 @@ jobs:
                   php-version: '8.4'
             - name: Create .env file for fixer
               run: |
-                  printf 'DATABASE_URL=test\nAPP_ENV=test\n' > .env
+                  printf 'DATABASE_URL=test\nAPP_ENV=dev\n' > .env
             - name: Install Composer dependencies
               run: composer install --no-interaction --prefer-dist
             - name: Run PHP CS Fixer

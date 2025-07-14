@@ -51,7 +51,7 @@ class QuestionFactoryTest extends TestCase
             [
                 'name' => 'docker_image',
                 'url' => 'http://example.com/docker_image.jpg',
-            ]
+            ],
         ];
         $dto->tips = [
             ['description' => 'Tip 1'],
