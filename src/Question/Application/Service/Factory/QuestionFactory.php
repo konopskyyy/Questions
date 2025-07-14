@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 
 class QuestionFactory
 {
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
         private readonly QuestionTagRepository $questionTagRepository,
         private readonly LoggerInterface $logger,
@@ -35,7 +36,7 @@ class QuestionFactory
 
         $metadata = new QuestionMetadata();
         $metadata->setCreatedAt(new \DateTimeImmutable('NOW'));
-        $metadata->setCreatedBy($dto->metadata->createdBy ?? 'Anonymous');
+        $metadata->setCreatedBy('Anonymous'); // todo to kiedys do zmiany
         $question->setMetadata($metadata);
 
         foreach ($dto->tags as $tagData) {

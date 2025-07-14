@@ -18,11 +18,6 @@ class QuestionCreateDto
     public array $images = [];
 
     /**
-     * @var array{createdBy?: string}|null
-     */
-    public ?array $metadata = null;
-
-    /**
      * @var array<int, array{name: string, description: string}>
      */
     public array $tags = [];
