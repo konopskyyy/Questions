@@ -3,6 +3,7 @@
 namespace App\Question\Application\Service\Factory;
 
 use App\Question\Dto\QuestionCreateDto;
+use App\Question\Entity\OpenQuestion;
 use App\Question\Entity\Question;
 use App\Question\Entity\QuestionImage;
 use App\Question\Entity\QuestionMetadata;
@@ -30,9 +31,8 @@ class QuestionFactory
             throw new \InvalidArgumentException('Invalid question type provided.');
         }
 
-        $question = new Question();
+        $question = new OpenQuestion();
         $question->setBody($dto->body);
-        $question->setType($dto->type);
 
         $metadata = new QuestionMetadata();
         $metadata->setCreatedAt(new \DateTimeImmutable('NOW'));

@@ -11,7 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
-class Question
+#[ORM\Table(name: 'question')]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+#[ORM\DiscriminatorMap(['open' => OpenQuestion::class, 'closed' => ClosedQuestion::class])]
+abstract class Question
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -21,9 +25,6 @@ class Question
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $body = null;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $type = 'open';
 
     #[ORM\Column(length: 255)]
     private ?string $status = QuestionStatus::DRAFT->value;
@@ -67,20 +68,6 @@ class Question
     public function setBody(string $body): static
     {
         $this->body = $body;
-
-        return $this;
-    }
-
-    public function getType(): ?string
-    {
-        // todo poprawic zwracany typ
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
         return $this;
     }
 
@@ -92,13 +79,9 @@ class Question
     public function setStatus(QuestionStatus|string $status): static
     {
         $this->status = $status instanceof QuestionStatus ? $status->value : $status;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, QuestionImage>
-     */
     public function getImages(): Collection
     {
         return $this->images;
@@ -110,7 +93,6 @@ class Question
             $this->images->add($image);
             $image->setQuestion($this);
         }
-
         return $this;
     }
 
@@ -121,7 +103,6 @@ class Question
                 $image->setQuestion(null);
             }
         }
-
         return $this;
     }
 
@@ -133,13 +114,9 @@ class Question
     public function setMetadata(?QuestionMetadata $metadata): static
     {
         $this->metadata = $metadata;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, QuestionTag>
-     */
     public function getTags(): Collection
     {
         return $this->tags;
@@ -150,14 +127,12 @@ class Question
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
         }
-
         return $this;
     }
 
     public function removeTag(QuestionTag $tag): static
     {
         $this->tags->removeElement($tag);
-
         return $this;
     }
 
@@ -172,7 +147,6 @@ class Question
             $this->tips->add($tip);
             $tip->setQuestion($this);
         }
-
         return $this;
     }
 
@@ -183,7 +157,6 @@ class Question
                 $tip->setQuestion(null);
             }
         }
-
         return $this;
     }
 
@@ -198,7 +171,6 @@ class Question
             $this->urls->add($url);
             $url->setQuestion($this);
         }
-
         return $this;
     }
 
@@ -209,7 +181,6 @@ class Question
                 $url->setQuestion(null);
             }
         }
-
         return $this;
     }
 }

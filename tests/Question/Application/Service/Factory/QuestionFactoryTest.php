@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Question\Application\Service\Factory\QuestionFactory;
 use App\Question\Dto\QuestionCreateDto;
+use App\Question\Entity\OpenQuestion;
 use App\Question\Entity\QuestionTag;
 use App\Question\Repository\QuestionTagRepository;
 use PHPUnit\Framework\Attributes\Test;
@@ -74,5 +75,6 @@ class QuestionFactoryTest extends TestCase
         $this->assertCount(1, $question->getImages());
         $this->assertCount(3, $question->getTips());
         $this->assertCount(2, $question->getUrls());
+        $this->assertInstanceOf(OpenQuestion::class, $question);
     }
 }
