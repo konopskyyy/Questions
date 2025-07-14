@@ -12,7 +12,7 @@ class CommandValidatorMiddleware implements MiddlewareInterface
 {
     public function __construct(
         #[TaggedLocator('app.message_validator', indexAttribute: 'class')]
-        private readonly ContainerInterface $validators
+        private readonly ContainerInterface $validators,
     ) {
     }
 
@@ -20,7 +20,7 @@ class CommandValidatorMiddleware implements MiddlewareInterface
     {
         $message = $envelope->getMessage();
         $messageClass = get_class($message);
-        $validatorClass = $messageClass . 'Validator';
+        $validatorClass = $messageClass.'Validator';
 
         if ($this->validators->has($validatorClass)) {
             $validator = $this->validators->get($validatorClass);

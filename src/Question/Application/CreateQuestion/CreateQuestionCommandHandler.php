@@ -13,8 +13,7 @@ class CreateQuestionCommandHandler
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly QuestionFactory $questionFactory,
-    )
-    {
+    ) {
     }
 
     public function __invoke(CreateQuestionCommand $command): Uuid

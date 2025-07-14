@@ -27,7 +27,7 @@ class QuestionFactoryTest extends TestCase
     #[Test]
     public function shouldThrowExceptionWhenTypeIsIncorrect(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid question type provided.');
 
         $dto = new QuestionCreateDto();
@@ -37,32 +37,31 @@ class QuestionFactoryTest extends TestCase
     }
 
     #[Test]
-    public function shouldReturnMinimalOpenQuestion(): void
+    public function shouldReturnOpenedQuestionWithAllData(): void
     {
-        $dto = new QuestionCreateDto();
-        $dto->type = 'open';
-        $dto->body = 'body';
+        $tag = (new QuestionTag())
+            ->setName('docker')
+            ->setDescription('Docker');
 
-        $question = $this->factory->createFromDto($dto);
-
-        $this->assertEquals(
-            $dto->body,
-            $question->getBody(),
-            'Question body should match the DTO body.'
-        );
-    }
-
-    #[Test]
-    public function shouldReturnQuestionWithFoundedTags(): void
-    {
         $dto = new QuestionCreateDto();
         $dto->type = 'open';
         $dto->body = 'body';
         $dto->tags = ['docker'];
-
-        // Przygotuj mock zwracający tag dla 'docker'
-        $tag = new QuestionTag();
-        $tag->setName('docker')->setDescription('Docker');
+        $dto->images = [
+            [
+                'name' => 'docker_image',
+                'url' => 'http://example.com/docker_image.jpg',
+            ]
+        ];
+        $dto->tips = [
+            ['description' => 'Tip 1'],
+            ['description' => 'Tip 2'],
+            ['description' => 'Tip 3'],
+        ];
+        $dto->urls = [
+            ['description' => 'Docker Docs', 'url' => 'https://docs.docker.com/'],
+            ['description' => 'Docker Hub', 'url' => 'https://hub.docker.com/'],
+        ];
 
         $this->questionTagRepository
             ->method('findOneBy')
@@ -71,10 +70,9 @@ class QuestionFactoryTest extends TestCase
 
         $question = $this->factory->createFromDto($dto);
 
-        $this->assertCount(
-            1,
-            $question->getTags(),
-            'Question should have one tag.'
-        );
+        $this->assertCount(1, $question->getTags(), 'Question should have one tag.');
+        $this->assertCount(1, $question->getImages());
+        $this->assertCount(3, $question->getTips());
+        $this->assertCount(2, $question->getUrls());
     }
 }

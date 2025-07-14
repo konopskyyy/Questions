@@ -14,6 +14,7 @@ final class QuestionTipAdmin extends AbstractAdmin
 {
     protected $baseRouteName = 'question_tip';
     protected $baseRoutePattern = 'question_tip';
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter

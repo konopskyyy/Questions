@@ -155,8 +155,8 @@ final class QuestionAdmin extends AbstractAdmin
     private function getQuestionTypeChoices(): array
     {
         return array_combine(
-            array_map(fn(QuestionType $type) => ucfirst(strtolower($type->name)), QuestionType::cases()),
-            array_map(fn(QuestionType $type) => $type->value, QuestionType::cases())
+            array_map(fn (QuestionType $type) => ucfirst(strtolower($type->name)), QuestionType::cases()),
+            array_map(fn (QuestionType $type) => $type->value, QuestionType::cases())
         );
     }
 }

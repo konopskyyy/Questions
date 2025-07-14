@@ -32,7 +32,7 @@ class QuestionCreateController extends AbstractController
 
             return $this->json(['id' => (string) $uuid], Response::HTTP_CREATED);
         } catch (\Throwable $e) {
-            //return $this->json(['error' => 'Server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            // return $this->json(['error' => 'Server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
             return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

@@ -67,6 +67,7 @@ class Question
     public function setBody(string $body): static
     {
         $this->body = $body;
+
         return $this;
     }
 
@@ -78,6 +79,7 @@ class Question
     public function setType(string $type): static
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -89,6 +91,7 @@ class Question
     public function setStatus(QuestionStatus|string $status): static
     {
         $this->status = $status instanceof QuestionStatus ? $status->value : $status;
+
         return $this;
     }
 
@@ -106,6 +109,7 @@ class Question
             $this->images->add($image);
             $image->setQuestion($this);
         }
+
         return $this;
     }
 
@@ -116,6 +120,7 @@ class Question
                 $image->setQuestion(null);
             }
         }
+
         return $this;
     }
 
@@ -127,6 +132,7 @@ class Question
     public function setMetadata(?QuestionMetadata $metadata): static
     {
         $this->metadata = $metadata;
+
         return $this;
     }
 
@@ -143,12 +149,14 @@ class Question
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
         }
+
         return $this;
     }
 
     public function removeTag(QuestionTag $tag): static
     {
         $this->tags->removeElement($tag);
+
         return $this;
     }
 
@@ -163,6 +171,7 @@ class Question
             $this->tips->add($tip);
             $tip->setQuestion($this);
         }
+
         return $this;
     }
 
@@ -173,6 +182,7 @@ class Question
                 $tip->setQuestion(null);
             }
         }
+
         return $this;
     }
 
@@ -187,6 +197,7 @@ class Question
             $this->urls->add($url);
             $url->setQuestion($this);
         }
+
         return $this;
     }
 
@@ -197,6 +208,7 @@ class Question
                 $url->setQuestion(null);
             }
         }
+
         return $this;
     }
 }

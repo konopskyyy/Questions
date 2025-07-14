@@ -16,6 +16,7 @@ final class QuestionMetadataAdmin extends AbstractAdmin
 {
     protected $baseRouteName = 'question_metadata';
     protected $baseRoutePattern = 'question_metadata';
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter

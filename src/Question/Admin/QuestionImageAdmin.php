@@ -14,6 +14,7 @@ final class QuestionImageAdmin extends AbstractAdmin
 {
     protected $baseRouteName = 'question_image';
     protected $baseRoutePattern = 'question_image';
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
