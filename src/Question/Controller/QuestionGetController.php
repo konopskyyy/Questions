@@ -11,7 +11,7 @@ use Symfony\Component\Uid\Uuid;
 
 class QuestionGetController extends AbstractController
 {
-    #[Route('/api/questions/{id}', name: 'question_get', methods: ['GET'])]
+    #[Route('/api/questions/{id}', name: 'question_get_api', methods: ['GET'])]
     public function __invoke(string $id, QuestionRepository $questionRepository): JsonResponse
     {
         $question = $questionRepository->find(Uuid::fromString($id));

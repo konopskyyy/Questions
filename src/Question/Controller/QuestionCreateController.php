@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class QuestionCreateController extends AbstractController
 {
-    #[Route('/api/questions', name: 'question_create', methods: ['POST'])]
+    #[Route('/api/questions', name: 'question_create_api', methods: ['POST'])]
     public function __invoke(
         #[MapRequestPayload] QuestionCreateDto $dto,
         ValidatorInterface $validator,
