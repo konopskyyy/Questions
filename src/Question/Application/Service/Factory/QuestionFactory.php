@@ -35,7 +35,7 @@ class QuestionFactory
 
         $metadata = new QuestionMetadata();
         $metadata->setCreatedAt(new \DateTimeImmutable('NOW'));
-        $metadata->setCreatedBy('Anontymous');
+        $metadata->setCreatedBy($dto->metadata->createdBy ?? 'Anonymous');
         $question->setMetadata($metadata);
 
         foreach ($dto->tags as $tagData) {

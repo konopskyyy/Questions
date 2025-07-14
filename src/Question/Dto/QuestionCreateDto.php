@@ -18,7 +18,7 @@ class QuestionCreateDto
     public array $images = [];
 
     /**
-     * @var array{name?: string, createdAt?: string, createdBy?: string}|null
+     * @var array{createdBy?: string}|null
      */
     public ?array $metadata = null;
 

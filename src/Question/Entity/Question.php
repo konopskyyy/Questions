@@ -71,8 +71,9 @@ class Question
         return $this;
     }
 
-    public function getType(): string
+    public function getType(): ?string
     {
+        //todo poprawic zwracany typ
         return $this->type;
     }
 
