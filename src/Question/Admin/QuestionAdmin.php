@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Question\Admin;
 
 use App\Question\Entity\Enum\QuestionType;
+use App\Question\Entity\OpenQuestion;
 use App\Question\Entity\QuestionMetadata;
 use App\Question\Entity\QuestionTag;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -61,12 +62,17 @@ final class QuestionAdmin extends AbstractAdmin
             ];
         }
 
+        $buttonList['open_question_create'] = [
+            'template' => 'admin/question/list__action_open_question_create.html.twig',
+        ];
+
         return $buttonList;
     }
 
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         parent::configureRoutes($collection);
+        $collection->add('open_question_create', 'open_question_create');
     }
 
     protected function configureFormFields(FormMapper $form): void

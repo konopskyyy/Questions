@@ -8,13 +8,20 @@ services:
     # Automatyczne rejestrowanie wszystkich klas jako serwisów
     App\:
         resource: '../src/'
-        tags: ['!attribute']
+        tags: [ '!attribute' ]
 
     # Rejestracja adminów Sonaty
     admin.question:
         class: App\Question\Admin\QuestionAdmin
         tags:
-            - { name: sonata.admin, model_class: App\Question\Entity\Question, controller: ~, manager_type: orm, group: admin, label: Question }
+            - {
+                name: sonata.admin,
+                model_class: App\Question\Entity\Question,
+                controller: App\Question\Controller\Admin\CreateQuestionAdminController,
+                manager_type: orm,
+                group: admin,
+                label: Question
+            }
 
     admin.question_tip:
         class: App\Question\Admin\QuestionTipAdmin

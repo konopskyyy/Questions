@@ -1,0 +1,12 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block title %}Dodaj pytanie otwarte{% endblock %}
+
+{% block content %}
+    <h1>Dodaj pytanie otwarte</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-primary" type="submit">Zapisz</button>
+    {{ form_end(form) }}
+{% endblock %}
