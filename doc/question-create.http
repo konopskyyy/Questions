@@ -4,7 +4,7 @@ Accept: application/json
 
 {
   "body": "What is the capital of France?",
-  "type": "single_choice",
+  "type": "open",
   "status": "draft",
   "images": [
     {"name": "paris.jpg", "url": "https://example.com/paris.jpg"},
@@ -15,9 +15,7 @@ Accept: application/json
     "createdBy": "admin"
   },
   "tags": [
-    {"name": "geography", "description": "Geography questions"},
-    {"name": "europe", "description": "European topics"},
-    {"name": "capital", "description": "Capital cities"}
+    "docker"
   ],
   "tips": [
     {"description": "It's a famous European city."},

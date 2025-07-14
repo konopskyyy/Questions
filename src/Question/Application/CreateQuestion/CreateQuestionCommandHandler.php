@@ -10,14 +10,16 @@ use Symfony\Component\Uid\Uuid;
 #[AsMessageHandler]
 class CreateQuestionCommandHandler
 {
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly QuestionFactory $questionFactory,
+    )
     {
     }
 
     public function __invoke(CreateQuestionCommand $command): Uuid
     {
-        // TODO przerobic na wtrzykiwana fabryke
-        $question = QuestionFactory::createFromDto($command->dto);
+        $question = $this->questionFactory->createFromDto($command->dto);
         $this->em->persist($question);
         $this->em->flush();
         /** @var Uuid $id */

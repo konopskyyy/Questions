@@ -19,6 +19,7 @@ final class QuestionTagAdmin extends AbstractAdmin
         $filter
             ->add('id')
             ->add('name')
+            ->add('description')
         ;
     }
 
@@ -27,6 +28,7 @@ final class QuestionTagAdmin extends AbstractAdmin
         $list
             ->add('id')
             ->add('name')
+            ->add('description')
         ;
     }
 
@@ -44,6 +46,7 @@ final class QuestionTagAdmin extends AbstractAdmin
         $show
             ->add('id')
             ->add('name')
+            ->add('description')
         ;
     }
 }
