@@ -73,7 +73,7 @@ class Question
 
     public function getType(): ?string
     {
-        //todo poprawic zwracany typ
+        // todo poprawic zwracany typ
         return $this->type;
     }
 
