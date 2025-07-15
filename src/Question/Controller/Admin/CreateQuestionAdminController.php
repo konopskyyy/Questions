@@ -26,12 +26,11 @@ class CreateQuestionAdminController extends CRUDController
     }
     public function openQuestionCreateAction(Request $request)
     {
-        // Tworzymy nową instancję pytania otwartego
         $question = new OpenQuestion();
 
-        // Tworzymy formularz ręcznie, na podstawie konfiguracji configureFormFields
         $form = $this->createFormBuilder($question)
             ->add('body')
+            ->add('answer')
             ->add('type', ChoiceType::class, [
                 'choices' => [
                     'Open' => 'open',
@@ -85,8 +84,7 @@ class CreateQuestionAdminController extends CRUDController
             $em->persist($question);
             $em->flush();
 
-            // Przekierowanie po zapisie, np. do listy pytań
-            return $this->redirectToRoute('question_list'); // dostosuj nazwę trasy
+            return $this->redirectToRoute('question_list');
         }
 
         // Renderowanie formularza w szablonie

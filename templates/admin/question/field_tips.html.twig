@@ -1,0 +1,14 @@
+<tr class="sonata-ba-view-container">
+    <th>Tips</th>
+    <td>
+        {% if value is empty %}
+            <em>No tips</em>
+        {% else %}
+            <ul style="padding-left: 18px; margin: 0;">
+                {% for tip in value %}
+                    <li>{{ tip.description }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </td>
+</tr>

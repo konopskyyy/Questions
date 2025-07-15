@@ -1,0 +1,14 @@
+<tr class="sonata-ba-view-container">
+    <th>Tags</th>
+    <td>
+        {% if value is empty %}
+            <em>No tags</em>
+        {% else %}
+            <ul style="padding-left: 18px; margin: 0;">
+                {% for tag in value %}
+                    <li>{{ tag.description }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </td>
+</tr>

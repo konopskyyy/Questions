@@ -6,8 +6,11 @@ namespace App\Question\Admin;
 
 use App\Question\Entity\Enum\QuestionType;
 use App\Question\Entity\OpenQuestion;
+use App\Question\Entity\Question;
+use App\Question\Entity\QuestionImage;
 use App\Question\Entity\QuestionMetadata;
 use App\Question\Entity\QuestionTag;
+use Doctrine\ORM\EntityManager;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -16,6 +19,7 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class QuestionAdmin extends AbstractAdmin
@@ -131,7 +135,24 @@ final class QuestionAdmin extends AbstractAdmin
             ->add('status')
             ->add('metadata.createdAt', null, [
                 'label' => 'Created At',
-            ]);
+            ]) //todo kiedys autor
+            ->add('images', null, [
+                'label' => 'Images',
+                'template' => 'admin/question/field_images.html.twig',
+            ])
+            ->add('tags', null, [
+                'label' => 'Tags',
+                'template' => 'admin/question/field_tags.html.twig',
+            ])
+            ->add('tips', null, [
+                'label' => 'Tags',
+                'template' => 'admin/question/field_tips.html.twig',
+            ])
+            ->add('urls', null, [
+                'label' => 'Tags',
+                'template' => 'admin/question/field_urls.html.twig',
+            ])
+        ;
     }
 
     // todo te 2 metody moze juz niepotrzebne
@@ -162,8 +183,8 @@ final class QuestionAdmin extends AbstractAdmin
     private function getQuestionTypeChoices(): array
     {
         return array_combine(
-            array_map(fn (QuestionType $type) => ucfirst(strtolower($type->name)), QuestionType::cases()),
-            array_map(fn (QuestionType $type) => $type->value, QuestionType::cases())
+            array_map(fn(QuestionType $type) => ucfirst(strtolower($type->name)), QuestionType::cases()),
+            array_map(fn(QuestionType $type) => $type->value, QuestionType::cases())
         );
     }
 }

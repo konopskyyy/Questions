@@ -9,9 +9,21 @@
         <div class="sonata-ba-form">
             {{ form_start(form) }}
 
+            {% if form.vars.errors|length > 0 %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+
             <div class="form-group row">
                 <div class="col-12">
                     {{ form_row(form.body, {'attr': {'class': 'form-control sonata-ba-field'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-12">
+                    {{ form_row(form.answer, {'attr': {'class': 'form-control sonata-ba-field'}}) }}
                 </div>
             </div>
 
@@ -66,10 +78,10 @@
             <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
                     data-target="#urls-wrapper">Dodaj URL</button>
 
-            <!-- Odstęp nad przyciskiem i wyrównanie przycisku do prawej -->
             <div class="d-flex justify-content-end mt-5 mb-2">
                 <button class="btn btn-success sonata-ba-action" type="submit">Zapisz</button>
             </div>
+            {{ form_widget(form._token) }}
             {{ form_end(form, { 'render_rest': false }) }}
         </div>
     </div>
@@ -135,14 +147,12 @@
             border-color: #3E7E22;
             color: #fff;
         }
-        /* Specjalnie dla wyrównania przycisku "Zapisz" do prawej */
         .d-flex {
             display: flex !important;
         }
         .justify-content-end {
             justify-content: flex-end !important;
         }
-        /* Responsywność */
         @media (max-width: 768px) {
             .col-md-8, .col-md-5, .col-12 {
                 flex: 0 0 100%;

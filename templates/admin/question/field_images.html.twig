@@ -1,0 +1,19 @@
+<tr class="sonata-ba-view-container">
+    <th>Images</th>
+    <td>
+        {% if value is empty %}
+            <em>No images</em>
+        {% else %}
+            <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                {% for image in value %}
+                    <div style="border: 1px solid #ddd; border-radius: 6px; padding: 10px; text-align: center; max-width: 120px;">
+                        <img src="{{ asset(image.url) }}" alt="{{ image.name }}" style="max-height: 100px; display: block; margin: 0 auto;">
+                        {% if image.name %}
+                            <div style="margin-top: 4px; color: #888; font-size: 0.85rem;">{{ image.name }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </td>
+</tr>
