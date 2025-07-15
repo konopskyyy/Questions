@@ -25,6 +25,7 @@ class QuestionMetadata
     {
         $this->createdAt = new \DateTimeImmutable();
     }
+
     public function getId(): ?int
     {
         return $this->id;

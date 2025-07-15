@@ -6,12 +6,10 @@ use App\Question\Admin\Type\QuestionImageType;
 use App\Question\Admin\Type\QuestionTipType;
 use App\Question\Admin\Type\QuestionUrlType;
 use App\Question\Entity\OpenQuestion;
-use App\Question\Entity\QuestionMetadata;
 use App\Question\Entity\QuestionTag;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\AdminBundle\Form\Type\CollectionType;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,12 +18,12 @@ class CreateQuestionAdminController extends CRUDController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-    )
-    {
-
+    ) {
     }
+
     public function openQuestionCreateAction(Request $request)
     {
+        //todo przeniesc do osobnego formularza
         $question = new OpenQuestion();
 
         $form = $this->createFormBuilder($question)
@@ -73,21 +71,18 @@ class CreateQuestionAdminController extends CRUDController
                 'prototype' => true,
             ])
             ->getForm();
-;
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var EntityManagerInterface $em */
-            $em = $this->entityManager;
 
-            $em->persist($question);
-            $em->flush();
+
+            $this->entityManager->persist($question);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('question_list');
         }
 
-        // Renderowanie formularza w szablonie
         return $this->render('@Admin/question/open_question_create.html.twig', [
             'form' => $form->createView(),
         ]);
