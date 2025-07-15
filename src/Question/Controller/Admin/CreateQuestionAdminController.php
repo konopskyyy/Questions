@@ -2,6 +2,9 @@
 
 namespace App\Question\Controller\Admin;
 
+use App\Question\Admin\Type\QuestionImageType;
+use App\Question\Admin\Type\QuestionTipType;
+use App\Question\Admin\Type\QuestionUrlType;
 use App\Question\Entity\OpenQuestion;
 use App\Question\Entity\QuestionMetadata;
 use App\Question\Entity\QuestionTag;
@@ -37,12 +40,13 @@ class CreateQuestionAdminController extends CRUDController
                 'label' => 'Type',
             ])
             ->add('images', CollectionType::class, [
+                'entry_type' => QuestionImageType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
                 'required' => false,
-            ], [
-                'edit' => 'inline',
-                'inline' => 'table',
-                'admin_code' => 'admin.question_image',
+                'label' => 'Images',
+                'prototype' => true,
             ])
             ->add('tags', EntityType::class, [
                 'class' => QuestionTag::class,
@@ -52,22 +56,25 @@ class CreateQuestionAdminController extends CRUDController
                 'label' => 'Tags',
             ])
             ->add('tips', CollectionType::class, [
+                'entry_type' => QuestionTipType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
                 'required' => false,
-            ], [
-                'edit' => 'inline',
-                'inline' => 'table',
-                'admin_code' => 'admin.question_tip',
+                'label' => 'Tips',
+                'prototype' => true,
             ])
             ->add('urls', CollectionType::class, [
+                'entry_type' => QuestionUrlType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
                 'required' => false,
-            ], [
-                'edit' => 'inline',
-                'inline' => 'table',
-                'admin_code' => 'admin.question_url',
+                'label' => 'URLs',
+                'prototype' => true,
             ])
             ->getForm();
+;
 
         $form->handleRequest($request);
 

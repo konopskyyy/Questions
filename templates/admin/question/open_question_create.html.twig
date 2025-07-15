@@ -1,12 +1,102 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 
-{% block title %}Dodaj pytanie otwarte{% endblock %}
+{% block title %}Nowe pytanie otwarte{% endblock %}
 
 {% block content %}
-    <h1>Dodaj pytanie otwarte</h1>
+    <div class="container mt-4">
+        <h1>Utwórz nowe pytanie otwarte</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-primary" type="submit">Zapisz</button>
-    {{ form_end(form) }}
+        {{ form_start(form) }}
+        {{ form_row(form.body) }}
+        {{ form_row(form.type) }}
+        {{ form_row(form.tags) }}
+
+        <h4>Obrazki</h4>
+        <div id="images-wrapper"
+             data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+            {% for imageForm in form.images %}
+                <div class="image-item mb-2">
+                    {{ form_row(imageForm) }}
+                    <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-primary mb-4 add-item-btn"
+                data-target="#images-wrapper">Dodaj obrazek</button>
+
+        <h4>Podpowiedzi</h4>
+        <div id="tips-wrapper"
+             data-prototype="{{ form_widget(form.tips.vars.prototype)|e('html_attr') }}">
+            {% for tipForm in form.tips %}
+                <div class="tip-item mb-2">
+                    {{ form_row(tipForm) }}
+                    <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-primary mb-4 add-item-btn"
+                data-target="#tips-wrapper">Dodaj podpowiedź</button>
+
+        <h4>Linki URL</h4>
+        <div id="urls-wrapper"
+             data-prototype="{{ form_widget(form.urls.vars.prototype)|e('html_attr') }}">
+            {% for urlForm in form.urls %}
+                <div class="url-item mb-2">
+                    {{ form_row(urlForm) }}
+                    <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-primary mb-4 add-item-btn"
+                data-target="#urls-wrapper">Dodaj URL</button>
+
+        <div class="mt-4">
+            <button class="btn btn-success" type="submit">Zapisz</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    <style>
+        .image-item, .tip-item, .url-item {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+    </style>
+
+    <script>
+        // Dynamiczne dodawanie elementów
+        document.querySelectorAll('.add-item-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const targetSelector = this.getAttribute('data-target');
+                const container = document.querySelector(targetSelector);
+
+                let itemClass = '';
+                if (targetSelector === '#images-wrapper') itemClass = 'image-item';
+                if (targetSelector === '#tips-wrapper') itemClass = 'tip-item';
+                if (targetSelector === '#urls-wrapper') itemClass = 'url-item';
+
+                const index = container.querySelectorAll('.' + itemClass).length;
+                const prototype = container.getAttribute('data-prototype');
+                if (!prototype) {
+                    alert('Brak prototypu. Sprawdź konfigurację w PHP.');
+                    return;
+                }
+                const newForm = prototype.replace(/__name__/g, index);
+                const div = document.createElement('div');
+                div.classList.add(itemClass, 'mb-2');
+                div.innerHTML = newForm +
+                    '<button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>';
+                container.appendChild(div);
+            });
+        });
+
+        // Usuwanie elementów
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-item-btn')) {
+                e.target.closest('.mb-2').remove();
+            }
+        });
+    </script>
 {% endblock %}
