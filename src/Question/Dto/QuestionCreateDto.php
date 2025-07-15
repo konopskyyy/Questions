@@ -10,6 +10,9 @@ class QuestionCreateDto
     public string $body;
 
     #[Assert\NotBlank]
+    public string $answer;
+
+    #[Assert\NotBlank]
     public string $type;
 
     /**
@@ -31,4 +34,10 @@ class QuestionCreateDto
      * @var array<int, array{description: string, url: string}>
      */
     public array $urls = [];
+
+    /** @var array<int, array{letter: string, body: string}> */
+    public array $answerOptions = [];
+
+    /** @var array<int, string> */
+    public array $correctAnswers = [];
 }
