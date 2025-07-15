@@ -23,7 +23,7 @@ class CreateQuestionAdminController extends CRUDController
 
     public function openQuestionCreateAction(Request $request)
     {
-        //todo przeniesc do osobnego formularza
+        // todo przeniesc do osobnego formularza
         $question = new OpenQuestion();
 
         $form = $this->createFormBuilder($question)
@@ -75,8 +75,6 @@ class CreateQuestionAdminController extends CRUDController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-
             $this->entityManager->persist($question);
             $this->entityManager->flush();
 
