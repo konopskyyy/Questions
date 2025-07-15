@@ -17,10 +17,10 @@ class QuestionImageType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Image file',
+                'label' => 'Image name',
                 'required' => false,
             ])->add('url', TextType::class, [
-                'label' => 'Image file',
+                'label' => 'Image URL',
                 'required' => false,
             ])
 

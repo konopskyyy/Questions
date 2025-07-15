@@ -18,7 +18,7 @@ class QuestionTipType extends AbstractType
     {
         $builder
             ->add('description', TextType::class, [
-                'label' => 'Image file',
+                'label' => 'Tip text',
                 'required' => false,
             ])
         ;

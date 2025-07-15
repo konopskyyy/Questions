@@ -18,11 +18,11 @@ class QuestionUrlType extends AbstractType
     {
         $builder
             ->add('description', TextType::class, [
-                'label' => 'Image file',
+                'label' => 'URL description',
                 'required' => false,
             ])
             ->add('url', TextType::class, [
-                'label' => 'Image file',
+                'label' => 'URL',
                 'required' => false,
             ])
         ;

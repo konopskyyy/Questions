@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Question\Admin;
 
 use App\Question\Entity\Enum\QuestionType;
+use App\Question\Entity\OpenQuestion;
 use App\Question\Entity\QuestionMetadata;
 use App\Question\Entity\QuestionTag;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -86,7 +87,13 @@ final class QuestionAdmin extends AbstractAdmin
                 'class' => QuestionMetadata::class,
                 'required' => false,
                 'label' => 'Metadata',
-            ])
+            ]);
+
+        if ($this->getSubject() instanceof OpenQuestion) {
+            $form->add('answer');
+        }
+
+        $form
             ->add('images', CollectionType::class, [
                 'by_reference' => false,
                 'required' => false,
@@ -125,7 +132,13 @@ final class QuestionAdmin extends AbstractAdmin
     {
         $show
             ->add('id')
-            ->add('body')
+            ->add('body');
+
+        if ($this->getSubject() instanceof OpenQuestion) {
+            $show->add('answer');
+        }
+
+        $show
             ->add('type')
             ->add('status')
             ->add('metadata.createdAt', null, [
@@ -146,8 +159,7 @@ final class QuestionAdmin extends AbstractAdmin
             ->add('urls', null, [
                 'label' => 'Tags',
                 'template' => 'admin/question/field_urls.html.twig',
-            ])
-        ;
+            ]);
     }
 
     // todo te 2 metody moze juz niepotrzebne
@@ -178,8 +190,8 @@ final class QuestionAdmin extends AbstractAdmin
     private function getQuestionTypeChoices(): array
     {
         return array_combine(
-            array_map(fn (QuestionType $type) => ucfirst(strtolower($type->name)), QuestionType::cases()),
-            array_map(fn (QuestionType $type) => $type->value, QuestionType::cases())
+            array_map(fn(QuestionType $type) => ucfirst(strtolower($type->name)), QuestionType::cases()),
+            array_map(fn(QuestionType $type) => $type->value, QuestionType::cases())
         );
     }
 }

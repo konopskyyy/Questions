@@ -5,6 +5,7 @@ Accept: application/json
 {
     "body": "What is the capital of France?",
     "type": "open",
+    "answer": "Paris",
     "status": "draft",
     "images": [
         {"name": "paris.jpg", "url": "https://example.com/paris.jpg"},
