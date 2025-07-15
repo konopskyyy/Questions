@@ -108,11 +108,10 @@ class QuestionFactoryTest extends TestCase
             ['description' => 'Docker Hub', 'url' => 'https://hub.docker.com/'],
         ];
         $dto->answerOptions = [
-            ['letter' => 'A', 'body' => 'Option A'],
-            ['letter' => 'B', 'body' => 'Option B'],
-            ['letter' => 'C', 'body' => 'Option C'],
+            ['letter' => 'A', 'body' => 'Option A', 'is_correct' => true],
+            ['letter' => 'B', 'body' => 'Option B', 'is_correct' => true],
+            ['letter' => 'C', 'body' => 'Option C', 'is_correct' => false],
         ];
-        $dto->correctAnswers = ['A', 'B'];
 
         $this->questionTagRepository
             ->method('findOneBy')
@@ -126,7 +125,6 @@ class QuestionFactoryTest extends TestCase
         $this->assertCount(3, $question->getTips());
         $this->assertCount(2, $question->getUrls());
         $this->assertCount(3, $question->getAnswerOptions());
-        $this->assertCount(2, $question->getCorrectAnswers());
         $this->assertInstanceOf(ClosedQuestion::class, $question);
     }
 }

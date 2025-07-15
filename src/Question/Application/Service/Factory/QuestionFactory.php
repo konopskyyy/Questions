@@ -5,7 +5,6 @@ namespace App\Question\Application\Service\Factory;
 use App\Question\Dto\QuestionCreateDto;
 use App\Question\Entity\AnswerOption;
 use App\Question\Entity\ClosedQuestion;
-use App\Question\Entity\CorrectAnswer;
 use App\Question\Entity\OpenQuestion;
 use App\Question\Entity\Question;
 use App\Question\Entity\QuestionImage;
@@ -64,13 +63,7 @@ class QuestionFactory
                 (new AnswerOption())
                     ->setLetter($answerOption['letter'])
                     ->setBody($answerOption['body'])
-            );
-        }
-
-        foreach ($dto->correctAnswers as $correctAnswer) {
-            $question->addCorrectAnswer(
-                (new CorrectAnswer())
-                    ->setLetter($correctAnswer)
+                    ->setIsCorrect($answerOption['is_correct'])
             );
         }
 

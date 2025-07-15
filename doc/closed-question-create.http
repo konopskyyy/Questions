@@ -1,0 +1,76 @@
+POST http://localhost:2001/api/questions
+Content-Type: application/json
+Accept: application/json
+
+{
+    "body": "What is the capital of France?",
+    "type": "closed",
+    "status": "draft",
+    "images": [
+        {
+            "name": "paris.jpg",
+            "url": "https://example.com/paris.jpg"
+        },
+        {
+            "name": "eiffel.jpg",
+            "url": "https://example.com/eiffel.jpg"
+        },
+        {
+            "name": "louvre.jpg",
+            "url": "https://example.com/louvre.jpg"
+        }
+    ],
+    "metadata": {
+        "createdBy": "admin"
+    },
+    "tags": [
+        "docker"
+    ],
+    "tips": [
+        {
+            "description": "It's a famous European city."
+        },
+        {
+            "description": "The Eiffel Tower is located here."
+        },
+        {
+            "description": "It starts with the letter P."
+        }
+    ],
+    "urls": [
+        {
+            "description": "Wikipedia",
+            "url": "https://en.wikipedia.org/wiki/Paris"
+        },
+        {
+            "description": "Official website",
+            "url": "https://www.paris.fr/"
+        },
+        {
+            "description": "Travel guide",
+            "url": "https://www.lonelyplanet.com/france/paris"
+        }
+    ],
+    "anserOptions": [
+        {
+            "letter": "A",
+            "description": "Paris",
+            "is_correct": true
+        },
+        {
+            "letter": "B",
+            "description": "London",
+            "is_correct": false
+        },
+        {
+            "letter": "C",
+            "description": "Berlin",
+            "is_correct": false
+        },
+        {
+            "letter": "D",
+            "description": "Madrid",
+            "is_correct": false
+        }
+    ]
+}

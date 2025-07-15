@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Question\Entity\CorrectAnswer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

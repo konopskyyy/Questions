@@ -22,6 +22,9 @@ class AnswerOption
     #[ORM\ManyToOne(inversedBy: 'answerOptions')]
     private ?ClosedQuestion $question = null;
 
+    #[ORM\Column]
+    private ?bool $isCorrect = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class AnswerOption
     public function setQuestion(?ClosedQuestion $question): static
     {
         $this->question = $question;
+
+        return $this;
+    }
+
+    public function isCorrect(): ?bool
+    {
+        return $this->isCorrect;
+    }
+
+    public function setIsCorrect(bool $isCorrect): static
+    {
+        $this->isCorrect = $isCorrect;
 
         return $this;
     }

@@ -17,17 +17,10 @@ class ClosedQuestion extends Question
     #[ORM\OneToMany(targetEntity: AnswerOption::class, mappedBy: 'question')]
     private Collection $answerOptions;
 
-    /**
-     * @var Collection<int, CorrectAnswer>
-     */
-    #[ORM\OneToMany(targetEntity: CorrectAnswer::class, mappedBy: 'question')]
-    private Collection $correctAnswers;
-
     public function __construct()
     {
         parent::__construct();
         $this->answerOptions = new ArrayCollection();
-        $this->correctAnswers = new ArrayCollection();
     }
 
     /**
@@ -54,36 +47,6 @@ class ClosedQuestion extends Question
             // set the owning side to null (unless already changed)
             if ($answerOption->getQuestion() === $this) {
                 $answerOption->setQuestion(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CorrectAnswer>
-     */
-    public function getCorrectAnswers(): Collection
-    {
-        return $this->correctAnswers;
-    }
-
-    public function addCorrectAnswer(CorrectAnswer $correctAnswer): static
-    {
-        if (!$this->correctAnswers->contains($correctAnswer)) {
-            $this->correctAnswers->add($correctAnswer);
-            $correctAnswer->setQuestion($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCorrectAnswer(CorrectAnswer $correctAnswer): static
-    {
-        if ($this->correctAnswers->removeElement($correctAnswer)) {
-            // set the owning side to null (unless already changed)
-            if ($correctAnswer->getQuestion() === $this) {
-                $correctAnswer->setQuestion(null);
             }
         }
 

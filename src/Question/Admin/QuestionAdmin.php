@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Question\Admin;
 
+use App\Question\Entity\ClosedQuestion;
 use App\Question\Entity\Enum\QuestionType;
 use App\Question\Entity\OpenQuestion;
 use App\Question\Entity\QuestionMetadata;
@@ -91,6 +92,18 @@ final class QuestionAdmin extends AbstractAdmin
 
         if ($this->getSubject() instanceof OpenQuestion) {
             $form->add('answer');
+        }
+
+        //todo sprawdzic czemu nie ma danych
+        if ($this->getSubject() instanceof ClosedQuestion) {
+            $form->add('answerOptions', CollectionType::class, [
+                'by_reference' => false,
+                'required' => false,
+            ], [
+                'edit' => 'inline',
+                'inline' => 'table',
+                'admin_code' => 'admin.answer_option',
+            ]);
         }
 
         $form
