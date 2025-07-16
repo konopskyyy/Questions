@@ -11,7 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
-class Question
+#[ORM\Table(name: 'question')]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+#[ORM\DiscriminatorMap(['open' => OpenQuestion::class, 'closed' => ClosedQuestion::class])]
+abstract class Question
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -21,9 +25,6 @@ class Question
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $body = null;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $type = 'open';
 
     #[ORM\Column(length: 255)]
     private ?string $status = QuestionStatus::DRAFT->value;
@@ -71,19 +72,6 @@ class Question
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        // todo poprawic zwracany typ
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -96,9 +84,6 @@ class Question
         return $this;
     }
 
-    /**
-     * @return Collection<int, QuestionImage>
-     */
     public function getImages(): Collection
     {
         return $this->images;
@@ -137,9 +122,6 @@ class Question
         return $this;
     }
 
-    /**
-     * @return Collection<int, QuestionTag>
-     */
     public function getTags(): Collection
     {
         return $this->tags;
@@ -211,5 +193,14 @@ class Question
         }
 
         return $this;
+    }
+
+    public function getType(): string
+    {
+        return match (get_class($this)) {
+            OpenQuestion::class => 'open',
+            ClosedQuestion::class => 'closed',
+            default => 'unknown',
+        };
     }
 }

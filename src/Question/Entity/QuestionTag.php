@@ -90,6 +90,6 @@ class QuestionTag
 
     public function __toString(): string
     {
-        return $this->getName() ?? ''; // lub inna właściwość opisująca obiekt
+        return $this->getDescription() ?? ''; // lub inna właściwość opisująca obiekt
     }
 }

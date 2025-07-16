@@ -3,24 +3,31 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "body": "Przykładowe pytanie?",
-  "type": "single",
-  "status": "draft",
-  "images": [
-    {"name": "img1", "url": "http://example.com/img1.jpg"}
-  ],
-  "tags": [
-    {"name": "tag1", "description": "desc1"}
-  ],
-  "metadata": {
-    "createdBy": "test-user"
-  },
-  "tips": [
-    {"body": "Podpowiedź 1"}
-  ],
-  "urls": [
-    {"url": "http://example.com"}
-  ]
+    "body": "What is the capital of France?",
+    "type": "open",
+    "answer": "Paris",
+    "status": "draft",
+    "images": [
+        {"name": "paris.jpg", "url": "https://example.com/paris.jpg"},
+        {"name": "eiffel.jpg", "url": "https://example.com/eiffel.jpg"},
+        {"name": "louvre.jpg", "url": "https://example.com/louvre.jpg"}
+    ],
+    "metadata": {
+        "createdBy": "admin"
+    },
+    "tags": [
+        "docker"
+    ],
+    "tips": [
+        {"description": "It's a famous European city."},
+        {"description": "The Eiffel Tower is located here."},
+        {"description": "It starts with the letter P."}
+    ],
+    "urls": [
+        {"description": "Wikipedia", "url": "https://en.wikipedia.org/wiki/Paris"},
+        {"description": "Official website", "url": "https://www.paris.fr/"},
+        {"description": "Travel guide", "url": "https://www.lonelyplanet.com/france/paris"}
+    ]
 }
 
 > {%

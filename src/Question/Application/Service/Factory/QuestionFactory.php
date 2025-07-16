@@ -3,6 +3,9 @@
 namespace App\Question\Application\Service\Factory;
 
 use App\Question\Dto\QuestionCreateDto;
+use App\Question\Entity\AnswerOption;
+use App\Question\Entity\ClosedQuestion;
+use App\Question\Entity\OpenQuestion;
 use App\Question\Entity\Question;
 use App\Question\Entity\QuestionImage;
 use App\Question\Entity\QuestionMetadata;
@@ -20,19 +23,56 @@ class QuestionFactory
     ) {
     }
 
-    public function createFromDto(QuestionCreateDto $dto): Question
+    public function createFromDto(QuestionCreateDto $dto): ClosedQuestion|OpenQuestion
     {
         $this->logger->info('Rozpoczynam tworzenie pytania z DTO', [
             'dto' => $dto,
         ]);
 
-        if ('open' !== $dto->type) {
-            throw new \InvalidArgumentException('Invalid question type provided.');
+        $question = match ($dto->type) {
+            'open' => $this->prepareOpenQuestion($dto),
+            'closed' => $this->prepareClosedQuestion($dto),
+            default => throw new \InvalidArgumentException('Invalid question type provided.'),
+        };
+
+        $this->logger->info('Dodane pytania z DTO', [
+            'question' => $question,
+        ]);
+
+        return $question;
+    }
+
+    private function prepareOpenQuestion(QuestionCreateDto $dto): OpenQuestion
+    {
+        $question = new OpenQuestion();
+        /** @var OpenQuestion $question */
+        $question = $this->prepareGeneralDataOnQuestion($question, $dto);
+        $question->setAnswer($dto->answer);
+
+        return $question;
+    }
+
+    private function prepareClosedQuestion(QuestionCreateDto $dto): ClosedQuestion
+    {
+        $question = new ClosedQuestion();
+        /** @var ClosedQuestion $question */
+        $question = $this->prepareGeneralDataOnQuestion($question, $dto);
+
+        foreach ($dto->answerOptions as $answerOption) {
+            $question->addAnswerOption(
+                (new AnswerOption())
+                    ->setLetter($answerOption['letter'])
+                    ->setBody($answerOption['body'])
+                    ->setIsCorrect($answerOption['isCorrect'])
+            );
         }
 
-        $question = new Question();
+        return $question;
+    }
+
+    private function prepareGeneralDataOnQuestion(Question $question, QuestionCreateDto $dto): Question
+    {
         $question->setBody($dto->body);
-        $question->setType($dto->type);
 
         $metadata = new QuestionMetadata();
         $metadata->setCreatedAt(new \DateTimeImmutable('NOW'));
@@ -73,10 +113,6 @@ class QuestionFactory
             $question->getUrls()->add($url);
             $url->setQuestion($question);
         }
-
-        $this->logger->info('Dodane pytania z DTO', [
-            'question' => $question,
-        ]);
 
         return $question;
     }

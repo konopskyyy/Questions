@@ -1,0 +1,14 @@
+<tr class="sonata-ba-view-container">
+    <th>Urls</th>
+    <td>
+        {% if value is empty %}
+            <em>No urls</em>
+        {% else %}
+            <ul style="padding-left: 18px; margin: 0;">
+                {% for url in value %}
+                    <li>{{ url.description }} - {{ url.url }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </td>
+</tr>

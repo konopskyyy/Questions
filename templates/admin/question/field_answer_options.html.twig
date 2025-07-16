@@ -1,0 +1,22 @@
+<tr class="sonata-ba-view-container">
+    <th>Answers</th>
+    <td>
+        {% if value is empty %}
+            <em>No answers</em>
+        {% else %}
+            <ul style="padding-left: 18px; margin: 0;">
+                {% for answer in value %}
+                    <li>
+                        <strong>{{ answer.letter }}</strong> —
+                        {{ answer.body }}
+                        {% if answer.isCorrect %}
+                            <span style="color: green;">✅ Correct</span>
+                        {% else %}
+                            <span style="color: red;">❌ Bad</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </td>
+</tr>

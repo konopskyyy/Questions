@@ -1,0 +1,196 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block title %}Nowe pytanie otwarte{% endblock %}
+
+{% block content %}
+    <div class="container-fluid mt-4">
+        <h1 class="sonata-ba-title">Utwórz nowe pytanie otwarte</h1>
+
+        <div class="sonata-ba-form">
+            {{ form_start(form) }}
+
+            {% if form.vars.errors|length > 0 %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+
+            <div class="form-group row">
+                <div class="col-12">
+                    {{ form_row(form.body, {'attr': {'class': 'form-control sonata-ba-field'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-12">
+                    {{ form_row(form.answer, {'attr': {'class': 'form-control sonata-ba-field'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-5">
+                    {{ form_row(form.type, {'attr': {'class': 'form-control sonata-ba-field'}}) }}
+                </div>
+                <div class="col-md-5">
+                    {{ form_row(form.tags, {'attr': {'class': 'form-control sonata-ba-field'}}) }}
+                </div>
+            </div>
+
+            <h4 class="sonata-ba-list-title">Obrazki</h4>
+            <div id="images-wrapper"
+                 class="sonata-collection-form"
+                 data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+                {% for imageForm in form.images %}
+                    <div class="image-item mb-2 sonata-ba-field">
+                        {{ form_row(imageForm, {'attr': {'class': 'form-control'}}) }}
+                        <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
+                    data-target="#images-wrapper">Dodaj obrazek</button>
+
+            <h4 class="sonata-ba-list-title">Podpowiedzi</h4>
+            <div id="tips-wrapper"
+                 class="sonata-collection-form"
+                 data-prototype="{{ form_widget(form.tips.vars.prototype)|e('html_attr') }}">
+                {% for tipForm in form.tips %}
+                    <div class="tip-item mb-2 sonata-ba-field">
+                        {{ form_row(tipForm, {'attr': {'class': 'form-control'}}) }}
+                        <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
+                    data-target="#tips-wrapper">Dodaj podpowiedź</button>
+
+            <h4 class="sonata-ba-list-title">Linki URL</h4>
+            <div id="urls-wrapper"
+                 class="sonata-collection-form"
+                 data-prototype="{{ form_widget(form.urls.vars.prototype)|e('html_attr') }}">
+                {% for urlForm in form.urls %}
+                    <div class="url-item mb-2 sonata-ba-field">
+                        {{ form_row(urlForm, {'attr': {'class': 'form-control'}}) }}
+                        <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
+                    data-target="#urls-wrapper">Dodaj URL</button>
+
+            <div class="d-flex justify-content-end mt-5 mb-2">
+                <button class="btn btn-success sonata-ba-action" type="submit">Zapisz</button>
+            </div>
+            {{ form_widget(form._token) }}
+            {{ form_end(form, { 'render_rest': false }) }}
+        </div>
+    </div>
+
+    <style>
+        .form-control, .sonata-ba-field input, .sonata-ba-field textarea, .select2-selection--single {
+            width: 100%;
+            min-width: 270px;
+            max-width: 100%;
+            box-sizing: border-box;
+            padding: 8px 12px;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+        .sonata-ba-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .sonata-ba-list-title {
+            font-size: 1.2rem;
+            margin-top: 28px;
+            margin-bottom: 8px;
+        }
+        .image-item, .tip-item, .url-item {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            position: relative;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        form label, .sonata-ba-field label {
+            font-weight: 500;
+            margin-bottom: 4px;
+            display: block;
+        }
+        button.btn, .btn {
+            font-size: 1rem;
+            border-radius: 8px;
+            padding: 7px 18px;
+            transition: background 0.2s;
+        }
+        .btn-outline-primary {
+            color: #3866A3;
+            border-color: #3866A3;
+            background: #fff;
+        }
+        .btn-outline-primary:hover {
+            background: #3866A3;
+            color: #fff;
+        }
+        .btn-danger.btn-sm.remove-item-btn {
+            border-radius: 5px;
+            padding: 4px 14px;
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+        .btn-success {
+            background: #3E7E22;
+            border-color: #3E7E22;
+            color: #fff;
+        }
+        .d-flex {
+            display: flex !important;
+        }
+        .justify-content-end {
+            justify-content: flex-end !important;
+        }
+        @media (max-width: 768px) {
+            .col-md-8, .col-md-5, .col-12 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        document.querySelectorAll('.add-item-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const targetSelector = this.getAttribute('data-target');
+                const container = document.querySelector(targetSelector);
+
+                let itemClass = '';
+                if (targetSelector === '#images-wrapper') itemClass = 'image-item';
+                if (targetSelector === '#tips-wrapper') itemClass = 'tip-item';
+                if (targetSelector === '#urls-wrapper') itemClass = 'url-item';
+
+                const index = container.querySelectorAll('.' + itemClass).length;
+                const prototype = container.getAttribute('data-prototype');
+                if (!prototype) {
+                    alert('Brak prototypu. Sprawdź konfigurację w PHP.');
+                    return;
+                }
+                const newForm = prototype.replace(/__name__/g, index);
+                const div = document.createElement('div');
+                div.classList.add(itemClass, 'mb-2', 'sonata-ba-field');
+                div.innerHTML = newForm +
+                    '<button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>';
+                container.appendChild(div);
+            });
+        });
+
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-item-btn')) {
+                e.target.closest('.mb-2').remove();
+            }
+        });
+    </script>
+{% endblock %}
