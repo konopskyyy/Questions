@@ -67,6 +67,10 @@ final class QuestionAdmin extends AbstractAdmin
             'template' => 'admin/question/list__action_open_question_create.html.twig',
         ];
 
+        $buttonList['closed_question_create'] = [
+            'template' => 'admin/question/list__action_closed_question_create.html.twig',
+        ];
+
         return $buttonList;
     }
 
@@ -74,6 +78,7 @@ final class QuestionAdmin extends AbstractAdmin
     {
         parent::configureRoutes($collection);
         $collection->add('open_question_create', 'open_question_create');
+        $collection->add('closed_question_create', 'closed_question_create');
     }
 
     protected function configureFormFields(FormMapper $form): void
@@ -120,8 +125,7 @@ final class QuestionAdmin extends AbstractAdmin
                 'multiple' => true,
                 'required' => false,
                 'label' => 'Tags',
-                // opcjonalnie:
-                'property' => 'name', // jeśli chcesz wyświetlać nazwę taga
+                'property' => 'description',
             ])
             ->add('tips', CollectionType::class, [
                 'by_reference' => false,
