@@ -15,8 +15,7 @@ class ClosedQuestion extends Question
         targetEntity: AnswerOption::class,
         mappedBy: 'question',
         cascade: ['persist']
-    )]    private Collection $answerOptions;
-
+    )] private Collection $answerOptions;
     public function __construct()
     {
         parent::__construct();

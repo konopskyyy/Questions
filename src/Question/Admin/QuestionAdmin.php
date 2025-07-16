@@ -94,7 +94,7 @@ final class QuestionAdmin extends AbstractAdmin
             $form->add('answer');
         }
 
-        //todo sprawdzic czemu nie ma danych
+        // todo sprawdzic czemu nie ma danych
         if ($this->getSubject() instanceof ClosedQuestion) {
             $form->add('answerOptions', CollectionType::class, [
                 'by_reference' => false,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Question\Repository;
 
 use App\Question\Entity\AnswerOption;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

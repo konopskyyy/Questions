@@ -2,7 +2,7 @@
 
 namespace App\Question\Entity;
 
-use App\Repository\AnswerOptionRepository;
+use App\Question\Repository\AnswerOptionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnswerOptionRepository::class)]
