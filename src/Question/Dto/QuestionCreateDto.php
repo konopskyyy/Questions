@@ -34,6 +34,6 @@ class QuestionCreateDto
      */
     public array $urls = [];
 
-    /** @var array<int, array{letter: string, body: string, is_correct: bool}> */
+    /** @var array<int, array{letter: string, body: string, isCorrect: bool}> */
     public array $answerOptions = [];
 }

@@ -151,6 +151,13 @@ final class QuestionAdmin extends AbstractAdmin
             $show->add('answer');
         }
 
+        if ($this->getSubject() instanceof ClosedQuestion) {
+            $show->add('answerOptions', null, [
+                'label' => 'Answer Options',
+                'template' => 'admin/question/field_answer_options.html.twig',
+            ]);
+        }
+
         $show
             ->add('type')
             ->add('status')

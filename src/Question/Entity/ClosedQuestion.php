@@ -11,11 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class ClosedQuestion extends Question
 {
-    /**
-     * @var Collection<int, AnswerOption>
-     */
-    #[ORM\OneToMany(targetEntity: AnswerOption::class, mappedBy: 'question')]
-    private Collection $answerOptions;
+    #[ORM\OneToMany(
+        targetEntity: AnswerOption::class,
+        mappedBy: 'question',
+        cascade: ['persist']
+    )]    private Collection $answerOptions;
 
     public function __construct()
     {

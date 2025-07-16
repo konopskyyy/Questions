@@ -51,26 +51,26 @@ Accept: application/json
             "url": "https://www.lonelyplanet.com/france/paris"
         }
     ],
-    "anserOptions": [
+    "answerOptions": [
         {
             "letter": "A",
-            "description": "Paris",
-            "is_correct": true
+            "body": "Paris",
+            "isCorrect": true
         },
         {
             "letter": "B",
-            "description": "London",
-            "is_correct": false
+            "body": "London",
+            "isCorrect": false
         },
         {
             "letter": "C",
-            "description": "Berlin",
-            "is_correct": false
+            "body": "Berlin",
+            "isCorrect": false
         },
         {
             "letter": "D",
-            "description": "Madrid",
-            "is_correct": false
+            "body": "Madrid",
+            "isCorrect": false
         }
     ]
 }

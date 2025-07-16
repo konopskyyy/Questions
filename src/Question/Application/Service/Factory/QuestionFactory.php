@@ -58,12 +58,12 @@ class QuestionFactory
         /** @var ClosedQuestion $question */
         $question = $this->prepareGeneralDataOnQuestion($question, $dto);
 
-        foreach ($dto->answerOptions as $answerOption) {
+            foreach ($dto->answerOptions as $answerOption) {
             $question->addAnswerOption(
                 (new AnswerOption())
                     ->setLetter($answerOption['letter'])
                     ->setBody($answerOption['body'])
-                    ->setIsCorrect($answerOption['is_correct'])
+                    ->setIsCorrect($answerOption['isCorrect'])
             );
         }
 

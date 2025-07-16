@@ -108,9 +108,9 @@ class QuestionFactoryTest extends TestCase
             ['description' => 'Docker Hub', 'url' => 'https://hub.docker.com/'],
         ];
         $dto->answerOptions = [
-            ['letter' => 'A', 'body' => 'Option A', 'is_correct' => true],
-            ['letter' => 'B', 'body' => 'Option B', 'is_correct' => true],
-            ['letter' => 'C', 'body' => 'Option C', 'is_correct' => false],
+            ['letter' => 'A', 'body' => 'Option A', 'isCorrect' => true],
+            ['letter' => 'B', 'body' => 'Option B', 'isCorrect' => true],
+            ['letter' => 'C', 'body' => 'Option C', 'isCorrect' => false],
         ];
 
         $this->questionTagRepository
