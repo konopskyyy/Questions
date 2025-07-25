@@ -43,7 +43,7 @@ jobs:
 
             - name: Docker Compose up on server
               run: |
-                  DOCKER_CMD="cd ${{ secrets.SSH_PATH }} && docker compose up -d"
+                  DOCKER_CMD="cd ${{ secrets.SSH_PATH }} && docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d"
                   if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
                     ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
                   else

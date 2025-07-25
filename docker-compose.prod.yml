@@ -1,0 +1,5 @@
+services:
+    php-fpm:
+        image: php-fpm-prod
+        working_dir: /application
+
