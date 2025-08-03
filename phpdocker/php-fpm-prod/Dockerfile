@@ -4,8 +4,6 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apt-get update && apt-get install -y \
     unzip libicu-dev libpq-dev libzip-dev zip \
-    && pecl install xdebug \
-    && docker-php-ext-enable xdebug \
     && docker-php-ext-install intl pdo pdo_mysql zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
