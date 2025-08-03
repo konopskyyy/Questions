@@ -52,7 +52,8 @@ jobs:
 
             - name: Composer install in php-fpm container
               run: |
-                  ls -al ${{ secrets.SSH_PATH }}
+                  pwd
+                  ls -al
                   DOCKER_CMD="cd ${{ secrets.SSH_PATH }} && docker compose exec -T php-fpm composer install --no-interaction --prefer-dist"
                   if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=5 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo ok' 2>/dev/null; then
                     ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "$DOCKER_CMD"
