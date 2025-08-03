@@ -2,6 +2,7 @@ services:
     mysql:
         image: 'mysql:8.0'
         working_dir: /application
+        restart: unless-stopped
         volumes:
             - '.:/application'
         environment:
@@ -15,6 +16,7 @@ services:
     webserver:
         image: 'nginx:alpine'
         working_dir: /application
+        restart: unless-stopped
         volumes:
             - '.:/application'
             - './phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
@@ -23,6 +25,7 @@ services:
 
     php-fpm:
         build: phpdocker/php-fpm
+        restart: unless-stopped
         working_dir: /application
         volumes:
             - '.:/application'
