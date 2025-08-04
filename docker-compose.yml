@@ -31,3 +31,22 @@ services:
             - '.:/application'
             - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.4/fpm/conf.d/99-overrides.ini'
             - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.4/cli/conf.d/99-overrides.ini'
+
+    grafana:
+        image: grafana/grafana:latest
+        container_name: grafana
+        restart: unless-stopped
+        environment:
+            - GF_SECURITY_ADMIN_PASSWORD=admin
+            - GF_SECURITY_ADMIN_USER=admin
+        ports:
+            - "3000:3000"
+        volumes:
+            - grafana_data:/var/lib/grafana
+            - ./phpdocker/grafana/provisioning:/etc/grafana/provisioning
+            - ./phpdocker/grafana/dashboards:/var/lib/grafana/dashboards
+        depends_on:
+            - mysql
+
+volumes:
+    grafana_data:
