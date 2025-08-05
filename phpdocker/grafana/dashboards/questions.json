@@ -120,7 +120,7 @@
             "pluginVersion": "12.2.0-16711121739",
             "targets": [
                 {
-                    "dataset": "questions",
+                    "dataset": "db_ula214",
                     "datasource": {
                         "type": "mysql",
                         "uid": "P211906C1C32DB77E"
@@ -128,7 +128,7 @@
                     "editorMode": "code",
                     "format": "table",
                     "rawQuery": true,
-                    "rawSql": "SELECT status, COUNT(*) AS count\nFROM questions.question \nGROUP BY status LIMIT 50 ",
+                    "rawSql": "SELECT status, COUNT(*) AS count\nFROM db_ula214.question \nGROUP BY status LIMIT 50 ",
                     "refId": "A",
                     "sql": {
                         "columns": [
@@ -136,7 +136,7 @@
                                 "name": "COUNT",
                                 "parameters": [
                                     {
-                                        "name": "status",
+                                        "name": "",
                                         "type": "functionParameter"
                                     }
                                 ],
@@ -146,7 +146,6 @@
                         "groupBy": [
                             {
                                 "property": {
-                                    "name": "status",
                                     "type": "string"
                                 },
                                 "type": "groupBy"
@@ -175,5 +174,5 @@
     "timezone": "browser",
     "title": "Pytania",
     "uid": "e2b9d0e3-6fb6-41ab-b0cd-aefaf01abaec",
-    "version": 10
+    "version": 1
 }
