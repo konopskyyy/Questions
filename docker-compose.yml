@@ -40,7 +40,7 @@ services:
             - GF_SECURITY_ADMIN_PASSWORD=admin
             - GF_SECURITY_ADMIN_USER=admin
         ports:
-            - "3000:3000"
+            - "2004:3000"
         volumes:
             - grafana_data:/var/lib/grafana
             - ./phpdocker/grafana/provisioning:/etc/grafana/provisioning
