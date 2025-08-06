@@ -89,6 +89,6 @@ jobs:
                     else
                       for file in $files; do
                         echo "Linting $file"
-                        docker run --rm -v "${{ github.workspace }}:/workspace" hadolint/hadolint "/workspace/${file#./}"
+                        docker run --rm -v "${{ github.workspace }}:/workspace" hadolint/hadolint hadolint "/workspace/${file#./}"
                       done
                     fi
