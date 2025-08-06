@@ -75,3 +75,20 @@ jobs:
               run: ./bin/console lint:yaml config/
             - name: Run Container Lint
               run: ./bin/console lint:container
+
+    hadolint-multi:
+        name: Hadolint multiple Dockerfiles
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v4
+            -   name: Lint all Dockerfiles with Hadolint
+                run: |
+                    files=$(find . -type f -name 'Dockerfile*')
+                    if [ -z "$files" ]; then
+                      echo "No Dockerfiles found to lint"
+                    else
+                      for file in $files; do
+                        echo "Linting $file"
+                        docker run --rm -v "${{ github.workspace }}:/workspace" hadolint/hadolint "/workspace/${file#./}"
+                      done
+                    fi
