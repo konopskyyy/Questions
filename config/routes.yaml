@@ -8,3 +8,9 @@ question_admin_controllers:
         path: ../src/Question/Controller/Admin/
         namespace: App\Question\Controller\Admin
     type: attribute
+security_controllers:
+    resource:
+        path: ../src/User/UserInterface/Controller/
+        namespace: App\User\UserInterface\Controller
+    type: attribute
+

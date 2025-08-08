@@ -1,0 +1,7 @@
+{% block user_block %}
+    {% if app.user %}
+        <li>
+            <a href="{{ path('app_logout') }}">Wyloguj się</a>
+        </li>
+    {% endif %}
+{% endblock %}

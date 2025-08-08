@@ -1,0 +1,13 @@
+{# templates/admin/layout.html.twig #}
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{# Nadpisujemy blok nawigacji bocznej - dodajemy guzik wyloguj #}
+{% block sonata_nav_sidebar %}
+    {{ parent() }}
+
+    <ul class="nav">
+        <li>
+            <a href="{{ path('app_logout') }}">Wyloguj się</a>
+        </li>
+    </ul>
+{% endblock %}
