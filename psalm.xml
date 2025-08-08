@@ -1,53 +1,53 @@
-<?xml version="1.0"?>
-<psalm
-    errorLevel="4"
-    resolveFromConfigFile="true"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    findUnusedBaselineEntry="true"
-    findUnusedCode="true"
->
-    <projectFiles>
-        <directory name="src" />
-        <ignoreFiles>
-            <directory name="vendor" />
-        </ignoreFiles>
-    </projectFiles>
-    <issueHandlers>
-        <PossiblyUnusedParam>
-            <errorLevel type="suppress">
-                <file name="**/*Repository.php"/>
-            </errorLevel>
-        </PossiblyUnusedParam>
-        <PossiblyUnusedMethod>
-            <errorLevel type="suppress">
-                <file name="**/*Repository.php"/>
-                <file name="**/*Entity/**"/> <!-- to potencjalnie mozna wylaczyc -->
-                <file name="**/*User/**"/> <!-- to potencjalnie mozna wylaczyc -->
-            </errorLevel>
-        </PossiblyUnusedMethod>
-        <UnusedClass>
-            <errorLevel type="suppress">
-                <file name="**/Middleware/**"/>
-                <file name="**/*Handler.php"/>
-                <file name="**/*Validator.php"/>
-                <file name="**/*Controller.php"/>
-                <file name="**/*Admin.php"/>
-                <file name="**/*Command.php"/> <!-- to potencjalnie bedzie mozna wylaczyc jako CliCommand -->
-            </errorLevel>
-        </UnusedClass>
-        <MissingOverrideAttribute>
-            <errorLevel type="suppress">
-                <file name="**/*Admin.php"/>
-                <file name="**/*User.php"/> <!-- to potencjalnie bedzie mozna wylaczyc -->
-                <file name="**/*MakeAdminCommand.php"/> <!-- to potencjalnie bedzie mozna wylaczyc -->
-            </errorLevel>
-        </MissingOverrideAttribute>
-        <MissingTemplateParam>
-            <errorLevel type="suppress">
-                <directory name="**"/>
-            </errorLevel>
-        </MissingTemplateParam>
-    </issueHandlers>
-</psalm>
+    <?xml version="1.0"?>
+    <psalm
+        errorLevel="4"
+        resolveFromConfigFile="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+        findUnusedBaselineEntry="true"
+        findUnusedCode="true"
+    >
+        <projectFiles>
+            <directory name="src" />
+            <ignoreFiles>
+                <directory name="vendor" />
+            </ignoreFiles>
+        </projectFiles>
+        <issueHandlers>
+            <PossiblyUnusedParam>
+                <errorLevel type="suppress">
+                    <file name="**/*Repository.php"/>
+                </errorLevel>
+            </PossiblyUnusedParam>
+            <PossiblyUnusedMethod>
+                <errorLevel type="suppress">
+                    <file name="**/*Repository.php"/>
+                    <file name="**/*Entity/**"/> <!-- to potencjalnie mozna wylaczyc -->
+                    <file name="src/User/Domain/User.php"/>
+                </errorLevel>
+            </PossiblyUnusedMethod>
+            <UnusedClass>
+                <errorLevel type="suppress">
+                    <file name="**/Middleware/**"/>
+                    <file name="**/*Handler.php"/>
+                    <file name="**/*Validator.php"/>
+                    <file name="**/*Controller.php"/>
+                    <file name="**/*Admin.php"/>
+                    <file name="**/*Command.php"/> <!-- to potencjalnie bedzie mozna wylaczyc jako CliCommand -->
+                </errorLevel>
+            </UnusedClass>
+            <MissingOverrideAttribute>
+                <errorLevel type="suppress">
+                    <file name="**/*Admin.php"/>
+                    <file name="**/*User.php"/> <!-- to potencjalnie bedzie mozna wylaczyc -->
+                    <file name="**/*MakeAdminCommand.php"/> <!-- to potencjalnie bedzie mozna wylaczyc -->
+                </errorLevel>
+            </MissingOverrideAttribute>
+            <MissingTemplateParam>
+                <errorLevel type="suppress">
+                    <directory name="**"/>
+                </errorLevel>
+            </MissingTemplateParam>
+        </issueHandlers>
+    </psalm>
