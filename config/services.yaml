@@ -62,3 +62,8 @@ services:
         class: App\Admin\AnswerOptionAdmin
         tags:
             - { name: sonata.admin, model_class: App\Question\Entity\AnswerOption, controller: ~, manager_type: orm, group: admin, label: AnswerOption }
+
+    admin.user:
+        class: App\Admin\UserAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\User\Domain\User, controller: ~, manager_type: orm, group: admin, label: User }
