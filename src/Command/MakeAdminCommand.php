@@ -41,6 +41,7 @@ class MakeAdminCommand extends Command
 
         if (!$password || !$email) {
             $io->error('Please provide a password');
+
             return Command::FAILURE;
         }
 

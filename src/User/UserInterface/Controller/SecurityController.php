@@ -13,8 +13,8 @@ class SecurityController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
     ) {
-
     }
+
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
