@@ -24,7 +24,7 @@
                 <errorLevel type="suppress">
                     <file name="**/*Repository.php"/>
                     <file name="**/*Entity/**"/> <!-- to potencjalnie mozna wylaczyc -->
-                    <file name="src/User/Domain/User.php"/>
+                    <file name="**/User/Domain/User.php"/>
                 </errorLevel>
             </PossiblyUnusedMethod>
             <UnusedClass>
