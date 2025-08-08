@@ -38,6 +38,7 @@
         <MissingOverrideAttribute>
             <errorLevel type="suppress">
                 <file name="**/*Admin.php"/>
+                <file name="**/*User.php"/> <!-- to potencjalnie bedzie mozna wylaczyc -->
             </errorLevel>
         </MissingOverrideAttribute>
         <MissingTemplateParam>

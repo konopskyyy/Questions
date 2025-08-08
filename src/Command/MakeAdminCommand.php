@@ -21,10 +21,8 @@ class MakeAdminCommand extends Command
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly UserPasswordHasherInterface $passwordHasher,
-    )
-    {
+    ) {
         parent::__construct();
-
     }
 
     protected function configure(): void
