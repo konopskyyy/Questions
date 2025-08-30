@@ -14,7 +14,7 @@ class AcceptQuestionCommandValidator
     ) {
     }
 
-    public function validate(AcceptQuestionCommand $command): void
+    public function __invoke(AcceptQuestionCommand $command): void
     {
         $question = $this->questionRepository->find($command->questionId);
 

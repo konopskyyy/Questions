@@ -30,7 +30,7 @@ class CommandValidatorMiddleware implements MiddlewareInterface
             if (empty($attributes)) {
                 throw new \LogicException("Validator $validatorClass must have #[AsMessageValidator] attribute.");
             }
-            $validator->validate($message);
+            $validator($message);
         }
 
         return $stack->next()->handle($envelope, $stack);
