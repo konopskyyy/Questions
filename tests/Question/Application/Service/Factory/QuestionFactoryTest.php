@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Question\Application\Service\Factory\QuestionFactory;
-use App\Question\Dto\QuestionCreateDto;
+use App\Question\Controller\Dto\QuestionCreateDto;
 use App\Question\Entity\ClosedQuestion;
 use App\Question\Entity\OpenQuestion;
 use App\Question\Entity\QuestionTag;

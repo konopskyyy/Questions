@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Command;
+namespace App\User\UserInterface\Cli;
 
-use App\User\Domain\User;
-use App\User\Infrastructure\Repository\UserRepository;
+use App\User\Application\CreateUser\CreateUserCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsCommand(
     name: 'app:make-admin',
@@ -19,8 +18,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class MakeAdminCommand extends Command
 {
     public function __construct(
-        private readonly UserRepository $userRepository,
-        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly MessageBusInterface $messageBus,
     ) {
         parent::__construct();
     }
@@ -45,16 +43,16 @@ class MakeAdminCommand extends Command
             return Command::FAILURE;
         }
 
-        $user = new User();
-        $user->setEmail($email)
-            ->setRoles(['ROLE_ADMIN']);
+        try {
+            $command = new CreateUserCommand($email, $password);
+            $this->messageBus->dispatch($command);
+            $io->success('User created');
 
-        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+            return Command::SUCCESS;
+        } catch (\Throwable $exception) {
+            $io->error($exception->getMessage());
 
-        $this->userRepository->save($user, true);
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
-
-        return Command::SUCCESS;
+            return Command::FAILURE;
+        }
     }
 }

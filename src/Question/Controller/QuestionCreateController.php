@@ -3,7 +3,7 @@
 namespace App\Question\Controller;
 
 use App\Question\Application\CreateQuestion\CreateQuestionCommand;
-use App\Question\Dto\QuestionCreateDto;
+use App\Question\Controller\Dto\QuestionCreateDto;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

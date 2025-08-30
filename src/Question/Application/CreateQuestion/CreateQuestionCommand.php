@@ -2,7 +2,7 @@
 
 namespace App\Question\Application\CreateQuestion;
 
-use App\Question\Dto\QuestionCreateDto;
+use App\Question\Controller\Dto\QuestionCreateDto;
 
 class CreateQuestionCommand
 {

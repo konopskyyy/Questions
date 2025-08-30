@@ -56,6 +56,11 @@ services:
         resource: '../src/Question/Application/**/*Validator.php'
         tags: [ 'app.message_validator' ]
 
+    App\User\Application\:
+        resource: '../src/User/Application/**/*Validator.php'
+        tags: [ 'app.message_validator' ]
+
+
     #todo zrobic to bardziej elegancko
 
     admin.answer_option:

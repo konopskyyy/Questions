@@ -2,7 +2,7 @@
 
 namespace App\Question\Application\Service\Factory;
 
-use App\Question\Dto\QuestionCreateDto;
+use App\Question\Controller\Dto\QuestionCreateDto;
 use App\Question\Entity\AnswerOption;
 use App\Question\Entity\ClosedQuestion;
 use App\Question\Entity\OpenQuestion;
