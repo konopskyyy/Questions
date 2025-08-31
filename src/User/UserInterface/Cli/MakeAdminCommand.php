@@ -2,7 +2,7 @@
 
 namespace App\User\UserInterface\Cli;
 
-use App\User\Application\CreateUser\CreateUserCommand;
+use App\User\Application\Create\CreateUserCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
