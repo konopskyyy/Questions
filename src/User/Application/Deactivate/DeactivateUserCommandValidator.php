@@ -21,7 +21,7 @@ class DeactivateUserCommandValidator
         /** @var User $user */
         $user = $this->userRepository->findById($command->userId);
 
-        if ($user) {
+        if (!$user) {
             throw new \DomainException('Użytkownik nie istnieje.');
         }
 
