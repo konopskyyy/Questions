@@ -5,7 +5,9 @@ ARG GID=1000
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-RUN apt-get update && apt-get install -y \
+
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip libicu-dev libpq-dev libzip-dev zip \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug \
