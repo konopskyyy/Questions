@@ -3,7 +3,7 @@ FROM php:8.4-fpm
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        unzip libicu-dev libpq-dev libzip-dev zip \
+    unzip libicu-dev libpq-dev libzip-dev zip \
     && docker-php-ext-install intl pdo pdo_mysql zip ctype iconv\
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
