@@ -1,6 +1,8 @@
 <?php
 
-namespace App\User\Application\CreateUser;
+declare(strict_types=1);
+
+namespace App\User\Application\Create;
 
 use App\Common\Middleware\AsMessageValidator;
 use App\User\Infrastructure\Repository\UserRepository;

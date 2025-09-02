@@ -21,3 +21,8 @@
 .idea/
 .idea.iml
 .idea/php.xml
+/report
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

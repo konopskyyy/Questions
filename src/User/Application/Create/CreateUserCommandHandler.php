@@ -1,6 +1,8 @@
 <?php
 
-namespace App\User\Application\CreateUser;
+declare(strict_types=1);
+
+namespace App\User\Application\Create;
 
 use App\User\Domain\User;
 use App\User\Infrastructure\Repository\UserRepository;
@@ -20,7 +22,9 @@ class CreateUserCommandHandler
     {
         $user = new User();
         $user->setEmail($command->email)
-            ->setRoles(['ROLE_ADMIN']);
+            ->setRoles(['ROLE_ADMIN'])
+            ->setIsActive(true)
+        ;
 
         $user->setPassword($this->passwordHasher->hashPassword($user, $command->password));
 

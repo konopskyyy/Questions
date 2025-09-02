@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Question\Application\Service\Factory;
+
 use App\Question\Application\Service\Factory\QuestionFactory;
 use App\Question\Controller\Dto\QuestionCreateDto;
 use App\Question\Entity\ClosedQuestion;
@@ -29,7 +31,7 @@ class QuestionFactoryTest extends TestCase
     #[Test]
     public function shouldThrowExceptionWhenTypeIsIncorrect(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid question type provided.');
 
         $dto = new QuestionCreateDto();
