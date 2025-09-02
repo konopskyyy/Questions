@@ -13,10 +13,9 @@ class DeactivateUserCommandHandler
 {
     public function __construct(
         private readonly UserRepository $userRepository,
-    )
-    {
-
+    ) {
     }
+
     public function __invoke(DeactivateUserCommand $command): void
     {
         /** @var User $user */

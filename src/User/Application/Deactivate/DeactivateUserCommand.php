@@ -11,7 +11,7 @@ use Symfony\Component\Uid\Uuid;
 class DeactivateUserCommand
 {
     public function __construct(
-        public readonly Uuid $userId
+        public readonly Uuid $userId,
     ) {
     }
 }

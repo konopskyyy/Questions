@@ -8,7 +8,6 @@ use App\User\Application\Deactivate\DeactivateUserCommand;
 use App\User\Application\Deactivate\DeactivateUserCommandValidator;
 use App\User\Domain\User;
 use App\User\Infrastructure\Repository\UserRepository;
-use DomainException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -17,6 +16,7 @@ use Symfony\Component\Uid\Uuid;
 class DeactivateUserCommandValidatorTest extends TestCase
 {
     use ProphecyTrait;
+
     public function setUp(): void
     {
         $this->userRepository = $this->createMock(UserRepository::class);
@@ -30,7 +30,7 @@ class DeactivateUserCommandValidatorTest extends TestCase
 
         $handler = new DeactivateUserCommandValidator($this->userRepository);
 
-        $this->expectException(DomainException::class);
+        $this->expectException(\DomainException::class);
         $this->expectExceptionMessage('Użytkownik nie istnieje');
         $handler(new DeactivateUserCommand($id));
     }
@@ -46,7 +46,7 @@ class DeactivateUserCommandValidatorTest extends TestCase
 
         $handler = new DeactivateUserCommandValidator($this->userRepository);
 
-        $this->expectException(DomainException::class);
+        $this->expectException(\DomainException::class);
         $this->expectExceptionMessage('Użytkownik jest już nieaktywny');
         $handler(new DeactivateUserCommand($id));
     }

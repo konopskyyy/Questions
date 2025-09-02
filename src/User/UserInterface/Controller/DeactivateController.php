@@ -18,9 +18,7 @@ class DeactivateController extends AbstractController
     public function __construct(
         private readonly MessageBusInterface $messageBus,
         private readonly LoggerInterface $logger,
-    )
-    {
-
+    ) {
     }
 
     #[Route('/api/user/:id/deactivate', name: 'api_user_deactivate', methods: ['POST'])]

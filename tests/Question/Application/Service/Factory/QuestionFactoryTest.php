@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Question\Application\Service\Factory;
 
-
 use App\Question\Application\Service\Factory\QuestionFactory;
 use App\Question\Controller\Dto\QuestionCreateDto;
 use App\Question\Entity\ClosedQuestion;
 use App\Question\Entity\OpenQuestion;
 use App\Question\Entity\QuestionTag;
 use App\Question\Repository\QuestionTagRepository;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -33,7 +31,7 @@ class QuestionFactoryTest extends TestCase
     #[Test]
     public function shouldThrowExceptionWhenTypeIsIncorrect(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid question type provided.');
 
         $dto = new QuestionCreateDto();
