@@ -38,7 +38,6 @@ final class QuestionTagAdmin extends AbstractAdmin
                     'delete' => [],
                 ],
             ]);
-        ;
     }
 
     protected function configureFormFields(FormMapper $form): void
