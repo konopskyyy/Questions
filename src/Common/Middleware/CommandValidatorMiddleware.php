@@ -22,6 +22,7 @@ class CommandValidatorMiddleware implements MiddlewareInterface
         $message = $envelope->getMessage();
         $messageClass = get_class($message);
 
+        /** @var class-string $validatorClass */
         $validatorClass = $messageClass.'Validator';
 
         if ($this->validators->has($validatorClass)) {
