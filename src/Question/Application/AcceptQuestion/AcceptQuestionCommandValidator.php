@@ -4,6 +4,7 @@ namespace App\Question\Application\AcceptQuestion;
 
 use App\Common\Middleware\AsMessageValidator;
 use App\Question\Entity\Enum\QuestionStatus;
+use App\Question\Entity\Question;
 use App\Question\Repository\QuestionRepository;
 
 #[AsMessageValidator]
@@ -17,6 +18,10 @@ class AcceptQuestionCommandValidator
     public function __invoke(AcceptQuestionCommand $command): void
     {
         $question = $this->questionRepository->find($command->questionId);
+
+        if (!$question) {
+            throw new \DomainException('Question not found');
+        }
 
         if ($question->getStatus() != QuestionStatus::DRAFT->value) {
             throw new \DomainException('Niepoprawny status');
