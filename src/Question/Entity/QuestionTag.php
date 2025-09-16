@@ -1,13 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Question\Entity;
 
 use App\Question\Repository\QuestionTagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: QuestionTagRepository::class)]
+#[UniqueEntity(fields: ['name'], message: 'Tag name must be unique.')]
+#[UniqueEntity(fields: ['description'], message: 'Tag description must be unique.')]
 class QuestionTag
 {
     #[ORM\Id]
@@ -15,11 +20,14 @@ class QuestionTag
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $description = null;
+
+    #[ORM\Column(type: 'string', length: 7, nullable: true)]
+    private ?string $color = null;
 
     /**
      * @var Collection<int, Question>
@@ -61,6 +69,18 @@ class QuestionTag
         return $this;
     }
 
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): static
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Question>
      */
@@ -90,6 +110,6 @@ class QuestionTag
 
     public function __toString(): string
     {
-        return $this->getDescription() ?? ''; // lub inna właściwość opisująca obiekt
+        return $this->getDescription() ?? '';
     }
 }

@@ -40,6 +40,10 @@ final class QuestionAdmin extends AbstractAdmin
             ->add('body')
             ->add('type')
             ->add('status')
+            ->add('tags', null, [
+                'label' => 'Tags',
+                'template' => 'admin/question/list_field_tags.html.twig',
+            ])
             ->add('metadata.createdAt', null, [
                 'label' => 'Created At',
                 'sortable' => true,

@@ -4,9 +4,21 @@
         {% if value is empty %}
             <em>No tags</em>
         {% else %}
-            <ul style="padding-left: 18px; margin: 0;">
+            <ul style="padding-left: 0; margin: 0; list-style: none;">
                 {% for tag in value %}
-                    <li>{{ tag.description }}</li>
+                    <li style="
+                        display: inline-block;
+                        background: {{ tag.color|default('#dddddd') }};
+                        color: #222;
+                        padding: 2px 10px;
+                        margin: 2px 4px 2px 0;
+                        border-radius: 4px;
+                        min-width: 48px;
+                        font-size: 0.96em;
+                        font-weight: 500;
+                        ">
+                        {{ tag.description }}
+                    </li>
                 {% endfor %}
             </ul>
         {% endif %}
