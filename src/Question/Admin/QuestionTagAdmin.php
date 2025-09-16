@@ -30,7 +30,14 @@ final class QuestionTagAdmin extends AbstractAdmin
             ->add('id')
             ->add('name')
             ->add('description')
-        ;
+            ->add('color')
+            ->add(ListMapper::NAME_ACTIONS, null, [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                    'delete' => [],
+                ],
+            ]);
     }
 
     protected function configureFormFields(FormMapper $form): void
@@ -39,6 +46,7 @@ final class QuestionTagAdmin extends AbstractAdmin
             ->add('name')
             ->add('description', null
             )
+            ->add('color')
         ;
     }
 
@@ -48,6 +56,7 @@ final class QuestionTagAdmin extends AbstractAdmin
             ->add('id')
             ->add('name')
             ->add('description')
+            ->add('color')
         ;
     }
 }
