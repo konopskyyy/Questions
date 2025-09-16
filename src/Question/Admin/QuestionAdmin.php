@@ -57,6 +57,12 @@ final class QuestionAdmin extends AbstractAdmin
             ]);
     }
 
+    protected function configureDefaultSortValues(array &$sortValues): void
+    {
+        $sortValues['_sort_by'] = 'metadata.createdAt';
+        $sortValues['_sort_order'] = 'DESC';
+    }
+
     protected function configureActionButtons(array $buttonList, $action, ?object $object = null): array
     {
         $buttonList = parent::configureActionButtons($buttonList, $action, $object);
