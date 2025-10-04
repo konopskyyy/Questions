@@ -4,7 +4,6 @@ namespace App\Question\Application\AcceptQuestion;
 
 use App\Common\Middleware\AsMessageValidator;
 use App\Question\Entity\Enum\QuestionStatus;
-use App\Question\Entity\Question;
 use App\Question\Repository\QuestionRepository;
 
 #[AsMessageValidator]
