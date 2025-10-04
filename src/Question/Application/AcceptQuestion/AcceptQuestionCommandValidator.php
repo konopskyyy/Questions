@@ -18,6 +18,10 @@ class AcceptQuestionCommandValidator
     {
         $question = $this->questionRepository->find($command->questionId);
 
+        if (!$question) {
+            throw new \DomainException('Question not found');
+        }
+
         if ($question->getStatus() != QuestionStatus::DRAFT->value) {
             throw new \DomainException('Niepoprawny status');
         }

@@ -22,8 +22,8 @@ class QuestionResponseMapper
                 'description' => $tag->getDescription(),
             ], $question->getTags()->toArray()),
             'metadata' => $question->getMetadata() ? [
-                'createdAt' => $question->getMetadata()->getCreatedAt()?->format(DATE_ATOM),
-                'createdBy' => $question->getMetadata()->getCreatedBy(),
+                'createdAt' => $question->getMetadata()?->getCreatedAt()?->format(DATE_ATOM),
+                'createdBy' => $question->getMetadata()?->getCreatedBy(),
             ] : null,
             'tips' => array_map(fn ($tip) => [
                 'description' => $tip->getDescription(),
