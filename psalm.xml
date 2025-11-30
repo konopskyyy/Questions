@@ -35,6 +35,7 @@
                 <file name="**/*Controller.php"/>
                 <file name="**/*Admin.php"/>
                 <file name="**/*Command.php"/> <!-- to potencjalnie bedzie mozna wylaczyc jako CliCommand -->
+                <file name="**/*Listener.php"/>
             </errorLevel>
         </UnusedClass>
         <MissingOverrideAttribute>

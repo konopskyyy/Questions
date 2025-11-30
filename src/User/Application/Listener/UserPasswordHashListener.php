@@ -10,10 +10,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsDoctrineListener('prePersist')]
 #[AsDoctrineListener('preUpdate')]
-class UserPasswordHashListener
+readonly class UserPasswordHashListener
 {
     public function __construct(
-        private readonly UserPasswordHasherInterface $passwordHasher,
+        private UserPasswordHasherInterface $passwordHasher,
     ) {
     }
 
