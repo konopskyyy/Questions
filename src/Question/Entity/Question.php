@@ -15,7 +15,7 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
 #[ORM\DiscriminatorMap([
     'open' => OpenQuestion::class,
-    'closed' => ClosedQuestion::class
+    'closed' => ClosedQuestion::class,
 ])]
 abstract class Question
 {

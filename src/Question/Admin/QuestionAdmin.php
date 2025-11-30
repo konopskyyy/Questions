@@ -7,17 +7,11 @@ namespace App\Question\Admin;
 use App\Question\Entity\ClosedQuestion;
 use App\Question\Entity\Enum\QuestionType;
 use App\Question\Entity\OpenQuestion;
-use App\Question\Entity\QuestionMetadata;
-use App\Question\Entity\QuestionTag;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\Form\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class QuestionAdmin extends AbstractAdmin
 {
