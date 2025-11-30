@@ -3,18 +3,20 @@
 namespace App\Question\Entity;
 
 use App\Question\Entity\Enum\QuestionStatus;
-use App\Question\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity(repositoryClass: QuestionRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'question')]
 #[ORM\InheritanceType('SINGLE_TABLE')]
 #[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
-#[ORM\DiscriminatorMap(['open' => OpenQuestion::class, 'closed' => ClosedQuestion::class])]
+#[ORM\DiscriminatorMap([
+    'open' => OpenQuestion::class,
+    'closed' => ClosedQuestion::class
+])]
 abstract class Question
 {
     #[ORM\Id]
@@ -58,6 +60,41 @@ abstract class Question
     public function getId(): ?Uuid
     {
         return $this->id;
+    }
+
+    public function setId(?Uuid $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function setImages(Collection $images): self
+    {
+        $this->images = $images;
+
+        return $this;
+    }
+
+    public function setTags(Collection $tags): self
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    public function setTips(Collection $tips): self
+    {
+        $this->tips = $tips;
+
+        return $this;
+    }
+
+    public function setUrls(Collection $urls): self
+    {
+        $this->urls = $urls;
+
+        return $this;
     }
 
     public function getBody(): ?string
