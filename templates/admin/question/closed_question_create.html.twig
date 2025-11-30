@@ -9,6 +9,12 @@
         <div class="sonata-ba-form">
             {{ form_start(form) }}
 
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    {{ form_row(form.body, {'attr': {'class': 'form-control sonata-ba-field'}}) }}
+                </div>
+            </div>
+
             {% if form.vars.errors|length > 0 %}
                 <div class="alert alert-danger" role="alert">
                     {{ form_errors(form) }}
@@ -16,80 +22,95 @@
             {% endif %}
 
             <div class="form-group row">
-                <div class="col-12">
-                    {{ form_row(form.body, {'attr': {'class': 'form-control sonata-ba-field'}}) }}
+                <div class="col-md-3 text-center">
+                    {{ form_row(form.type) }}
                 </div>
             </div>
 
             <div class="form-group row">
-                <div class="col-md-6">
-                    {{ form_row(form.type) }}
-                </div>
-                <div class="col-md-6">
+                <div class="col-md-3 text-center">
                     {{ form_row(form.tags) }}
                 </div>
             </div>
 
-            <h4 class="sonata-ba-list-title">Odpowiedzi</h4>
-            <div id="answer-options-wrapper"
-                 class="sonata-collection-form"
-                 data-prototype="{{ form_widget(form.answerOptions.vars.prototype)|e('html_attr') }}">
-                {% for option in form.answerOptions %}
-                    <div class="answer-option-item mb-2 sonata-ba-field p-3 bg-light border rounded">
-                        {{ form_row(option.letter) }}
-                        {{ form_row(option.body) }}
-                        {{ form_row(option.isCorrect) }}
-                        <button type="button" class="btn btn-danger btn-sm remove-item-btn mt-2">Usuń</button>
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <h4 class="sonata-ba-list-title">Odpowiedzi</h4>
+                    <div id="answer-options-wrapper"
+                         class="sonata-collection-form"
+                         data-prototype="{{ form_widget(form.answerOptions.vars.prototype)|e('html_attr') }}">
+                        {% for option in form.answerOptions %}
+                            <div class="answer-option-item mb-2 sonata-ba-field p-3 bg-light border rounded">
+                                {{ form_row(option.letter) }}
+                                {{ form_row(option.body) }}
+                                {{ form_row(option.isCorrect) }}
+                                <button type="button" class="btn btn-danger btn-sm remove-item-btn mt-2">Usuń</button>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                    <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
+                            data-target="#answer-options-wrapper">Dodaj odpowiedź</button>
+                </div>
             </div>
-            <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
-                    data-target="#answer-options-wrapper">Dodaj odpowiedź</button>
 
-            <h4 class="sonata-ba-list-title">Obrazki</h4>
-            <div id="images-wrapper"
-                 class="sonata-collection-form"
-                 data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
-                {% for imageForm in form.images %}
-                    <div class="image-item mb-2 sonata-ba-field">
-                        {{ form_row(imageForm) }}
-                        <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <h4 class="sonata-ba-list-title">Obrazki</h4>
+                    <div id="images-wrapper"
+                         class="sonata-collection-form"
+                         data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+                        {% for imageForm in form.images %}
+                            <div class="image-item mb-2 sonata-ba-field">
+                                {{ form_row(imageForm) }}
+                                <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                    <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
+                            data-target="#images-wrapper">Dodaj obrazek</button>
+                </div>
             </div>
-            <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
-                    data-target="#images-wrapper">Dodaj obrazek</button>
 
-            <h4 class="sonata-ba-list-title">Podpowiedzi</h4>
-            <div id="tips-wrapper"
-                 class="sonata-collection-form"
-                 data-prototype="{{ form_widget(form.tips.vars.prototype)|e('html_attr') }}">
-                {% for tipForm in form.tips %}
-                    <div class="tip-item mb-2 sonata-ba-field">
-                        {{ form_row(tipForm) }}
-                        <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <h4 class="sonata-ba-list-title">Podpowiedzi</h4>
+                    <div id="tips-wrapper"
+                         class="sonata-collection-form"
+                         data-prototype="{{ form_widget(form.tips.vars.prototype)|e('html_attr') }}">
+                        {% for tipForm in form.tips %}
+                            <div class="tip-item mb-2 sonata-ba-field">
+                                {{ form_row(tipForm) }}
+                                <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                    <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
+                            data-target="#tips-wrapper">Dodaj podpowiedź</button>
+                </div>
             </div>
-            <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
-                    data-target="#tips-wrapper">Dodaj podpowiedź</button>
 
-            <h4 class="sonata-ba-list-title">Linki URL</h4>
-            <div id="urls-wrapper"
-                 class="sonata-collection-form"
-                 data-prototype="{{ form_widget(form.urls.vars.prototype)|e('html_attr') }}">
-                {% for urlForm in form.urls %}
-                    <div class="url-item mb-2 sonata-ba-field">
-                        {{ form_row(urlForm) }}
-                        <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <h4 class="sonata-ba-list-title">Linki URL</h4>
+                    <div id="urls-wrapper"
+                         class="sonata-collection-form"
+                         data-prototype="{{ form_widget(form.urls.vars.prototype)|e('html_attr') }}">
+                        {% for urlForm in form.urls %}
+                            <div class="url-item mb-2 sonata-ba-field">
+                                {{ form_row(urlForm) }}
+                                <button type="button" class="btn btn-danger btn-sm remove-item-btn">Usuń</button>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                    <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
+                            data-target="#urls-wrapper">Dodaj URL</button>
+                </div>
             </div>
-            <button type="button" class="btn btn-outline-primary btn-sm mb-4 add-item-btn"
-                    data-target="#urls-wrapper">Dodaj URL</button>
 
-            <div class="d-flex justify-content-end mt-5 mb-2">
-                <button class="btn btn-success sonata-ba-action" type="submit">Zapisz</button>
+            <div class="row">
+                <div class="col-md-3 text-center" style="margin-top: 10px;">
+                    <button class="btn btn-success sonata-ba-action mt-3" type="submit">Zapisz</button>
+                </div>
             </div>
 
             {{ form_widget(form._token) }}

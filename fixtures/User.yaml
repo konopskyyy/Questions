@@ -1,0 +1,19 @@
+Symfony\Component\Uid\Uuid:
+    uuid-{1..2}:
+        __construct:
+            uuid: '<uuid()>'
+
+App\User\Domain\User:
+    user_admin:
+        id: '@uuid-1'
+        email: admin@example.com
+        roles: ['ROLE_ADMIN']
+        password: admin1
+        isActive: true
+
+    user_1:
+        id: '@uuid-2'
+        email: user@example.com
+        roles: [ 'ROLE_USER' ]
+        password: pass
+        isActive: true

@@ -7,17 +7,11 @@ namespace App\Question\Admin;
 use App\Question\Entity\ClosedQuestion;
 use App\Question\Entity\Enum\QuestionType;
 use App\Question\Entity\OpenQuestion;
-use App\Question\Entity\QuestionMetadata;
-use App\Question\Entity\QuestionTag;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\Form\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class QuestionAdmin extends AbstractAdmin
 {
@@ -89,70 +83,6 @@ final class QuestionAdmin extends AbstractAdmin
         parent::configureRoutes($collection);
         $collection->add('open_question_create', 'open_question_create');
         $collection->add('closed_question_create', 'closed_question_create');
-    }
-
-    protected function configureFormFields(FormMapper $form): void
-    {
-        $form
-            ->add('body')
-            ->add('type', ChoiceType::class, [
-                'choices' => $this->getQuestionTypeChoices(),
-                'label' => 'Type',
-            ])
-            ->add('metadata', ModelType::class, [
-                'class' => QuestionMetadata::class,
-                'required' => false,
-                'label' => 'Metadata',
-            ]);
-
-        if ($this->getSubject() instanceof OpenQuestion) {
-            $form->add('answer');
-        }
-
-        // todo sprawdzic czemu nie ma danych
-        if ($this->getSubject() instanceof ClosedQuestion) {
-            $form->add('answerOptions', CollectionType::class, [
-                'by_reference' => false,
-                'required' => false,
-            ], [
-                'edit' => 'inline',
-                'inline' => 'table',
-                'admin_code' => 'admin.answer_option',
-            ]);
-        }
-
-        $form
-            ->add('images', CollectionType::class, [
-                'by_reference' => false,
-                'required' => false,
-            ], [
-                'edit' => 'inline',
-                'inline' => 'table',
-                'admin_code' => 'admin.question_image',
-            ])
-            ->add('tags', ModelType::class, [
-                'class' => QuestionTag::class,
-                'multiple' => true,
-                'required' => false,
-                'label' => 'Tags',
-                'property' => 'description',
-            ])
-            ->add('tips', CollectionType::class, [
-                'by_reference' => false,
-                'required' => false,
-            ], [
-                'edit' => 'inline',
-                'inline' => 'table',
-                'admin_code' => 'admin.question_tip',
-            ])
-            ->add('urls', CollectionType::class, [
-                'by_reference' => false,
-                'required' => false,
-            ], [
-                'edit' => 'inline',
-                'inline' => 'table',
-                'admin_code' => 'admin.question_url',
-            ]);
     }
 
     protected function configureShowFields(ShowMapper $show): void

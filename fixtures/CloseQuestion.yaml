@@ -1,0 +1,32 @@
+Symfony\Component\Uid\Uuid:
+    uuid-{1..2}:
+        __construct:
+            uuid: '<uuid()>'
+
+App\Question\Entity\ClosedQuestion:
+    close-question-1:
+        id: '@uuid-1'
+        status: draft
+        body: Testowe pytanie 1
+
+App\Question\Entity\AnswerOption:
+    answer-option-1:
+        letter: A
+        body: Testowa odpowiedz A
+        question: '@close-question-1'
+        is_correct: true
+    answer-option-2:
+        letter: B
+        body: Testowa odpowiedz B
+        question: '@close-question-1'
+        is_correct: false
+    answer-option-3:
+        letter: C
+        body: Testowa odpowiedz C
+        question: '@close-question-1'
+        is_correct: false
+    answer-option-4:
+        letter: D
+        body: Testowa odpowiedz D
+        question: '@close-question-1'
+        is_correct: false
