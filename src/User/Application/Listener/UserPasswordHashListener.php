@@ -10,7 +10,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsDoctrineListener('prePersist')]
 #[AsDoctrineListener('preUpdate')]
-class UserPasswordHasListener
+class UserPasswordHashListener
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
@@ -25,7 +25,7 @@ class UserPasswordHasListener
             return;
         }
 
-        $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPassword()));
+        $user->setPassword($this->passwordHasher->hashPassword($user, (string) $user->getPassword()));
     }
 
     public function preUpdate(PreUpdateEventArgs $event): void
@@ -36,6 +36,6 @@ class UserPasswordHasListener
             return;
         }
 
-        $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPassword()));
+        $user->setPassword($this->passwordHasher->hashPassword($user, (string) $user->getPassword()));
     }
 }
