@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: QuestionTipRepository::class)]
-class QuestionTip
+class QuestionTip implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -49,6 +49,7 @@ class QuestionTip
         return $this;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->getDescription() ?? ''; // lub inna właściwość opisująca obiekt

@@ -8,7 +8,10 @@ services:
     # Automatyczne rejestrowanie wszystkich klas jako serwisów
     App\:
         resource: '../src/'
-        tags: [ '!attribute' ]
+        exclude:
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
 
     # Rejestracja adminów Sonaty
     admin.question:

@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Entity(repositoryClass: QuestionTagRepository::class)]
 #[UniqueEntity(fields: ['name'], message: 'Tag name must be unique.')]
 #[UniqueEntity(fields: ['description'], message: 'Tag description must be unique.')]
-class QuestionTag
+class QuestionTag implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -108,6 +108,7 @@ class QuestionTag
         return $this;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->getDescription() ?? '';

@@ -5,7 +5,7 @@ namespace App\Question\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-class QuestionMetadata
+class QuestionMetadata implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -67,6 +67,7 @@ class QuestionMetadata
         return $this;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         // todo zrobic czytelniej
