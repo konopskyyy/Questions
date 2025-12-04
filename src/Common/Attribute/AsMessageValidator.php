@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Common\Middleware;
+namespace App\Common\Attribute;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class AsMessageValidator
