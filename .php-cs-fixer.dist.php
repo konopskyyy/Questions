@@ -8,7 +8,6 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setRules([
         '@Symfony' => true,
-        'ordered_class_elements' => false,
     ])
     ->setFinder($finder)
 ;

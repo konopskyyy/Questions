@@ -5,7 +5,7 @@ namespace App\Question\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-class QuestionMetadata
+class QuestionMetadata implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
