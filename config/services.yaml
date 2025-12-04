@@ -51,18 +51,6 @@ services:
         tags:
             - { name: sonata.admin, model_class: App\Question\Entity\QuestionTag, controller: ~, manager_type: orm, group: admin, label: 'Question Tag' }
 
-    _instanceof:
-        App\Common\Middleware\AsMessageValidator:
-            tags: [ 'app.message_validator' ]
-
-    App\Question\Application\:
-        resource: '../src/Question/Application/**/*Validator.php'
-        tags: [ 'app.message_validator' ]
-
-    App\User\Application\:
-        resource: '../src/User/Application/**/*Validator.php'
-        tags: [ 'app.message_validator' ]
-
 
     #todo zrobic to bardziej elegancko
 
@@ -75,3 +63,9 @@ services:
         class: App\Admin\UserAdmin
         tags:
             - { name: sonata.admin, model_class: App\User\Domain\User, controller: ~, manager_type: orm, group: admin, label: User }
+
+    App\Organization\Domain\Repository\OrganizationRepositoryInterface:
+        class: 'App\Organization\Infrastructure\Repository\OrganizationRepository'
+
+    App\Organization\Domain\Repository\AddressRepositoryInterface:
+        class: 'App\Organization\Infrastructure\Repository\AddressRepository'
