@@ -64,6 +64,7 @@ class QuestionUrl implements \Stringable
         return $this;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->getDescription() ?? ''; // lub inna właściwość opisująca obiekt

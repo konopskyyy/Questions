@@ -67,6 +67,7 @@ class QuestionMetadata implements \Stringable
         return $this;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         // todo zrobic czytelniej
