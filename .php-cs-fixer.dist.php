@@ -8,7 +8,7 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setRules([
         '@Symfony' => true,
-        'stringable' => false,
+        'ordered_interfaces' => false,
     ])
     ->setFinder($finder)
 ;
