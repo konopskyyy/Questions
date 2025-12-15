@@ -16,6 +16,8 @@ class Organization
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', length: 36, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private Uuid $id;
 
     #[ORM\ManyToMany(targetEntity: User::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
@@ -34,7 +36,7 @@ class Organization
     private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private ?\DateTimeImmutable $updatedAt;
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct(
         #[ORM\Column(type: 'string', length: 255)]
@@ -46,6 +48,9 @@ class Organization
         #[ORM\OneToOne(targetEntity: Address::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
         #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
         private Address $address,
+
+        #[ORM\Column(type: 'string', length: 120)]
+        private string $taxId,
     ) {
         $this->recruiters = new ArrayCollection();
         $this->candidates = new ArrayCollection();
@@ -98,16 +103,49 @@ class Organization
         return $this->updatedAt;
     }
 
-    public function addRecruter(User $user): void
+    public function addRecruiter(User $user): void
     {
         if ($user->isRecruter() && !$this->recruiters->contains($user)) {
             $this->recruiters->add($user);
         }
     }
 
-    public function removeRecruter(User $user): void
+    public function removeRecruiter(User $user): void
     {
         $this->recruiters->removeElement($user);
+    }
+
+    public function getTaxId(): string
+    {
+        return $this->taxId;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function setLogo(string $logo): self
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    public function setAddress(Address $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function setTaxId(string $taxId): self
+    {
+        $this->taxId = $taxId;
+
+        return $this;
     }
 
     #[PrePersist]

@@ -18,7 +18,7 @@ class CreateOrganizationValidator
 
     public function __invoke(CreateOrganizationCommand $command): void
     {
-        $organization = $this->organizationRepository->findByName($command->createOrganizationDTO->name);
+        $organization = $this->organizationRepository->findByTaxId($command->createOrganizationDTO->taxId);
 
         if ($organization) {
             $this->logger->info('[CreateOrganization] Organization already exists.', [

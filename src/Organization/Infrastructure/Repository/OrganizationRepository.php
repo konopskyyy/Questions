@@ -35,8 +35,8 @@ class OrganizationRepository implements OrganizationRepositoryInterface
         return $this->repository->findOneBy(['id' => $id]);
     }
 
-    public function findByName(string $name): ?Organization
+    public function findByTaxId(string $taxId): ?Organization
     {
-        return $this->repository->findOneBy(['name' => $name]);
+        return $this->repository->findOneBy(['taxId' => $taxId]);
     }
 }

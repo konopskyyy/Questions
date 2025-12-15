@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Organization\Application\Command\CreateOrganization\DTO;
+namespace App\Organization\Application\Command\UpdateOrganization\DTO;
 
 use App\Organization\Application\DTO\AddressDTO;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Assert\Cascade]
-class CreateOrganizationDTO
+class UpdateOrganizationDTO
 {
     public function __construct(
         #[Assert\NotBlank]

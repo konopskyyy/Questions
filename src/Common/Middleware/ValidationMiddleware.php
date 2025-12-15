@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Common\Middleware;
 
-use App\Core\Application\MessageBus\Attribute\AsMessageValidator;
-use App\Core\Application\MessageBus\Middleware\MiddlewareServiceCreator;
+use App\Common\Attribute\AsMessageValidator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
 use Symfony\Component\DependencyInjection\ServiceLocator;

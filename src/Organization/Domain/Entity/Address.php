@@ -11,7 +11,8 @@ use Symfony\Component\Uid\Uuid;
 class Address
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'UUID')]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', length: 36, unique: true)]
     private Uuid $id;
 
@@ -85,6 +86,48 @@ class Address
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function setStreet(string $street): self
+    {
+        $this->street = $street;
+
+        return $this;
+    }
+
+    public function setBuildingNo(string $buildingNo): self
+    {
+        $this->buildingNo = $buildingNo;
+
+        return $this;
+    }
+
+    public function setApartmentNo(?string $apartmentNo): self
+    {
+        $this->apartmentNo = $apartmentNo;
+
+        return $this;
+    }
+
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function setPostalCode(string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function setCountry(string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
     }
 
     #[PrePersist]
