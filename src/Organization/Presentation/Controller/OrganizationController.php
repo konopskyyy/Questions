@@ -9,7 +9,6 @@ use App\Organization\Application\Command\UpdateOrganization\DTO\UpdateOrganizati
 use App\Organization\Application\Command\UpdateOrganization\UpdateOrganizationCommand;
 use App\Organization\Application\Query\GetOrganizationById\GetOrganizationByIdQuery;
 use App\Organization\Application\Query\GetOrganizationByTaxId\GetOrganizationByTaxIdQuery;
-use App\Organization\Domain\Entity\Organization;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,8 +62,7 @@ class OrganizationController extends AbstractController
     public function updateOrganizationAction(
         string $id,
         #[MapRequestPayload] UpdateOrganizationDTO $updateOrganizationDTO,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         if (!Uuid::isValid($id)) {
             return new JsonResponse(
                 data: 'Invalida id',
@@ -134,7 +132,8 @@ class OrganizationController extends AbstractController
     }
 
     #[Route(path: '/api/organization/{id}', name: 'app_api_organization_remove', methods: [Request::METHOD_DELETE])]
-    public function removeAction(string $id): JsonResponse {
+    public function removeAction(string $id): JsonResponse
+    {
         if (!Uuid::isValid($id)) {
             return new JsonResponse(
                 data: 'Invalida id',
@@ -148,7 +147,6 @@ class OrganizationController extends AbstractController
                     id: Uuid::fromString($id),
                 ),
             );
-
         } catch (\Exception|ExceptionInterface $exception) {
             return new JsonResponse(
                 data: $exception->getMessage(),

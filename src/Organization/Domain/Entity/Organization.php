@@ -46,7 +46,7 @@ class Organization
         private string $logo,
 
         #[ORM\OneToOne(targetEntity: Address::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-        #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
+        #[JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
         private Address $address,
 
         #[ORM\Column(type: 'string', length: 120)]

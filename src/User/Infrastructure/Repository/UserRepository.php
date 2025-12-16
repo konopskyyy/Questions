@@ -32,14 +32,21 @@ class UserRepository implements UserRepositoryInterface
         $this->entityManager->flush();
     }
 
-
     public function findByEmail(string $email): ?User
     {
         return $this->repository->findOneBy(['email' => $email]);
     }
 
-    public function findById(Uuid $userId): ?User
+    public function findById(Uuid $id): ?User
     {
-        return $this->repository->findOneBy(['id' => $userId]);
+        return $this->repository->findOneBy(['id' => $id]);
+    }
+
+    public function getById(Uuid $id): User
+    {
+        /** @var User $user */
+        $user = $this->repository->findOneBy(['id' => $id]);
+
+        return $user;
     }
 }

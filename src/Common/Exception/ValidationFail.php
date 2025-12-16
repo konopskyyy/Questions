@@ -10,7 +10,6 @@ use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 
 class ValidationFail extends UnrecoverableMessageHandlingException implements HttpExceptionInterface
 {
-
     public function getStatusCode(): int
     {
         return Response::HTTP_BAD_REQUEST;

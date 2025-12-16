@@ -28,7 +28,7 @@ class RemoveOrganizationValidator
                 ],
             );
 
-            throw new ValidationFail("Organization not found");
+            throw new ValidationFail('Organization not found');
         }
     }
 }

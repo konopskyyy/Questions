@@ -52,13 +52,7 @@ readonly class ValidationMiddleware extends MiddlewareServiceCreator implements 
         $validatorAttributeReflections = $validatorReflection->getAttributes(AsMessageValidator::class);
 
         if (empty($validatorAttributeReflections)) {
-            throw new \RuntimeException(
-                \sprintf(
-                    'Class %1$s has no attribute %2$s maybe you forgot add #[%2$s] before class keyword',
-                    $validator::class,
-                    AsMessageValidator::class,
-                )
-            );
+            throw new \RuntimeException(\sprintf('Class %1$s has no attribute %2$s maybe you forgot add #[%2$s] before class keyword', $validator::class, AsMessageValidator::class));
         }
 
         if (!\is_callable($validator)) {

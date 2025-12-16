@@ -28,6 +28,6 @@ class CreateUserCommandHandler
 
         $user->setPassword($this->passwordHasher->hashPassword($user, $command->password));
 
-        $this->userRepository->save($user, true);
+        $this->userRepository->save($user);
     }
 }

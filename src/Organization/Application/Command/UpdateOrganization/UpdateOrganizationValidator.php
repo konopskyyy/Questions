@@ -20,7 +20,7 @@ class UpdateOrganizationValidator
     {
         $organization = $this->organizationRepository->find($command->id);
 
-        if(!$organization) {
+        if (!$organization) {
             $this->logger->info(
                 message: '[UpdateOrganization] Organization not found',
                 context: [
@@ -28,9 +28,7 @@ class UpdateOrganizationValidator
                 ],
             );
 
-            throw new ValidationFail(
-                message: 'Organization not found',
-            );
+            throw new ValidationFail(message: 'Organization not found');
         }
     }
 }

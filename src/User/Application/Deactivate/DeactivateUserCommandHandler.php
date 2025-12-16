@@ -22,6 +22,6 @@ class DeactivateUserCommandHandler
         $user = $this->userRepository->findById($command->userId);
 
         $user->deactivate();
-        $this->userRepository->save($user, true);
+        $this->userRepository->save($user);
     }
 }

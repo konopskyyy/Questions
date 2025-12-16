@@ -2,7 +2,6 @@
 
 namespace App\Organization\Application\DTO;
 
-use DateTimeInterface;
 use Symfony\Component\Uid\Uuid;
 
 class OrganizationDTO
@@ -26,8 +25,8 @@ class OrganizationDTO
             'logo' => $this->logo,
             'taxId' => $this->taxId,
             'address' => $this->address,
-            'createdAt' => $this->createdAt->format(DateTimeInterface::ATOM),
-            'updatedAt' => $this->updatedAt?->format(DateTimeInterface::ATOM),
+            'createdAt' => $this->createdAt->format(\DateTimeInterface::ATOM),
+            'updatedAt' => $this->updatedAt?->format(\DateTimeInterface::ATOM),
         ];
     }
 }

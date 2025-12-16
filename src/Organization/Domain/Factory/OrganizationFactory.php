@@ -37,7 +37,7 @@ class OrganizationFactory
         );
 
         foreach ($recruiters as $recruiterId) {
-            $recruiter = $this->userRepository->findById($recruiterId);
+            $recruiter = $this->userRepository->getById($recruiterId);
             $organization->addRecruiter($recruiter);
         }
 
