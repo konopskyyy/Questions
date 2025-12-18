@@ -2,7 +2,7 @@
 
 namespace App\Question\Application\AcceptQuestion;
 
-use App\Common\Middleware\AsMessageValidator;
+use App\Common\Attribute\AsMessageValidator;
 use App\Question\Entity\Enum\QuestionStatus;
 use App\Question\Repository\QuestionRepository;
 

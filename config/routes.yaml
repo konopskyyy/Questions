@@ -13,5 +13,10 @@ security_controllers:
         path: ../src/User/UserInterface/Controller/
         namespace: App\User\UserInterface\Controller
     type: attribute
+organization_controllers:
+    resource:
+        path: ../src/Organization/Presentation/Controller/
+        namespace: App\Organization\Presentation\Controller
+    type: attribute
 api_login_check:
     path: /api/login_check

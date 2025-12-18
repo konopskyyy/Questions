@@ -4,48 +4,49 @@ declare(strict_types=1);
 
 namespace App\User\Infrastructure\Repository;
 
+use App\User\Domain\Repository\UserRepositoryInterface;
 use App\User\Domain\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Uid\Uuid;
 
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class UserRepository implements UserRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, User::class);
+    private EntityRepository $repository;
+
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    ) {
+        $this->repository = $this->entityManager->getRepository(User::class);
     }
 
-    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    public function save(User $user): void
     {
-        if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
-        }
-
-        $user->setPassword($newHashedPassword);
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 
-    public function save(User $user, bool $flush = false): void
+    public function remove(User $user): void
     {
-        $this->getEntityManager()->persist($user);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
     }
 
     public function findByEmail(string $email): ?User
     {
-        return $this->findOneBy(['email' => $email]);
+        return $this->repository->findOneBy(['email' => $email]);
     }
 
-    public function findById(Uuid $userId)
+    public function findById(Uuid $id): ?User
     {
-        return $this->findOneBy(['id' => $userId]);
+        return $this->repository->findOneBy(['id' => $id]);
+    }
+
+    public function getById(Uuid $id): User
+    {
+        /** @var User $user */
+        $user = $this->repository->findOneBy(['id' => $id]);
+
+        return $user;
     }
 }
