@@ -39,4 +39,26 @@ class OrganizationRepository implements OrganizationRepositoryInterface
     {
         return $this->repository->findOneBy(['taxId' => $taxId]);
     }
+
+    public function findByRecruiterId(Uuid $recruiterId): ?Organization
+    {
+        return $this->repository->createQueryBuilder('organization')
+            ->join('organization.recruiters', 'recruiter')
+            ->andWhere('recruiter.id = :recruiterId')
+            ->setParameter('recruiterId', $recruiterId->toBinary())
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findByCandidateId(Uuid $candidateId): ?Organization
+    {
+        return $this->repository->createQueryBuilder('o')
+            ->join('o.candidates', 'c')
+            ->andWhere('c.id = :candidateId')
+            ->setParameter('candidateId', $candidateId->toBinary())
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 }
