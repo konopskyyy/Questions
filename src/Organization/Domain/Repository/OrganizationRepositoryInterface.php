@@ -16,5 +16,6 @@ interface OrganizationRepositoryInterface
     public function findByTaxId(string $taxId): ?Organization;
 
     public function findByRecruiterId(Uuid $recruiterId): ?Organization;
+
     public function findByCandidateId(Uuid $candidateId): ?Organization;
 }

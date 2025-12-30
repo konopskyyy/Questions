@@ -59,6 +59,6 @@ class OrganizationRepository implements OrganizationRepositoryInterface
             ->setParameter('candidateId', $candidateId->toBinary())
             ->getQuery()
             ->getOneOrNullResult()
-            ;
+        ;
     }
 }
