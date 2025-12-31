@@ -105,7 +105,7 @@ class Organization
 
     public function addRecruiter(User $user): void
     {
-        if ($user->isRecruter() && !$this->recruiters->contains($user)) {
+        if ($user->isRecruiter() && !$this->recruiters->contains($user)) {
             $this->recruiters->add($user);
         }
     }
