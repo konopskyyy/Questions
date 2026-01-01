@@ -6,6 +6,9 @@ namespace App\User\Application\Deactivate;
 
 use App\Common\Attribute\AsMessageValidator;
 use App\User\Domain\User;
+use App\User\Domain\Validation\UserInactiveValidation;
+use App\User\Domain\Validation\UserNotFoundValidation;
+use App\User\Domain\Validation\UserValidationInterface;
 use App\User\Infrastructure\Repository\UserRepository;
 
 #[AsMessageValidator]
@@ -21,12 +24,14 @@ class DeactivateUserCommandValidator
         /** @var User $user */
         $user = $this->userRepository->findById($command->userId);
 
-        if (!$user) {
-            throw new \DomainException('Użytkownik nie istnieje.');
-        }
+        $validations = [
+            new UserNotFoundValidation(),
+            new UserInactiveValidation(),
+        ];
 
-        if (!$user->isActive()) {
-            throw new \DomainException('Użytkownik jest już nieaktywny.');
+        /** @var UserValidationInterface $validation */
+        foreach ($validations as $validation) {
+            $validation->validate($user);
         }
     }
 }
