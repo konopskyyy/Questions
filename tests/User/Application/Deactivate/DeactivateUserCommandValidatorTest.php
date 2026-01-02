@@ -28,10 +28,12 @@ class DeactivateUserCommandValidatorTest extends TestCase
         $id = Uuid::v7();
         $this->userRepository->method('findById')->with($id)->willReturn(null);
 
-        $handler = new DeactivateUserCommandValidator($this->userRepository);
+        $handler = new DeactivateUserCommandValidator(
+            $this->userRepository,
+        );
 
         $this->expectException(\DomainException::class);
-        $this->expectExceptionMessage('Użytkownik nie istnieje');
+        $this->expectExceptionMessage('U01: User was not found.');
         $handler(new DeactivateUserCommand($id));
     }
 
@@ -44,10 +46,12 @@ class DeactivateUserCommandValidatorTest extends TestCase
 
         $this->userRepository->method('findById')->with($id)->willReturn($user);
 
-        $handler = new DeactivateUserCommandValidator($this->userRepository);
+        $handler = new DeactivateUserCommandValidator(
+            $this->userRepository,
+        );
 
         $this->expectException(\DomainException::class);
-        $this->expectExceptionMessage('Użytkownik jest już nieaktywny');
+        $this->expectExceptionMessage('U02: User is inactive.');
         $handler(new DeactivateUserCommand($id));
     }
 }
