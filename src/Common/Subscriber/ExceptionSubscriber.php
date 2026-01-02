@@ -28,7 +28,7 @@ final class ExceptionSubscriber implements EventSubscriberInterface
         $response = new JsonResponse(
             [
                 'error' => $exception->getMessage(),
-                'code'  => $statusCode,
+                'code' => $statusCode,
                 'class' => $exception::class,
             ],
             $statusCode
@@ -37,4 +37,3 @@ final class ExceptionSubscriber implements EventSubscriberInterface
         $event->setResponse($response);
     }
 }
-
