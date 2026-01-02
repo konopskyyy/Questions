@@ -8,7 +8,7 @@ use App\Common\Attribute\AsMessageValidator;
 use App\User\Infrastructure\Repository\UserRepository;
 
 #[AsMessageValidator]
-class CreateUserCommandValidator
+class CreateUserValidator
 {
     public function __construct(
         private readonly UserRepository $userRepository,

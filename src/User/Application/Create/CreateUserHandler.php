@@ -10,7 +10,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsMessageHandler]
-class CreateUserCommandHandler
+class CreateUserHandler
 {
     public function __construct(
         private readonly UserRepository $userRepository,
