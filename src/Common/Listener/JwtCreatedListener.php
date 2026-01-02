@@ -32,12 +32,12 @@ class JwtCreatedListener
             /** @var Organization $organization */
             $organization = $this->organizationRepository->findByRecruiterId($userId);
 
-            $data['organizationId'] = $organization->getId()->toString();
+            $data['organizationId'] = $organization?->getId()->toString();
         } else {
             /** @var Organization $organization */
             $organization = $this->organizationRepository->findByCandidateId($userId);
 
-            $data['organizationId'] = $organization->getId()->toString();
+            $data['organizationId'] = $organization?->getId()->toString();
         }
 
         $event->setData($data);
