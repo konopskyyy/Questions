@@ -64,6 +64,11 @@ services:
         tags:
             - { name: sonata.admin, model_class: App\User\Domain\User, controller: ~, manager_type: orm, group: admin, label: User }
 
+    admin.organization:
+        class: App\Admin\OrganizationAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Organization\Domain\Entity\Organization, controller: ~, manager_type: orm, group: admin, label: Organization }
+
     App\Organization\Domain\Repository\OrganizationRepositoryInterface:
         class: 'App\Organization\Infrastructure\Repository\OrganizationRepository'
 

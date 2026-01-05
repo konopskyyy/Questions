@@ -1,0 +1,23 @@
+Symfony\Component\Uid\Uuid:
+    uuid-{1..2}:
+        __construct:
+            uuid: '<uuid()>'
+App\Organization\Domain\Entity\Address:
+    test_address:
+        __construct:
+            street: Test Street 123
+            buildingNo: '1'
+            apartmentNo: '2'
+            city: Test City
+            postalCode: '12-345'
+            country: Test Country
+App\Organization\Domain\Entity\Organization:
+    test_organization:
+        id: '@uuid-1'
+        __construct:
+            name: test organization
+            logo: https://cdn-icons-png.flaticon.com/512/7347/7347153.png
+            taxId: '1234567890'
+            address: '@test_address'
+        recruiters:
+            - '@user_admin'

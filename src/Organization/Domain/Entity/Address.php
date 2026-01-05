@@ -35,7 +35,7 @@ class Address
         #[ORM\Column(type: 'string', length: 255)]
         private string $city,
 
-        #[ORM\Column(type: 'string', length: 5)]
+        #[ORM\Column(type: 'string', length: 6)]
         private string $postalCode,
 
         #[ORM\Column(type: 'string', length: 255)]
