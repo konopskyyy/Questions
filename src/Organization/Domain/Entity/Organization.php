@@ -110,6 +110,13 @@ class Organization
         }
     }
 
+    public function setRecruiters(ArrayCollection $recruiters): self
+    {
+        $this->recruiters = $recruiters;
+
+        return $this;
+    }
+
     public function removeRecruiter(User $user): void
     {
         $this->recruiters->removeElement($user);
