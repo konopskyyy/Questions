@@ -1,13 +1,13 @@
 .PHONY: up install db fixtures init
 
 up:
-	docker compose up -d --build
 	@if [ -z "$$(docker network ls --filter name=^questions$$ -q)" ]; then \
 		echo "Tworzenie sieci 'questions'..."; \
 		docker network create questions; \
 	else \
 		echo "Siec 'questions' juz istnieje."; \
 	fi
+	docker compose up -d --build
 
 install:
 	docker compose exec php-fpm composer install
