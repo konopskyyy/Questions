@@ -7,6 +7,7 @@ use App\User\Domain\User;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Uid\Uuid;
 
 #[AsEventListener(event: Events::JWT_CREATED)]
 final class JwtCreatedListener
@@ -27,9 +28,12 @@ final class JwtCreatedListener
 
         $payload = $event->getData();
 
+        /** @var Uuid $userId */
+        $userId = $user->getId();
+
         $organization = $user->isRecruiter()
-            ? $this->organizationRepository->findByRecruiterId($user->getId())
-            : $this->organizationRepository->findByCandidateId($user->getId());
+            ? $this->organizationRepository->findByRecruiterId($userId)
+            : $this->organizationRepository->findByCandidateId($userId);
 
         $payload['organizationId'] = $organization?->getId()->toRfc4122();
 
