@@ -1,0 +1,58 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    admin.question:
+        class: App\Question\Admin\QuestionAdmin
+        tags:
+            - {
+                name: sonata.admin,
+                model_class: App\Question\Entity\Question,
+                controller: App\Question\Controller\Admin\CreateQuestionAdminController,
+                manager_type: orm,
+                group: admin,
+                label: Question
+            }
+
+    admin.question_tip:
+        class: App\Question\Admin\QuestionTipAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Question\Entity\QuestionTip, controller: ~, manager_type: orm, group: admin, label: 'Question Tip' }
+
+    admin.question_url:
+        class: App\Question\Admin\QuestionUrlAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Question\Entity\QuestionUrl, controller: ~, manager_type: orm, group: admin, label: 'Question Url' }
+
+    admin.question_image:
+        class: App\Question\Admin\QuestionImageAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Question\Entity\QuestionImage, controller: ~, manager_type: orm, group: admin, label: 'Question Image' }
+
+    admin.question_metadata:
+        class: App\Question\Admin\QuestionMetadataAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Question\Entity\QuestionMetadata, controller: ~, manager_type: orm, group: admin, label: 'Question Metadata' }
+
+    admin.question_tag:
+        class: App\Question\Admin\QuestionTagAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Question\Entity\QuestionTag, controller: ~, manager_type: orm, group: admin, label: 'Question Tag' }
+
+    admin.answer_option:
+        class: App\Question\Admin\AnswerOptionAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Question\Entity\AnswerOption, controller: ~, manager_type: orm, group: admin, label: AnswerOption }
+
+    admin.user:
+        class: App\User\Admin\UserAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\User\Domain\User, controller: ~, manager_type: orm, group: admin, label: User }
+
+    admin.organization:
+        class: App\Organization\Admin\OrganizationAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Organization\Domain\Entity\Organization, controller: ~, manager_type: orm, group: admin, label: Organization }
+
+

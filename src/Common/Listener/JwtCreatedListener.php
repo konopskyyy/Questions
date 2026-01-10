@@ -36,6 +36,8 @@ final class JwtCreatedListener
             : $this->organizationRepository->findByCandidateId($userId);
 
         $payload['organizationId'] = $organization?->getId()->toRfc4122();
+        $payload['userId'] = $userId;
+        unset($payload['roles']);
 
         $event->setData($payload);
     }
