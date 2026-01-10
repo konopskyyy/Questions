@@ -20,3 +20,7 @@ organization_controllers:
     type: attribute
 api_login_check:
     path: /api/login_check
+healthCheckController:
+    resource:
+        path: ..src/HealthCheck/UserInterface/Controller
+        namespace: App\User\UserInterface\Controller
