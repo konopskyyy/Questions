@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\UserInterface\Controller;
+namespace App\HealthCheck\UserInterface\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
