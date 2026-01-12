@@ -103,6 +103,18 @@ class Organization
         return $this->updatedAt;
     }
 
+    public function addCandidate(User $candidate): void
+    {
+        if (!$this->candidates->contains($candidate)) {
+            $this->candidates->add($candidate);
+        }
+    }
+
+    public function removeCandidate(User $candidate): void
+    {
+        $this->candidates->removeElement($candidate);
+    }
+
     public function addRecruiter(User $user): void
     {
         if ($user->isRecruiter() && !$this->recruiters->contains($user)) {

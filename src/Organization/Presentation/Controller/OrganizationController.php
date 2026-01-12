@@ -2,6 +2,10 @@
 
 namespace App\Organization\Presentation\Controller;
 
+use App\Organization\Application\Command\AddCandidateToOrganization\AddCandidateToOrganizationCommand;
+use App\Organization\Application\Command\AddCandidateToOrganization\DTO\AddCandidateToOrganizationDTO;
+use App\Organization\Application\Command\AddRecruiterToOrganization\AddRecruiterToOrganizationCommand;
+use App\Organization\Application\Command\AddRecruiterToOrganization\DTO\AddRecruiterToOrganizationDTO;
 use App\Organization\Application\Command\CreateOrganization\CreateOrganizationCommand;
 use App\Organization\Application\Command\CreateOrganization\DTO\CreateOrganizationDTO;
 use App\Organization\Application\Command\RemoveOrganization\RemoveOrganizationCommand;
@@ -65,7 +69,7 @@ class OrganizationController extends AbstractController
     ): JsonResponse {
         if (!Uuid::isValid($id)) {
             return new JsonResponse(
-                data: 'Invalida id',
+                data: 'Invalid id',
                 status: Response::HTTP_BAD_REQUEST,
             );
         }
@@ -105,7 +109,7 @@ class OrganizationController extends AbstractController
     {
         if (!Uuid::isValid($id)) {
             return new JsonResponse(
-                data: 'Invalida id',
+                data: 'Invalid id',
                 status: Response::HTTP_BAD_REQUEST,
             );
         }
@@ -136,7 +140,7 @@ class OrganizationController extends AbstractController
     {
         if (!Uuid::isValid($id)) {
             return new JsonResponse(
-                data: 'Invalida id',
+                data: 'Invalid id',
                 status: Response::HTTP_BAD_REQUEST,
             );
         }
@@ -155,5 +159,61 @@ class OrganizationController extends AbstractController
         }
 
         return new JsonResponse(status: Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route(
+        path: '/api/organization/{organizationId}/recruiter/{recruiterId}',
+        name: 'app_api_organization_add_recruiter',
+        methods: [Request::METHOD_POST],
+    )]
+    public function addRecruiterToOrganizationAction(string $organizationId, string $recruiterId): JsonResponse
+    {
+        if (!Uuid::isValid($organizationId) || !Uuid::isValid($recruiterId)) {
+            return new JsonResponse(
+                data: 'Invalid id',
+                status: Response::HTTP_BAD_REQUEST,
+            );
+        }
+
+        $this->commandBus->dispatch(
+            message: new AddRecruiterToOrganizationCommand(
+                addRecruiterToOrganizationDTO: new AddRecruiterToOrganizationDTO(
+                    recruiterId: Uuid::fromString($recruiterId),
+                    organizationId: Uuid::fromString($organizationId),
+                ),
+            )
+        );
+
+        return new JsonResponse(
+            status: Response::HTTP_OK,
+        );
+    }
+
+    #[Route(
+        path: '/api/organization/{organizationId}/candidate/{candidateId}',
+        name: 'app_api_organization_add_candidate',
+        methods: [Request::METHOD_POST],
+    )]
+    public function addCandidateToOrganizationAction(string $organizationId, string $candidateId): JsonResponse
+    {
+        if (!Uuid::isValid($organizationId) || !Uuid::isValid($candidateId)) {
+            return new JsonResponse(
+                data: 'Invalid id',
+                status: Response::HTTP_BAD_REQUEST,
+            );
+        }
+
+        $this->commandBus->dispatch(
+            message: new AddCandidateToOrganizationCommand(
+                addCandidateToOrganizationDTO: new AddCandidateToOrganizationDTO(
+                    candidateId: Uuid::fromString($candidateId),
+                    organizationId: Uuid::fromString($organizationId),
+                ),
+            )
+        );
+
+        return new JsonResponse(
+            status: Response::HTTP_OK,
+        );
     }
 }
