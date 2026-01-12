@@ -4,7 +4,6 @@ namespace App\Organization\Application\Command\AddCandidateToOrganization;
 
 use App\Common\Attribute\AsMessageValidator;
 use App\Common\Exception\ValidationFail;
-use App\Organization\Application\Command\AddRecruiterToOrganization\AddRecruiterToOrganizationCommand;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;

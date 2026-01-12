@@ -2,11 +2,9 @@
 
 namespace App\Organization\Application\Command\AddCandidateToOrganization;
 
-use App\Organization\Application\Command\AddRecruiterToOrganization\AddRecruiterToOrganizationCommand;
 use App\Organization\Domain\Entity\Organization;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
-use App\User\Domain\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -25,7 +23,6 @@ class AddCandidateToOrganizationHandler
         /** @var Organization $organization */
         $organization = $this->organizationRepository->find($command->addCandidateToOrganizationDTO->organizationId);
 
-        /** @var User $candidate */
         $candidate = $this->userRepository->getById($command->addCandidateToOrganizationDTO->candidateId);
 
         $organization->addCandidate($candidate);
