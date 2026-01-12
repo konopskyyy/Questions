@@ -23,7 +23,6 @@ class CreateOrganizationDTO
 
         public AddressDTO $address,
         public array $recruiters,
-        public array $candidates,
     ) {
     }
 }
