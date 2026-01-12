@@ -9,6 +9,7 @@ use App\Organization\Application\Command\UpdateOrganization\DTO\UpdateOrganizati
 use App\Organization\Application\Command\UpdateOrganization\UpdateOrganizationCommand;
 use App\Organization\Application\Query\GetOrganizationById\GetOrganizationByIdQuery;
 use App\Organization\Application\Query\GetOrganizationByTaxId\GetOrganizationByTaxIdQuery;
+use App\User\Domain\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,9 +32,13 @@ class OrganizationController extends AbstractController
     #[Route(path: '/api/organization', name: 'app_api_organization_create', methods: [Request::METHOD_POST])]
     public function createAction(#[MapRequestPayload] CreateOrganizationDTO $createOrganizationDTO): JsonResponse
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         try {
             $this->commandBus->dispatch(
                 message: new CreateOrganizationCommand(
+                    userId: $user->getId(),
                     createOrganizationDTO: $createOrganizationDTO,
                 ),
             );

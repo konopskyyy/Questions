@@ -138,4 +138,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return \in_array('ROLE_RECRUITER', $this->roles, true);
     }
+
+    public function isAdmin(): bool
+    {
+        return \in_array('ROLE_ADMIN', $this->roles, true);
+    }
 }
