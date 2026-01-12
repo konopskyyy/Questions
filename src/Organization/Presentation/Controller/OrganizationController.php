@@ -35,10 +35,13 @@ class OrganizationController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        /** @var Uuid $userId */
+        $userId = $user?->getId();
+
         try {
             $this->commandBus->dispatch(
                 message: new CreateOrganizationCommand(
-                    userId: $user->getId(),
+                    userId: $userId,
                     createOrganizationDTO: $createOrganizationDTO,
                 ),
             );
