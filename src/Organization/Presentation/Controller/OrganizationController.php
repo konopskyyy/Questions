@@ -8,6 +8,8 @@ use App\Organization\Application\Command\AddRecruiterToOrganization\AddRecruiter
 use App\Organization\Application\Command\AddRecruiterToOrganization\DTO\AddRecruiterToOrganizationDTO;
 use App\Organization\Application\Command\CreateOrganization\CreateOrganizationCommand;
 use App\Organization\Application\Command\CreateOrganization\DTO\CreateOrganizationDTO;
+use App\Organization\Application\Command\LeaveRecruiterOrganization\DTO\LeaveRecruiterOrganizationDTO;
+use App\Organization\Application\Command\LeaveRecruiterOrganization\LeaveRecruiterOrganizationCommand;
 use App\Organization\Application\Command\RemoveOrganization\RemoveOrganizationCommand;
 use App\Organization\Application\Command\UpdateOrganization\DTO\UpdateOrganizationDTO;
 use App\Organization\Application\Command\UpdateOrganization\UpdateOrganizationCommand;
@@ -222,6 +224,34 @@ class OrganizationController extends AbstractController
 
         return new JsonResponse(
             status: Response::HTTP_OK,
+        );
+    }
+
+    #[Route(
+        path: '/api/organization/{organizationId}/recruiter/{recruiterId}/leave',
+        name: 'app_api_organization_leave_candidate',
+        methods: [Request::METHOD_POST],
+    )]
+    public function leaveOrganizationRecruiterAction(string $organizationId, string $recruiterId): JsonResponse
+    {
+        if (!Uuid::isValid($organizationId) || !Uuid::isValid($recruiterId)) {
+            return new JsonResponse(
+                data: 'Invalid id',
+                status: Response::HTTP_BAD_REQUEST,
+            );
+        }
+
+        $this->commandBus->dispatch(
+            message: new LeaveRecruiterOrganizationCommand(
+                leaveRecruiterOrganizationDTO: new LeaveRecruiterOrganizationDTO(
+                    organizationId: Uuid::fromString($organizationId),
+                    recruiterId: Uuid::fromString($recruiterId),
+                ),
+            ),
+        );
+
+        return new JsonResponse(
+            status: Response::HTTP_NO_CONTENT,
         );
     }
 }
