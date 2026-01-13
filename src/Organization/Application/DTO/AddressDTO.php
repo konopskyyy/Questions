@@ -30,7 +30,7 @@ class AddressDTO
         public string $city,
 
         #[Assert\NotBlank]
-        #[Length(min: 1, max: 5)]
+        #[Length(min: 1, max: 6)]
         public string $postalCode,
 
         #[Assert\NotBlank]
