@@ -20,13 +20,13 @@ class Organization
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private Uuid $id;
 
-    #[ORM\ManyToMany(targetEntity: User::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\ManyToMany(targetEntity: User::class)]
     #[ORM\JoinTable(name: 'organization_recruiters')]
     #[JoinColumn(name: 'organization_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'recruiters_id', referencedColumnName: 'id')]
     private Collection $recruiters;
 
-    #[ORM\ManyToMany(targetEntity: User::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\ManyToMany(targetEntity: User::class)]
     #[ORM\JoinTable(name: 'organization_candidates')]
     #[JoinColumn(name: 'organization_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'candidates_id', referencedColumnName: 'id')]
@@ -117,7 +117,7 @@ class Organization
 
     public function addRecruiter(User $user): void
     {
-        if ($user->isRecruiter() && !$this->recruiters->contains($user)) {
+        if (!$this->recruiters->contains($user)) {
             $this->recruiters->add($user);
         }
     }
