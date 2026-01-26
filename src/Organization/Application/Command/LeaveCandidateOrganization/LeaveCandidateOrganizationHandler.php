@@ -2,7 +2,6 @@
 
 namespace App\Organization\Application\Command\LeaveCandidateOrganization;
 
-use App\Organization\Application\Command\LeaveRecruiterOrganization\LeaveRecruiterOrganizationCommand;
 use App\Organization\Domain\Entity\Organization;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;

@@ -7,7 +7,7 @@ use App\Organization\Application\Command\LeaveCandidateOrganization\DTO\LeaveCan
 class LeaveCandidateOrganizationCommand
 {
     public function __construct(
-        public LeavecandidateOrganizationDTO $leaveCandidateOrganizationDTO,
+        public LeaveCandidateOrganizationDTO $leaveCandidateOrganizationDTO,
     ) {
     }
 }
