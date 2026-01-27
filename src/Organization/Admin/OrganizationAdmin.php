@@ -72,6 +72,12 @@ final class OrganizationAdmin extends AbstractAdmin
             ->add('address.city')
             ->add('address.postalCode')
             ->add('address.country')
+            ->add('recruiters', null, [
+                'template' => 'admin/organization/field/recruiters.html.twig',
+            ])
+            ->add('candidates', null, [
+                'template' => 'admin/organization/field/candidates.html.twig',
+            ])
         ;
     }
 }

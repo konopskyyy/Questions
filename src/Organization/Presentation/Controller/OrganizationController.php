@@ -8,6 +8,10 @@ use App\Organization\Application\Command\AddRecruiterToOrganization\AddRecruiter
 use App\Organization\Application\Command\AddRecruiterToOrganization\DTO\AddRecruiterToOrganizationDTO;
 use App\Organization\Application\Command\CreateOrganization\CreateOrganizationCommand;
 use App\Organization\Application\Command\CreateOrganization\DTO\CreateOrganizationDTO;
+use App\Organization\Application\Command\LeaveCandidateOrganization\DTO\LeaveCandidateOrganizationDTO;
+use App\Organization\Application\Command\LeaveCandidateOrganization\LeaveCandidateOrganizationCommand;
+use App\Organization\Application\Command\LeaveRecruiterOrganization\DTO\LeaveRecruiterOrganizationDTO;
+use App\Organization\Application\Command\LeaveRecruiterOrganization\LeaveRecruiterOrganizationCommand;
 use App\Organization\Application\Command\RemoveOrganization\RemoveOrganizationCommand;
 use App\Organization\Application\Command\UpdateOrganization\DTO\UpdateOrganizationDTO;
 use App\Organization\Application\Command\UpdateOrganization\UpdateOrganizationCommand;
@@ -222,6 +226,62 @@ class OrganizationController extends AbstractController
 
         return new JsonResponse(
             status: Response::HTTP_OK,
+        );
+    }
+
+    #[Route(
+        path: '/api/organization/{organizationId}/recruiter/{recruiterId}',
+        name: 'app_api_organization_recruiter_leave',
+        methods: [Request::METHOD_DELETE],
+    )]
+    public function leaveOrganizationRecruiterAction(string $organizationId, string $recruiterId): JsonResponse
+    {
+        if (!Uuid::isValid($organizationId) || !Uuid::isValid($recruiterId)) {
+            return new JsonResponse(
+                data: 'Invalid id',
+                status: Response::HTTP_BAD_REQUEST,
+            );
+        }
+
+        $this->commandBus->dispatch(
+            message: new LeaveRecruiterOrganizationCommand(
+                leaveRecruiterOrganizationDTO: new LeaveRecruiterOrganizationDTO(
+                    organizationId: Uuid::fromString($organizationId),
+                    recruiterId: Uuid::fromString($recruiterId),
+                ),
+            ),
+        );
+
+        return new JsonResponse(
+            status: Response::HTTP_NO_CONTENT,
+        );
+    }
+
+    #[Route(
+        path: '/api/organization/{organizationId}/candidate/{candidateId}',
+        name: 'app_api_organization_candidate_leave',
+        methods: [Request::METHOD_DELETE],
+    )]
+    public function leaveOrganizationCandidateAction(string $organizationId, string $candidateId): JsonResponse
+    {
+        if (!Uuid::isValid($organizationId) || !Uuid::isValid($candidateId)) {
+            return new JsonResponse(
+                data: 'Invalid id',
+                status: Response::HTTP_BAD_REQUEST,
+            );
+        }
+
+        $this->commandBus->dispatch(
+            message: new LeaveCandidateOrganizationCommand(
+                leaveCandidateOrganizationDTO: new LeaveCandidateOrganizationDTO(
+                    organizationId: Uuid::fromString($organizationId),
+                    candidateId: Uuid::fromString($candidateId),
+                ),
+            ),
+        );
+
+        return new JsonResponse(
+            status: Response::HTTP_NO_CONTENT,
         );
     }
 }
