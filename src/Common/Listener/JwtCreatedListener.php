@@ -31,9 +31,7 @@ final class JwtCreatedListener
         /** @var Uuid $userId */
         $userId = $user->getId();
 
-        $organization = $user->isRecruiter()
-            ? $this->organizationRepository->findByRecruiterId($userId)
-            : $this->organizationRepository->findByCandidateId($userId);
+        $organization = $this->organizationRepository->findByRecruiterId($userId);
 
         $payload['organizationId'] = $organization?->getId()->toRfc4122();
         $payload['userId'] = $userId;
