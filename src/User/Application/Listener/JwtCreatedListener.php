@@ -35,4 +35,4 @@ final class JwtCreatedListener
 
         $event->setData($payload);
     }
-    }
+}
