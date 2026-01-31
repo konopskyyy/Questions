@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Common\Listener;
+namespace App\User\Application\Listener;
 
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\User;
@@ -22,21 +22,15 @@ final class JwtCreatedListener
         /** @var User $user */
         $user = $event->getUser();
 
-        if (!$user instanceof User) {
-            return;
-        }
-
         $payload = $event->getData();
 
         /** @var Uuid $userId */
         $userId = $user->getId();
 
-        $organization = $user->isRecruiter()
-            ? $this->organizationRepository->findByRecruiterId($userId)
-            : $this->organizationRepository->findByCandidateId($userId);
+        $organization = $this->organizationRepository->findByRecruiterId($userId);
 
         $payload['organizationId'] = $organization?->getId()->toRfc4122();
-        $payload['userId'] = $userId;
+        $payload['userId'] = $userId->toRfc4122();
         unset($payload['roles']);
 
         $event->setData($payload);
