@@ -15,6 +15,8 @@ use App\Organization\Application\Command\LeaveRecruiterOrganization\LeaveRecruit
 use App\Organization\Application\Command\RemoveOrganization\RemoveOrganizationCommand;
 use App\Organization\Application\Command\UpdateOrganization\DTO\UpdateOrganizationDTO;
 use App\Organization\Application\Command\UpdateOrganization\UpdateOrganizationCommand;
+use App\Organization\Application\Command\UploadOrganizationLogo\DTO\UploadOrganizationLogoDTO;
+use App\Organization\Application\Command\UploadOrganizationLogo\UploadOrganizationLogoCommand;
 use App\Organization\Application\Query\GetOrganizationById\GetOrganizationByIdQuery;
 use App\Organization\Application\Query\GetOrganizationByTaxId\GetOrganizationByTaxIdQuery;
 use App\User\Domain\User;
@@ -282,6 +284,37 @@ class OrganizationController extends AbstractController
 
         return new JsonResponse(
             status: Response::HTTP_NO_CONTENT,
+        );
+    }
+
+    #[Route(path: '/api/organization/{organizationId}/upload', name: 'app_api_organization_upload', methods: ['POST'])]
+    public function uploadOrganizationLogoAction(
+        string $organizationId,
+        #[MapRequestPayload] UploadOrganizationLogoDTO $uploadOrganizationLogoDTO,
+    ): JsonResponse {
+        if (!Uuid::isValid($organizationId)) {
+            return new JsonResponse(
+                data: 'Invalid id',
+                status: Response::HTTP_BAD_REQUEST,
+            );
+        }
+
+        $fileId = Uuid::v7();
+
+        $uploadOrganizationLogoDTO->id = $fileId;
+
+        $this->commandBus->dispatch(
+            new UploadOrganizationLogoCommand(
+                organizationId: Uuid::fromString($organizationId),
+                uploadOrganizationLogoDTO: $uploadOrganizationLogoDTO,
+            )
+        );
+
+        return new JsonResponse(
+            data: [
+                'file_id' => $fileId->toString(),
+            ],
+            status: Response::HTTP_OK
         );
     }
 }

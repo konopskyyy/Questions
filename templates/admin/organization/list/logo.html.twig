@@ -1,0 +1,10 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    {% if object.logo %}
+        <img
+            src="data:{{ object.logo.mimeType }};base64,{{ object.logo.content|base64_encode }}"
+            style="max-height:50px;"
+        >
+    {% endif %}
+{% endblock %}
