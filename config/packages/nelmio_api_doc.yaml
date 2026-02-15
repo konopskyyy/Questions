@@ -1,0 +1,56 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Questions swagger
+            description: Oby kiedys na siebie pracowało
+            version: 1.0.0
+
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+
+        security:
+            - Bearer: []
+
+        paths:
+            /api/login_check:
+                post:
+                    tags: ['Token']
+                    summary: 'Pobierz token JWT'
+                    description: 'Wyślij dane logowania, aby otrzymać token Bearer.'
+
+                    security: []
+
+                    requestBody:
+                        required: true
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        username:
+                                            type: string
+                                            example: admin@example.com
+                                        password:
+                                            type: string
+                                            example: admin1
+                    responses:
+                        200:
+                            description: 'Token pobrany pomyślnie'
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            token:
+                                                type: string
+                                                description: 'Token JWT'
+                        401:
+                            description: 'Błędne dane logowania'
+
+    areas:
+        path_patterns:
+            - ^/api(?!/doc$)
