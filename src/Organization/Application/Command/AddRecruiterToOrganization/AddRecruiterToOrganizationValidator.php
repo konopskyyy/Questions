@@ -43,5 +43,16 @@ class AddRecruiterToOrganizationValidator
             );
             throw new ValidationFail('User not found');
         }
+
+        if ($organization->getRecruiters()->contains($user)) {
+            $this->logger->info(
+                message: '[AddRecruiterToOrganizationCommand] Recruiter is associated with this organization',
+                context: [
+                    'user_id' => $command->addRecruiterToOrganizationDTO->recruiterId,
+                    'organization_id' => $command->addRecruiterToOrganizationDTO->organizationId,
+                ],
+            );
+            throw new ValidationFail('Recruiter is associated with this organization');
+        }
     }
 }
