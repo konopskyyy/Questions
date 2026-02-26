@@ -69,7 +69,6 @@ class AddRecruiterToOrganizationValidatorTest extends TestCase
         $validator($command);
     }
 
-    //todo to jeszcze zweryfikowac
     public function testDoesntThrowRecruiterIsAssociatedWithThisOrganizationWhenUserHasNotTheSameId(): void
     {
         $recruiterId = Uuid::v7();
