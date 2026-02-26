@@ -31,7 +31,6 @@ final class JwtCreatedListener
 
         $payload['organizationId'] = $organization?->getId()->toRfc4122();
         $payload['userId'] = $userId->toRfc4122();
-        unset($payload['roles']);
 
         $event->setData($payload);
     }
