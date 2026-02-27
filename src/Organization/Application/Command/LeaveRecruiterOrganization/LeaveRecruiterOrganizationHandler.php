@@ -27,11 +27,12 @@ class LeaveRecruiterOrganizationHandler
 
         $organization->removeRecruiter($recruiter);
 
-        if ($organization->getRecruiters()->count() === 1) {
-            $this->organizationRepository->remove($organization);
+        $this->organizationRepository->save($organization);
+
+        if ($organization->getRecruiters()->count() === 0) {
+            $this->organizationRepository->remove($organization, true);
         }
 
-        $this->organizationRepository->save($organization);
 
         $this->logger->info(
             message: '[LeaveRecruiterOrganization] Recruiter leaved successfully',
