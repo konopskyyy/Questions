@@ -27,7 +27,7 @@ class LeaveRecruiterOrganizationHandler
 
         $organization->removeRecruiter($recruiter);
 
-        if (0 === sizeof($organization->getRecruiters())) {
+        if ($organization->getRecruiters()->count() === 0) {
             $this->organizationRepository->remove($organization);
         }
 
