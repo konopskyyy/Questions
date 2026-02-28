@@ -24,10 +24,12 @@ class OrganizationRepository implements OrganizationRepositoryInterface
         $this->entityManager->flush();
     }
 
-    public function remove(Organization $organization): void
+    public function remove(Organization $organization, ?bool $forceFlush = false): void
     {
         $this->entityManager->remove($organization);
-        $this->entityManager->flush();
+        if ($forceFlush) {
+            $this->entityManager->flush();
+        }
     }
 
     public function find(Uuid $id): ?Organization

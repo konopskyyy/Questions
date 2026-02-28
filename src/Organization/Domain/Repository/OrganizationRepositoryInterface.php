@@ -9,7 +9,7 @@ interface OrganizationRepositoryInterface
 {
     public function save(Organization $organization): void;
 
-    public function remove(Organization $organization): void;
+    public function remove(Organization $organization, ?bool $forceFlush = false): void;
 
     public function find(Uuid $id): ?Organization;
 
