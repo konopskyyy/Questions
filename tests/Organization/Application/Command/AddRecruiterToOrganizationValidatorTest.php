@@ -11,19 +11,16 @@ use App\Organization\Application\Command\AddRecruiterToOrganization\DTO\AddRecru
 use App\Organization\Domain\Entity\Address;
 use App\Organization\Domain\Entity\Organization;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
-use App\Organization\Infrastructure\Repository\OrganizationRepository;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use App\User\Domain\User;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
 class AddRecruiterToOrganizationValidatorTest extends TestCase
 {
-
     use ProphecyTrait;
 
     private OrganizationRepositoryInterface|ObjectProphecy $organizationRepository;
@@ -42,7 +39,7 @@ class AddRecruiterToOrganizationValidatorTest extends TestCase
         $recruiterId = Uuid::v7();
         $organizationId = Uuid::v7();
 
-        $dto = new AddRecruiterToOrganizationDto(
+        $dto = new AddRecruiterToOrganizationDTO(
             recruiterId: $recruiterId,
             organizationId: $organizationId
         );
@@ -50,7 +47,6 @@ class AddRecruiterToOrganizationValidatorTest extends TestCase
 
         $organization = new Organization(
             name: 'test organization',
-            logo: "www.logo.pl",
             address: new Address('street', '1', '1', 'city', '11-430', 'pl'),
             taxId: '1231234531'
         );
@@ -74,7 +70,7 @@ class AddRecruiterToOrganizationValidatorTest extends TestCase
         $recruiterId = Uuid::v7();
         $organizationId = Uuid::v7();
 
-        $dto = new AddRecruiterToOrganizationDto(
+        $dto = new AddRecruiterToOrganizationDTO(
             recruiterId: $recruiterId,
             organizationId: $organizationId
         );
@@ -82,7 +78,6 @@ class AddRecruiterToOrganizationValidatorTest extends TestCase
 
         $organization = new Organization(
             name: 'test organization',
-            logo: "www.logo.pl",
             address: new Address('street', '1', '1', 'city', '11-430', 'pl'),
             taxId: '1231234531'
         );

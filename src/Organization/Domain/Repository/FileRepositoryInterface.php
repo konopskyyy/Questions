@@ -9,5 +9,5 @@ interface FileRepositoryInterface
 {
     public function save(File $file): void;
 
-    public function getById(Uuid $uuid): File;
+    public function findById(Uuid $uuid): ?File;
 }

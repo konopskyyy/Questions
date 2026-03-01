@@ -3,7 +3,6 @@
 namespace App\Organization\Domain\Factory;
 
 use App\Organization\Application\DTO\AddressDTO;
-use App\Organization\Application\DTO\FileDTO;
 use App\Organization\Application\DTO\OrganizationDTO;
 use App\Organization\Domain\Entity\Organization;
 use App\User\Domain\Repository\UserRepositoryInterface;
@@ -13,7 +12,6 @@ class OrganizationFactory
     public function __construct(
         private readonly AddressFactory $addressService,
         private readonly UserRepositoryInterface $userRepository,
-        private readonly FileFactory $fileFactory,
     ) {
     }
 

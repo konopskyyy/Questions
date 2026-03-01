@@ -101,17 +101,16 @@ final class OrganizationAdmin extends AbstractAdmin
 
     protected function prePersist(object $object): void
     {
-        /** @var Organization $object */
         $this->handleFileUpload($object);
     }
 
     protected function preUpdate(object $object): void
     {
-        /** @var Organization $object */
+        /* @var Organization $object */
         $this->handleFileUpload($object);
     }
 
-    private function handleFileUpload(Organization $organization): void
+    private function handleFileUpload(object $organization): void
     {
         $form = $this->getForm();
         /** @var UploadedFile|null $uploadedFile */
@@ -123,7 +122,7 @@ final class OrganizationAdmin extends AbstractAdmin
 
         $content = file_get_contents($uploadedFile->getPathname());
 
-        if ($content === false) {
+        if (false === $content) {
             throw new \RuntimeException('Unable to read uploaded file.');
         }
 
@@ -133,6 +132,7 @@ final class OrganizationAdmin extends AbstractAdmin
             throw new \RuntimeException('Mime type not found in uploaded file.');
         }
 
+        /* @var Organization $organization */
         $this->commandBus->dispatch(
             new UploadOrganizationLogoCommand(
                 organizationId: $organization->getId(),
@@ -143,5 +143,4 @@ final class OrganizationAdmin extends AbstractAdmin
             )
         );
     }
-
 }

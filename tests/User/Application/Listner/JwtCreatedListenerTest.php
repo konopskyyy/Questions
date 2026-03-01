@@ -22,14 +22,12 @@ class JwtCreatedListenerTest extends TestCase
     private User|ObjectProphecy $userMock;
     private ObjectProphecy|Organization $organizationMock;
 
-
     public function setUp(): void
     {
         $this->organizationRepository = $this->prophesize(OrganizationRepositoryInterface::class);
         $this->userMock = $this->prophesize(User::class);
         $this->organizationMock = $this->prophesize(Organization::class);
     }
-
 
     public function testJwtCreatedListenerReturnAdditionalData(): void
     {

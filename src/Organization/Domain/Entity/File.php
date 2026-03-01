@@ -12,18 +12,18 @@ use Symfony\Component\Uid\Uuid;
 class File
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'uuid', length: 36, unique: true)]
+    #[Column(type: 'uuid', length: 36, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private Uuid $id;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 255)]
     private string $filename;
 
-    #[ORM\Column(type: 'blob')]
+    #[Column(type: 'blob')]
     private $content;
 
     #[Column(type: 'string', length: 100)]
@@ -61,7 +61,7 @@ class File
 
         rewind($this->content);
 
-        return stream_get_contents($this->content);
+        return (string) stream_get_contents($this->content);
     }
 
     public function setContent($content): self
@@ -88,6 +88,11 @@ class File
         $this->mimeType = $mimeType;
 
         return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 
     #[PrePersist]

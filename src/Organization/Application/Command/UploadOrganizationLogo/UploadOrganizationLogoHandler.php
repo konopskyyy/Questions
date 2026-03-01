@@ -25,19 +25,19 @@ class UploadOrganizationLogoHandler
 
         $binary = base64_decode($base64, true);
 
-        if ($binary === false) {
+        if (false === $binary) {
             throw new \RuntimeException('Base64 decode failed');
         }
 
         $tmpPath = tempnam(sys_get_temp_dir(), 'upload_');
 
-        if ($tmpPath === false) {
+        if (false === $tmpPath) {
             throw new \RuntimeException('Unable to create temporary file');
         }
 
         $result = file_put_contents($tmpPath, $binary);
 
-        if ($result === false) {
+        if (false === $result) {
             throw new \RuntimeException('Unable to write temporary file');
         }
 
@@ -60,5 +60,4 @@ class UploadOrganizationLogoHandler
             }
         }
     }
-
 }

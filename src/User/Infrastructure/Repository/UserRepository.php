@@ -54,6 +54,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $sql = 'SELECT COUNT(*) as recruiterCount FROM organization_recruiters WHERE recruiters_id = UUID_TO_BIN(:recruiters_id)';
 
+        /** @var array $result */
         $result = $this
             ->entityManager
             ->getConnection()
@@ -64,6 +65,6 @@ class UserRepository implements UserRepositoryInterface
                 ],
             );
 
-        return $result['recruiterCount'] !== 0;
+        return 0 !== $result['recruiterCount'];
     }
 }
