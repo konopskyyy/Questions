@@ -24,7 +24,6 @@ class CreateOrganizationHandler
     {
         $organization = $this->organizationFactory->create(
             name: $command->createOrganizationDTO->name,
-            logo: $command->createOrganizationDTO->logo,
             taxId: $command->createOrganizationDTO->taxId,
             addressDto: $command->createOrganizationDTO->address,
             recruiters: $command->createOrganizationDTO->recruiters,

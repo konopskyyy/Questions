@@ -49,4 +49,22 @@ class UserRepository implements UserRepositoryInterface
 
         return $user;
     }
+
+    public function isUserInAnotherOrganization(User $user): bool
+    {
+        $sql = 'SELECT COUNT(*) as recruiterCount FROM organization_recruiters WHERE recruiters_id = UUID_TO_BIN(:recruiters_id)';
+
+        /** @var array $result */
+        $result = $this
+            ->entityManager
+            ->getConnection()
+            ->fetchAssociative(
+                query: $sql,
+                params: [
+                    'recruiters_id' => $user->getId(),
+                ],
+            );
+
+        return 0 !== $result['recruiterCount'];
+    }
 }

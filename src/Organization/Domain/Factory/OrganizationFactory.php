@@ -17,14 +17,12 @@ class OrganizationFactory
 
     public function create(
         string $name,
-        string $logo,
         string $taxId,
         AddressDTO $addressDto,
         array $recruiters,
     ): Organization {
         $organization = new Organization(
             name: $name,
-            logo: $logo,
             address: $this->addressService->create(
                 street: $addressDto->street,
                 buildingNo: $addressDto->buildingNo,
@@ -49,7 +47,6 @@ class OrganizationFactory
         return new OrganizationDTO(
             id: $organization->getId(),
             name: $organization->getName(),
-            logo: $organization->getLogo(),
             taxId: $organization->getTaxId(),
             address: $this->addressService->createDto(
                 address: $organization->getAddress(),

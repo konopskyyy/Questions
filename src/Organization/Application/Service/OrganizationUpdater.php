@@ -9,7 +9,6 @@ class OrganizationUpdater
 {
     public function update(Organization $organization, UpdateOrganizationDTO $command): void
     {
-        $organization->setLogo($command->logo);
         $organization->setName($command->name);
         $organization->setTaxId($command->taxId);
 

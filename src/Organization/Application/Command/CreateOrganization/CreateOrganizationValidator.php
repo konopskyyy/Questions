@@ -40,5 +40,13 @@ class CreateOrganizationValidator
 
             throw new ValidationFail('User not found.');
         }
+
+        if ($this->userRepository->isUserInAnotherOrganization($user)) {
+            $this->logger->info('[CreateOrganization] User is already in an organization.', [
+                'user_id' => $user->getId()?->toString(),
+            ]);
+
+            throw new ValidationFail('User is already in an organization.');
+        }
     }
 }

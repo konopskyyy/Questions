@@ -9,7 +9,6 @@ class OrganizationDTO
     public function __construct(
         public Uuid $id,
         public string $name,
-        public string $logo,
         public string $taxId,
         public AddressDTO $address,
         public \DateTimeImmutable $createdAt,
@@ -22,7 +21,6 @@ class OrganizationDTO
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'logo' => $this->logo,
             'taxId' => $this->taxId,
             'address' => $this->address,
             'createdAt' => $this->createdAt->format(\DateTimeInterface::ATOM),
