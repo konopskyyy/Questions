@@ -1,0 +1,13 @@
+Symfony\Component\Uid\Uuid:
+    uuid-1:
+        __construct:
+            uuid: '<uuid()>'
+
+App\Organization\Domain\Entity\File:
+    file_logo:
+        id: '@uuid-1'
+        filename: 'logo.jpg'
+        mimeType: 'image/jpeg'
+        __calls:
+            - setContentFromPath:
+                  - '<("/application/fixtures/files/logo.jpg")>'

@@ -3,6 +3,7 @@
 namespace App\Organization\Domain\Factory;
 
 use App\Organization\Application\DTO\AddressDTO;
+use App\Organization\Application\DTO\FileDTO;
 use App\Organization\Application\DTO\OrganizationDTO;
 use App\Organization\Domain\Entity\Organization;
 use App\User\Domain\Repository\UserRepositoryInterface;
@@ -12,19 +13,18 @@ class OrganizationFactory
     public function __construct(
         private readonly AddressFactory $addressService,
         private readonly UserRepositoryInterface $userRepository,
+        private readonly FileFactory $fileFactory,
     ) {
     }
 
     public function create(
         string $name,
-        string $logo,
         string $taxId,
         AddressDTO $addressDto,
         array $recruiters,
     ): Organization {
         $organization = new Organization(
             name: $name,
-            logo: $logo,
             address: $this->addressService->create(
                 street: $addressDto->street,
                 buildingNo: $addressDto->buildingNo,
@@ -49,7 +49,6 @@ class OrganizationFactory
         return new OrganizationDTO(
             id: $organization->getId(),
             name: $organization->getName(),
-            logo: $organization->getLogo(),
             taxId: $organization->getTaxId(),
             address: $this->addressService->createDto(
                 address: $organization->getAddress(),

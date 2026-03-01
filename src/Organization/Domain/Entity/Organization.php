@@ -39,7 +39,7 @@ class Organization
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToOne(targetEntity: File::class, cascade: ['persist'], orphanRemoval: true)]
-    #[JoinColumn(name: 'file_id', referencedColumnName: 'id', nullable: true)]
+    #[JoinColumn(name: 'logo_id', referencedColumnName: 'id', nullable: true)]
     private ?File $logo = null;
 
     public function __construct(
@@ -133,6 +133,11 @@ class Organization
     public function removeRecruiter(User $user): void
     {
         $this->recruiters->removeElement($user);
+    }
+
+    public function findRecruiter(User $user)
+    {
+        return $this->recruiters->filter(fn (User $recruiter) => $recruiter->getId() === $user->getId());
     }
 
     public function getTaxId(): string

@@ -16,8 +16,8 @@ App\Organization\Domain\Entity\Organization:
         id: '@uuid-1'
         __construct:
             name: test organization
-            logo: https://cdn-icons-png.flaticon.com/512/7347/7347153.png
             taxId: '1234567890'
             address: '@test_address'
+        logo: '@file_logo'
         recruiters:
             - '@user_admin'

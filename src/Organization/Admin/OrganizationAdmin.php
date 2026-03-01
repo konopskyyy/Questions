@@ -6,12 +6,14 @@ namespace App\Organization\Admin;
 
 use App\Organization\Application\Command\UploadOrganizationLogo\DTO\UploadOrganizationLogoDTO;
 use App\Organization\Application\Command\UploadOrganizationLogo\UploadOrganizationLogoCommand;
+use App\Organization\Domain\Entity\Organization;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class OrganizationAdmin extends AbstractAdmin
@@ -97,17 +99,19 @@ final class OrganizationAdmin extends AbstractAdmin
         ;
     }
 
-    protected function prePersist(object $organization): void
+    protected function prePersist(object $object): void
     {
-        $this->handleFileUpload($organization);
+        /** @var Organization $object */
+        $this->handleFileUpload($object);
     }
 
-    protected function preUpdate(object $organization): void
+    protected function preUpdate(object $object): void
     {
-        $this->handleFileUpload($organization);
+        /** @var Organization $object */
+        $this->handleFileUpload($object);
     }
 
-    private function handleFileUpload($organization): void
+    private function handleFileUpload(Organization $organization): void
     {
         $form = $this->getForm();
         /** @var UploadedFile|null $uploadedFile */
@@ -117,13 +121,27 @@ final class OrganizationAdmin extends AbstractAdmin
             return;
         }
 
+        $content = file_get_contents($uploadedFile->getPathname());
+
+        if ($content === false) {
+            throw new \RuntimeException('Unable to read uploaded file.');
+        }
+
+        $mimeType = $uploadedFile->getMimeType();
+
+        if (!$mimeType) {
+            throw new \RuntimeException('Mime type not found in uploaded file.');
+        }
+
         $this->commandBus->dispatch(
             new UploadOrganizationLogoCommand(
                 organizationId: $organization->getId(),
                 uploadOrganizationLogoDTO: new UploadOrganizationLogoDTO(
-                    file: base64_encode(file_get_contents($uploadedFile->getPathname())),
+                    file: base64_encode($content),
+                    mimeType: $mimeType,
                 ),
             )
         );
     }
+
 }

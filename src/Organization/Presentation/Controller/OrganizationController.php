@@ -287,7 +287,7 @@ class OrganizationController extends AbstractController
         );
     }
 
-    #[Route(path: '/api/organization/{organizationId}/upload', name: 'app_api_organization_upload', methods: ['POST'])]
+    #[Route(path: '/api/organization/{organizationId}/logo', name: 'app_api_organization_upload', methods: ['POST'])]
     public function uploadOrganizationLogoAction(
         string $organizationId,
         #[MapRequestPayload] UploadOrganizationLogoDTO $uploadOrganizationLogoDTO,

@@ -3,7 +3,6 @@
 namespace App\Organization\Application\Command\UploadOrganizationLogo\DTO;
 
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Validator\Constraints as Assert;
 
 class UploadOrganizationLogoDTO
 {
@@ -11,6 +10,7 @@ class UploadOrganizationLogoDTO
 
     public function __construct(
         public string $file,
+        public string $mimeType,
     ) {
     }
 }
