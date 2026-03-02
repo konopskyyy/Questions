@@ -16,4 +16,6 @@ interface UserRepositoryInterface
     public function findByEmail(string $email): ?User;
 
     public function getById(Uuid $id): User;
+
+    public function isUserInAnotherOrganization(User $user): bool;
 }

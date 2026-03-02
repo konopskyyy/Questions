@@ -38,12 +38,13 @@ class Organization
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\OneToOne(targetEntity: File::class, cascade: ['persist'], orphanRemoval: true)]
+    #[JoinColumn(name: 'logo_id', referencedColumnName: 'id', nullable: true)]
+    private ?File $logo = null;
+
     public function __construct(
         #[ORM\Column(type: 'string', length: 255)]
         private string $name,
-
-        #[ORM\Column(type: 'string', length: 255)]
-        private string $logo,
 
         #[ORM\OneToOne(targetEntity: Address::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
         #[JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
@@ -88,7 +89,7 @@ class Organization
         return $this->name;
     }
 
-    public function getLogo(): string
+    public function getLogo(): ?File
     {
         return $this->logo;
     }
@@ -134,6 +135,11 @@ class Organization
         $this->recruiters->removeElement($user);
     }
 
+    public function findRecruiter(User $user)
+    {
+        return $this->recruiters->filter(fn (User $recruiter) => $recruiter->getId() === $user->getId());
+    }
+
     public function getTaxId(): string
     {
         return $this->taxId;
@@ -146,7 +152,7 @@ class Organization
         return $this;
     }
 
-    public function setLogo(string $logo): self
+    public function setLogo(File $logo): self
     {
         $this->logo = $logo;
 

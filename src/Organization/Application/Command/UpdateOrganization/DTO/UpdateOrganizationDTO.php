@@ -14,10 +14,6 @@ class UpdateOrganizationDTO
         public string $name,
 
         #[Assert\NotBlank]
-        #[Assert\Length(min: 3, max: 255)]
-        public string $logo,
-
-        #[Assert\NotBlank]
         #[Assert\Length(min: 3, max: 120)]
         public string $taxId,
 
