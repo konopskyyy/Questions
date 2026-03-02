@@ -5,7 +5,7 @@ namespace App\Common\Twig\Extension;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class BaseExtend extends AbstractExtension
+class BaseEncoderExtension extends AbstractExtension
 {
     public function getFilters()
     {
