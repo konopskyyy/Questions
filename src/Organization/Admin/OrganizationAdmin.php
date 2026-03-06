@@ -7,7 +7,6 @@ namespace App\Organization\Admin;
 use App\Organization\Application\Command\UploadOrganizationLogo\DTO\UploadOrganizationLogoDTO;
 use App\Organization\Application\Command\UploadOrganizationLogo\UploadOrganizationLogoCommand;
 use App\Organization\Domain\Entity\Organization;
-use RuntimeException;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -22,7 +21,8 @@ final class OrganizationAdmin extends AbstractAdmin
 {
     public function __construct(
         private readonly MessageBusInterface $commandBus,
-    ) {}
+    ) {
+    }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
@@ -124,13 +124,13 @@ final class OrganizationAdmin extends AbstractAdmin
         $content = file_get_contents($uploadedFile->getPathname());
 
         if (false === $content) {
-            throw new RuntimeException('Unable to read uploaded file.');
+            throw new \RuntimeException('Unable to read uploaded file.');
         }
 
         $mimeType = $uploadedFile->getMimeType();
 
         if (!$mimeType) {
-            throw new RuntimeException('Mime type not found in uploaded file.');
+            throw new \RuntimeException('Mime type not found in uploaded file.');
         }
 
         $uploadOrganizationLogoDTO = new UploadOrganizationLogoDTO(
