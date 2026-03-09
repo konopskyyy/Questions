@@ -15,6 +15,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Uid\Uuid;
 
 final class OrganizationAdmin extends AbstractAdmin
 {
@@ -132,14 +133,17 @@ final class OrganizationAdmin extends AbstractAdmin
             throw new \RuntimeException('Mime type not found in uploaded file.');
         }
 
+        $uploadOrganizationLogoDTO = new UploadOrganizationLogoDTO(
+            file: base64_encode($content),
+            mimeType: $mimeType,
+        );
+        $uploadOrganizationLogoDTO->id = Uuid::v7();
+
         /* @var Organization $organization */
         $this->commandBus->dispatch(
             new UploadOrganizationLogoCommand(
                 organizationId: $organization->getId(),
-                uploadOrganizationLogoDTO: new UploadOrganizationLogoDTO(
-                    file: base64_encode($content),
-                    mimeType: $mimeType,
-                ),
+                uploadOrganizationLogoDTO: $uploadOrganizationLogoDTO,
             )
         );
     }
