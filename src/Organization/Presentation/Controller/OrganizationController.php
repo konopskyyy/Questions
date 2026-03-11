@@ -17,6 +17,7 @@ use App\Organization\Application\Command\UpdateOrganization\DTO\UpdateOrganizati
 use App\Organization\Application\Command\UpdateOrganization\UpdateOrganizationCommand;
 use App\Organization\Application\Command\UploadOrganizationLogo\DTO\UploadOrganizationLogoDTO;
 use App\Organization\Application\Command\UploadOrganizationLogo\UploadOrganizationLogoCommand;
+use App\Organization\Application\Exception\OrganizationNotFoundException;
 use App\Organization\Application\Query\GetOrganizationById\GetOrganizationByIdQuery;
 use App\Organization\Application\Query\GetOrganizationByTaxId\GetOrganizationByTaxIdQuery;
 use App\User\Domain\User;
@@ -26,6 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Attribute\Route;
@@ -129,13 +131,22 @@ class OrganizationController extends AbstractController
         }
 
         try {
-            $envelope = $this->queryBus->dispatch(
-                message: new GetOrganizationByIdQuery(
-                    id: Uuid::fromString($id),
-                )
-            );
+            try {
+                $envelope = $this->queryBus->dispatch(
+                    message: new GetOrganizationByIdQuery(
+                        id: Uuid::fromString($id),
+                    )
+                );
 
-            $organizationDto = $envelope->last(HandledStamp::class)?->getResult();
+                $organizationDto = $envelope->last(HandledStamp::class)?->getResult();
+            } catch (HandlerFailedException $exception) {
+                throw $exception->getPrevious() ?? $exception;
+            }
+        } catch (OrganizationNotFoundException $exception) {
+            return new JsonResponse(
+                data: null,
+                status: Response::HTTP_NOT_FOUND,
+            );
         } catch (\Exception|ExceptionInterface $exception) {
             return new JsonResponse(
                 data: $exception->getMessage(),
@@ -287,7 +298,7 @@ class OrganizationController extends AbstractController
         );
     }
 
-    #[Route(path: '/api/organization/{organizationId}/logo', name: 'app_api_organization_upload', methods: ['POST'])]
+    #[Route(path: '/api/organization/{organizationId}/logo', name: 'app_api_organization_upload', methods: [Request::METHOD_POST])]
     public function uploadOrganizationLogoAction(
         string $organizationId,
         #[MapRequestPayload] UploadOrganizationLogoDTO $uploadOrganizationLogoDTO,
