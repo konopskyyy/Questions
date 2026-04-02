@@ -10,10 +10,10 @@ class UserNotFoundValidation implements UserValidationInterface
 {
     private const string MESSAGE = 'U01: User was not found.';
 
-    public function validate(?User $user): void
+    public function validate(?User $user, ValidationContext $context): void
     {
         if (!$user) {
-            throw new \DomainException(self::MESSAGE);
+            throw new UserValidationException(self::MESSAGE, $context);
         }
     }
 }

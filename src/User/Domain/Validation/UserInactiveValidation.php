@@ -10,10 +10,10 @@ class UserInactiveValidation implements UserValidationInterface
 {
     private const string MESSAGE = 'U02: User is inactive.';
 
-    public function validate(?User $user): void
+    public function validate(?User $user, ValidationContext $context): void
     {
         if ($user && !$user->isActive()) {
-            throw new \DomainException(self::MESSAGE);
+            throw new UserValidationException(self::MESSAGE, $context);
         }
     }
 }
