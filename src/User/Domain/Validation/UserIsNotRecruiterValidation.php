@@ -6,13 +6,13 @@ namespace App\User\Domain\Validation;
 
 use App\User\Domain\User;
 
-class UserInactiveValidation implements UserValidationInterface
+class UserIsNotRecruiterValidation implements UserValidationInterface
 {
-    private const string MESSAGE = 'U02: User is inactive.';
+    private const string MESSAGE = 'U04: User is not a recruiter.';
 
     public function validate(?User $user, ValidationContext $context): void
     {
-        if ($user && !$user->isActive()) {
+        if ($user && !$user->isRecruiter()) {
             throw new UserValidationException(self::MESSAGE, $context);
         }
     }

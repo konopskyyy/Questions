@@ -8,5 +8,5 @@ use App\User\Domain\User;
 
 interface UserValidationInterface
 {
-    public function validate(?User $user): void;
+    public function validate(?User $user, ValidationContext $context): void;
 }
