@@ -7,6 +7,7 @@ namespace User\Application\Deactivate;
 use App\User\Application\Deactivate\DeactivateUserCommand;
 use App\User\Application\Deactivate\DeactivateUserCommandValidator;
 use App\User\Domain\User;
+use App\User\Domain\Validation\ValidationContextFactory;
 use App\User\Infrastructure\Repository\UserRepository;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -17,9 +18,13 @@ class DeactivateUserCommandValidatorTest extends TestCase
 {
     use ProphecyTrait;
 
+    private UserRepository $userRepository;
+    private ValidationContextFactory $validationContextFactory;
+
     public function setUp(): void
     {
         $this->userRepository = $this->createMock(UserRepository::class);
+        $this->validationContextFactory = new ValidationContextFactory();
     }
 
     #[Test]
@@ -30,6 +35,7 @@ class DeactivateUserCommandValidatorTest extends TestCase
 
         $handler = new DeactivateUserCommandValidator(
             $this->userRepository,
+            $this->validationContextFactory,
         );
 
         $this->expectException(\DomainException::class);
@@ -48,6 +54,7 @@ class DeactivateUserCommandValidatorTest extends TestCase
 
         $handler = new DeactivateUserCommandValidator(
             $this->userRepository,
+            $this->validationContextFactory,
         );
 
         $this->expectException(\DomainException::class);

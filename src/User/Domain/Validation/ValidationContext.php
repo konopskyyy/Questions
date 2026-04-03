@@ -7,7 +7,7 @@ namespace App\User\Domain\Validation;
 class ValidationContext
 {
     public function __construct(
-        private readonly array $data = []
+        private readonly array $data = [],
     ) {
     }
 
