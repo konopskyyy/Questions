@@ -63,4 +63,16 @@ class OrganizationRepository implements OrganizationRepositoryInterface
             ->getOneOrNullResult()
         ;
     }
+
+    public function findOrganizationByUserId(Uuid $userId): ?Organization
+    {
+        $qb = $this->repository->createQueryBuilder('organization');
+
+        $qb
+            ->andWhere($qb->expr()->eq('organization.userId', ':userId'))
+            ->setParameter('userId', $userId->toBinary())
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }
