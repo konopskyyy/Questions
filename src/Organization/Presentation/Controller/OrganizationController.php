@@ -145,7 +145,7 @@ class OrganizationController extends AbstractController
         } catch (OrganizationNotFoundException $exception) {
             return new JsonResponse(
                 data: null,
-                status: Response::HTTP_NOT_FOUND,
+                status: Response::HTTP_NO_CONTENT,
             );
         } catch (\Exception|ExceptionInterface $exception) {
             return new JsonResponse(
