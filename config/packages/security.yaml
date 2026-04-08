@@ -15,10 +15,6 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-        organization_logo:
-            pattern: ^/api/organization/[^/]+/logo
-            security: false
-
         api:
             pattern: ^/api
             stateless: true
