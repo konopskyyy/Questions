@@ -385,6 +385,8 @@ class OrganizationController extends AbstractController
         $response->headers->set('Cache-Control', 'public, max-age=31536000, immutable');
 
         return $response;
+    }
+
     #[Route(path: '/api/organization', name: 'app_api_organization_list', methods: [Request::METHOD_GET])]
     public function getOrganizationListAction(): JsonResponse
     {
