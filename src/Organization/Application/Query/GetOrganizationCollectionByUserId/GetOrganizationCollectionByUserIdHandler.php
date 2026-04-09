@@ -2,6 +2,7 @@
 
 namespace App\Organization\Application\Query\GetOrganizationCollectionByUserId;
 
+use App\Organization\Application\DTO\OrganizationDTO;
 use App\Organization\Domain\Entity\Organization;
 use App\Organization\Domain\Factory\OrganizationFactory;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
@@ -22,6 +23,7 @@ class GetOrganizationCollectionByUserIdHandler
     {
         $organizations = $this->organizationRepository->findAllByUserId($query->userId);
 
+        /** @var ArrayCollection<int, OrganizationDTO> $organizationsDtoCollection */
         $organizationsDtoCollection = new ArrayCollection();
 
         /** @var Organization $organization */

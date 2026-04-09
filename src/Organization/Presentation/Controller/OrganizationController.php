@@ -336,9 +336,12 @@ class OrganizationController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        /** @var Uuid $userId */
+        $userId = $user->getId();
+
         $envelope = $this->queryBus->dispatch(
             message: new GetOrganizationCollectionByUserIdQuery(
-                userId: $user->getId(),
+                userId: $userId,
             )
         );
 
