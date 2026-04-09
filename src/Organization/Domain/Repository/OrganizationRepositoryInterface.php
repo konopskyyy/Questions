@@ -18,4 +18,8 @@ interface OrganizationRepositoryInterface
     public function findByRecruiterId(Uuid $recruiterId): ?Organization;
 
     public function findByCandidateId(Uuid $candidateId): ?Organization;
+
+    public function findOrganizationByUserId(Uuid $userId): ?Organization;
+
+    public function findAllByUserId(Uuid $userId): array;
 }

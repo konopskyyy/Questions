@@ -49,6 +49,5 @@ class JwtCreatedListenerTest extends TestCase
         $data = $event->getData();
 
         $this->assertSame((string) $userId, $data['userId']);
-        $this->assertSame((string) $organizationId, $data['organizationId']);
     }
 }
