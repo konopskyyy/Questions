@@ -4,7 +4,9 @@ namespace App\Organization\Domain\Factory;
 
 use App\Organization\Application\DTO\AddressDTO;
 use App\Organization\Application\DTO\OrganizationDTO;
+use App\Organization\Application\DTO\OrganizationMembershipDTO;
 use App\Organization\Domain\Entity\Organization;
+use App\Organization\Domain\Entity\OrganizationMembership;
 use App\Organization\Domain\Enum\OrganizationRole;
 use App\User\Domain\Repository\UserRepositoryInterface;
 
@@ -45,6 +47,24 @@ class OrganizationFactory
 
     public function createDto(Organization $organization): OrganizationDTO
     {
+        /** @var list<OrganizationMembershipDTO> $memberships */
+        $memberships = $organization->getMemberships()
+            ->map(function (OrganizationMembership $membership): OrganizationMembershipDTO {
+                $user = $membership->getUser();
+                $userId = $user->getId();
+
+                if (!$userId) {
+                    throw new \LogicException('Organization membership user must have an id.');
+                }
+
+                return new OrganizationMembershipDTO(
+                    userId: $userId,
+                    email: $user->getEmail() ?? 'empty',
+                    role: $membership->getRole(),
+                );
+            })
+            ->toArray();
+
         return new OrganizationDTO(
             id: $organization->getId(),
             name: $organization->getName(),
@@ -54,6 +74,7 @@ class OrganizationFactory
             ),
             createdAt: $organization->getCreatedAt(),
             updatedAt: $organization->getUpdatedAt(),
+            memberships: $memberships,
         );
     }
 }
