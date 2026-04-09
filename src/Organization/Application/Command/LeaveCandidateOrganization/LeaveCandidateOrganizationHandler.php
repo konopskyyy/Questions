@@ -3,6 +3,7 @@
 namespace App\Organization\Application\Command\LeaveCandidateOrganization;
 
 use App\Organization\Domain\Entity\Organization;
+use App\Organization\Domain\Enum\OrganizationRole;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -25,14 +26,14 @@ class LeaveCandidateOrganizationHandler
 
         $candidate = $this->userRepository->getById($command->leaveCandidateOrganizationDTO->candidateId);
 
-        $organization->removeCandidate($candidate);
+        $organization->removeMember($candidate, OrganizationRole::CANDIDATE);
 
         $this->userRepository->remove($candidate);
 
         $this->organizationRepository->save($organization);
 
         $this->logger->info(
-            message: '[LeaveCandidateOrganization] Recruiter leaved successfully',
+            message: '[LeaveCandidateOrganization] Candidate leaved successfully',
             context: [
                 'organization_id' => $command->leaveCandidateOrganizationDTO->organizationId,
                 'candidate_id' => $command->leaveCandidateOrganizationDTO->candidateId,

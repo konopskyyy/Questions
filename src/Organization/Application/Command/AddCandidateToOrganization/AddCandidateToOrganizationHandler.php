@@ -3,6 +3,7 @@
 namespace App\Organization\Application\Command\AddCandidateToOrganization;
 
 use App\Organization\Domain\Entity\Organization;
+use App\Organization\Domain\Enum\OrganizationRole;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -25,12 +26,12 @@ class AddCandidateToOrganizationHandler
 
         $candidate = $this->userRepository->getById($command->addCandidateToOrganizationDTO->candidateId);
 
-        $organization->addCandidate($candidate);
+        $organization->addMember($candidate, OrganizationRole::CANDIDATE);
 
         $this->organizationRepository->save($organization);
 
         $this->logger->info(
-            message: '[AddRecruiterToOrganization] Added user to organization',
+            message: '[AddCandidateToOrganization] Added user to organization',
             context: [
                 'organization_id' => $command->addCandidateToOrganizationDTO->organizationId,
                 'candidate_id' => $command->addCandidateToOrganizationDTO->candidateId,

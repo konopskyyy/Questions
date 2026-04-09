@@ -5,6 +5,7 @@ namespace App\Organization\Domain\Factory;
 use App\Organization\Application\DTO\AddressDTO;
 use App\Organization\Application\DTO\OrganizationDTO;
 use App\Organization\Domain\Entity\Organization;
+use App\Organization\Domain\Enum\OrganizationRole;
 use App\User\Domain\Repository\UserRepositoryInterface;
 
 class OrganizationFactory
@@ -36,7 +37,7 @@ class OrganizationFactory
 
         foreach ($recruiters as $recruiterId) {
             $recruiter = $this->userRepository->getById($recruiterId);
-            $organization->addRecruiter($recruiter);
+            $organization->addMember($recruiter, OrganizationRole::RECRUITER);
         }
 
         return $organization;

@@ -18,7 +18,7 @@ class GetOrganizationIdByUserIdHandler
 
     public function __invoke(GetOrganizationIdByUserIdQuery $query): ?Uuid
     {
-        $organization = $this->organizationRepository->find($query->userId);
+        $organization = $this->organizationRepository->findOrganizationByUserId($query->userId);
 
         return $organization?->getId() ?? null;
     }

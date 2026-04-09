@@ -4,6 +4,7 @@ namespace App\Organization\Application\Command\AddRecruiterToOrganization;
 
 use App\Common\Attribute\AsMessageValidator;
 use App\Common\Exception\ValidationFail;
+use App\Organization\Domain\Enum\OrganizationRole;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -44,15 +45,16 @@ class AddRecruiterToOrganizationValidator
             throw new ValidationFail('User not found');
         }
 
-        if ($organization->getRecruiters()->contains($user)) {
+        if ($organization->hasMember($user)) {
             $this->logger->info(
-                message: '[AddRecruiterToOrganizationCommand] Recruiter is associated with this organization',
+                message: '[AddRecruiterToOrganizationCommand] User is already associated with this organization',
                 context: [
                     'user_id' => $command->addRecruiterToOrganizationDTO->recruiterId,
                     'organization_id' => $command->addRecruiterToOrganizationDTO->organizationId,
+                    'role' => OrganizationRole::RECRUITER->value,
                 ],
             );
-            throw new ValidationFail('Recruiter is associated with this organization');
+            throw new ValidationFail('User is already associated with this organization');
         }
     }
 }

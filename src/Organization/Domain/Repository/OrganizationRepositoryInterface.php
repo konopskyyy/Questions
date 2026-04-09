@@ -3,6 +3,7 @@
 namespace App\Organization\Domain\Repository;
 
 use App\Organization\Domain\Entity\Organization;
+use App\Organization\Domain\Enum\OrganizationRole;
 use Symfony\Component\Uid\Uuid;
 
 interface OrganizationRepositoryInterface
@@ -20,6 +21,8 @@ interface OrganizationRepositoryInterface
     public function findByCandidateId(Uuid $candidateId): ?Organization;
 
     public function findOrganizationByUserId(Uuid $userId): ?Organization;
+
+    public function findByUserIdAndRole(Uuid $userId, OrganizationRole $role): ?Organization;
 
     public function findAllByUserId(Uuid $userId): array;
 }

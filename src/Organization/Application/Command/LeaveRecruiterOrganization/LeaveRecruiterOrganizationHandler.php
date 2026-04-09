@@ -3,6 +3,7 @@
 namespace App\Organization\Application\Command\LeaveRecruiterOrganization;
 
 use App\Organization\Domain\Entity\Organization;
+use App\Organization\Domain\Enum\OrganizationRole;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -25,11 +26,11 @@ class LeaveRecruiterOrganizationHandler
 
         $recruiter = $this->userRepository->getById($command->leaveRecruiterOrganizationDTO->recruiterId);
 
-        $organization->removeRecruiter($recruiter);
+        $organization->removeMember($recruiter, OrganizationRole::RECRUITER);
 
         $this->organizationRepository->save($organization);
 
-        if (0 === $organization->getRecruiters()->count()) {
+        if (0 === $organization->getMemberships()->count()) {
             $this->organizationRepository->remove($organization, true);
         }
 
