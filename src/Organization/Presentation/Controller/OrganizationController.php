@@ -17,10 +17,13 @@ use App\Organization\Application\Command\UpdateOrganization\DTO\UpdateOrganizati
 use App\Organization\Application\Command\UpdateOrganization\UpdateOrganizationCommand;
 use App\Organization\Application\Command\UploadOrganizationLogo\DTO\UploadOrganizationLogoDTO;
 use App\Organization\Application\Command\UploadOrganizationLogo\UploadOrganizationLogoCommand;
+use App\Organization\Application\DTO\FileDTO;
+use App\Organization\Application\Exception\LogoNotFoundException;
 use App\Organization\Application\Exception\OrganizationNotFoundException;
 use App\Organization\Application\Query\GetOrganizationById\GetOrganizationByIdQuery;
 use App\Organization\Application\Query\GetOrganizationByTaxId\GetOrganizationByTaxIdQuery;
 use App\Organization\Application\Query\GetOrganizationCollectionByUserId\GetOrganizationCollectionByUserIdQuery;
+use App\Organization\Application\Query\GetOrganizationLogo\GetOrganizationLogoQuery;
 use App\User\Domain\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -328,6 +331,60 @@ class OrganizationController extends AbstractController
             ],
             status: Response::HTTP_OK
         );
+    }
+
+    #[Route(
+        path: '/api/organization/{organizationId}/logo',
+        name: 'app_api_organization_logo_get',
+        methods: [Request::METHOD_GET],
+    )]
+    public function getOrganizationLogoAction(string $organizationId): Response
+    {
+        if (!Uuid::isValid($organizationId)) {
+            return new JsonResponse(
+                data: 'Invalid id',
+                status: Response::HTTP_BAD_REQUEST,
+            );
+        }
+
+        try {
+            $envelope = $this->queryBus->dispatch(
+                message: new GetOrganizationLogoQuery(
+                    organizationId: Uuid::fromString($organizationId),
+                )
+            );
+
+            /** @var FileDTO $fileDto */
+            $fileDto = $envelope->last(HandledStamp::class)?->getResult();
+        } catch (HandlerFailedException $exception) {
+            $previous = $exception->getPrevious();
+
+            if ($previous instanceof OrganizationNotFoundException) {
+                return new JsonResponse(
+                    data: 'Organization not found',
+                    status: Response::HTTP_NOT_FOUND,
+                );
+            }
+
+            if ($previous instanceof LogoNotFoundException) {
+                return new JsonResponse(
+                    data: 'Logo not found',
+                    status: Response::HTTP_NOT_FOUND,
+                );
+            }
+
+            return new JsonResponse(
+                data: $exception->getMessage(),
+                status: Response::HTTP_BAD_REQUEST,
+            );
+        }
+
+        $response = new Response($fileDto->content);
+        $response->headers->set('Content-Type', $fileDto->mimeType ?: 'image/png');
+        $response->headers->set('Content-Disposition', sprintf('inline; filename="%s"', $fileDto->filename));
+        $response->headers->set('Cache-Control', 'public, max-age=31536000, immutable');
+
+        return $response;
     }
 
     #[Route(path: '/api/organization', name: 'app_api_organization_list', methods: [Request::METHOD_GET])]
