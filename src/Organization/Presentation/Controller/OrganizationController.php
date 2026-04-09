@@ -20,6 +20,7 @@ use App\Organization\Application\Command\UploadOrganizationLogo\UploadOrganizati
 use App\Organization\Application\Exception\OrganizationNotFoundException;
 use App\Organization\Application\Query\GetOrganizationById\GetOrganizationByIdQuery;
 use App\Organization\Application\Query\GetOrganizationByTaxId\GetOrganizationByTaxIdQuery;
+use App\Organization\Application\Query\GetOrganizationCollectionByUserId\GetOrganizationCollectionByUserIdQuery;
 use App\User\Domain\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -325,6 +326,24 @@ class OrganizationController extends AbstractController
             data: [
                 'file_id' => $fileId->toString(),
             ],
+            status: Response::HTTP_OK
+        );
+    }
+
+    #[Route(path: '/api/organization', name: 'app_api_organization_list', methods: [Request::METHOD_GET])]
+    public function getOrganizationListAction(): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $envelope = $this->queryBus->dispatch(
+            message: new GetOrganizationCollectionByUserIdQuery(
+                userId: $user->getId(),
+            )
+        );
+
+        return $this->json(
+            data: $envelope->last(HandledStamp::class)?->getResult(),
             status: Response::HTTP_OK
         );
     }

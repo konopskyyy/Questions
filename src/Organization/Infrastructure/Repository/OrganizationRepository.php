@@ -75,4 +75,16 @@ class OrganizationRepository implements OrganizationRepositoryInterface
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    public function findAllByUserId(Uuid $userId): array
+    {
+        return $this->repository
+            ->createQueryBuilder('organization')
+            ->join('organization.recruiters', 'recruiter')
+            ->where('recruiter.id = :userId')
+            ->setParameter('userId', $userId->toBinary())
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
