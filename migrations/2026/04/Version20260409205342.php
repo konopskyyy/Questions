@@ -44,12 +44,12 @@ final class Version20260409205342 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             INSERT INTO organization_membership (id, organization_id, user_id, role, created_at, updated_at)
-            SELECT UUID_TO_BIN(UUID()), organization_id, recruiters_id, 'recruiter', NOW(), NULL
+            SELECT UNHEX(REPLACE(UUID(), '-', '')), organization_id, recruiters_id, 'recruiter', NOW(), NULL
             FROM organization_recruiters
         SQL);
         $this->addSql(<<<'SQL'
             INSERT INTO organization_membership (id, organization_id, user_id, role, created_at, updated_at)
-            SELECT UUID_TO_BIN(UUID()), oc.organization_id, oc.candidates_id, 'candidate', NOW(), NULL
+            SELECT UNHEX(REPLACE(UUID(), '-', '')), oc.organization_id, oc.candidates_id, 'candidate', NOW(), NULL
             FROM organization_candidates oc
             LEFT JOIN organization_membership om
               ON om.organization_id = oc.organization_id
