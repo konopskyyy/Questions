@@ -44,9 +44,5 @@ class LeaveRecruiterOrganizationValidator
             );
             throw new ValidationFail('User not found');
         }
-
-        if (!$organization->hasMemberWithRole($user, OrganizationRole::RECRUITER)) {
-            throw new ValidationFail('User is not a recruiter in this organization');
-        }
     }
 }
