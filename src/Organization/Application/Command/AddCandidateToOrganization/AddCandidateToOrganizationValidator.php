@@ -4,6 +4,7 @@ namespace App\Organization\Application\Command\AddCandidateToOrganization;
 
 use App\Common\Attribute\AsMessageValidator;
 use App\Common\Exception\ValidationFail;
+use App\Organization\Domain\Enum\OrganizationRole;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -24,7 +25,7 @@ class AddCandidateToOrganizationValidator
 
         if (!$organization) {
             $this->logger->info(
-                message: '[AddRecruiterToOrganizationCommand] Organization not found',
+                message: '[AddCandidateToOrganizationCommand] Organization not found',
                 context: [
                     'organization_id' => $command->addCandidateToOrganizationDTO->organizationId,
                 ],
@@ -36,12 +37,24 @@ class AddCandidateToOrganizationValidator
 
         if (!$user) {
             $this->logger->info(
-                message: '[AddRecruiterToOrganizationCommand] User not found',
+                message: '[AddCandidateToOrganizationCommand] User not found',
                 context: [
                     'user_id' => $command->addCandidateToOrganizationDTO->candidateId,
                 ],
             );
             throw new ValidationFail('User not found');
+        }
+
+        if ($organization->hasMember($user)) {
+            $this->logger->info(
+                message: '[AddCandidateToOrganizationCommand] User is already associated with this organization',
+                context: [
+                    'user_id' => $command->addCandidateToOrganizationDTO->candidateId,
+                    'organization_id' => $command->addCandidateToOrganizationDTO->organizationId,
+                    'role' => OrganizationRole::CANDIDATE->value,
+                ],
+            );
+            throw new ValidationFail('User is already associated with this organization');
         }
     }
 }

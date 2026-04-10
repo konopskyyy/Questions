@@ -3,6 +3,7 @@
 namespace App\Organization\Application\Command\AddRecruiterToOrganization;
 
 use App\Organization\Domain\Entity\Organization;
+use App\Organization\Domain\Enum\OrganizationRole;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -25,7 +26,7 @@ class AddRecruiterToOrganizationHandler
 
         $recruiter = $this->userRepository->getById($command->addRecruiterToOrganizationDTO->recruiterId);
 
-        $organization->addRecruiter($recruiter);
+        $organization->addMember($recruiter, OrganizationRole::RECRUITER);
 
         $this->organizationRepository->save($organization);
 

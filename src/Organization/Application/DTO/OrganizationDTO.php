@@ -6,6 +6,9 @@ use Symfony\Component\Uid\Uuid;
 
 class OrganizationDTO
 {
+    /**
+     * @param list<OrganizationMembershipDTO> $memberships
+     */
     public function __construct(
         public Uuid $id,
         public string $name,
@@ -13,6 +16,7 @@ class OrganizationDTO
         public AddressDTO $address,
         public \DateTimeImmutable $createdAt,
         public ?\DateTimeImmutable $updatedAt,
+        public array $memberships,
     ) {
     }
 
@@ -25,6 +29,7 @@ class OrganizationDTO
             'address' => $this->address,
             'createdAt' => $this->createdAt->format(\DateTimeInterface::ATOM),
             'updatedAt' => $this->updatedAt?->format(\DateTimeInterface::ATOM),
+            'memberships' => $this->memberships,
         ];
     }
 }

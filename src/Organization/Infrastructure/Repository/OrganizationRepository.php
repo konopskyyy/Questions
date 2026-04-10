@@ -3,6 +3,7 @@
 namespace App\Organization\Infrastructure\Repository;
 
 use App\Organization\Domain\Entity\Organization;
+use App\Organization\Domain\Enum\OrganizationRole;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -44,44 +45,49 @@ class OrganizationRepository implements OrganizationRepositoryInterface
 
     public function findByRecruiterId(Uuid $recruiterId): ?Organization
     {
-        return $this->repository->createQueryBuilder('organization')
-            ->join('organization.recruiters', 'recruiter')
-            ->andWhere('recruiter.id = :recruiterId')
-            ->setParameter('recruiterId', $recruiterId->toBinary())
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $this->findByUserIdAndRole($recruiterId, OrganizationRole::RECRUITER);
     }
 
     public function findByCandidateId(Uuid $candidateId): ?Organization
     {
-        return $this->repository->createQueryBuilder('o')
-            ->join('o.candidates', 'c')
-            ->andWhere('c.id = :candidateId')
-            ->setParameter('candidateId', $candidateId->toBinary())
+        return $this->findByUserIdAndRole($candidateId, OrganizationRole::CANDIDATE);
+    }
+
+    public function findOrganizationByUserId(Uuid $userId): ?Organization
+    {
+        return $this->repository
+            ->createQueryBuilder('organization')
+            ->join('organization.memberships', 'membership')
+            ->join('membership.user', 'user')
+            ->andWhere('user.id = :userId')
+            ->setParameter('userId', $userId->toBinary())
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
 
-    public function findOrganizationByUserId(Uuid $userId): ?Organization
+    public function findByUserIdAndRole(Uuid $userId, OrganizationRole $role): ?Organization
     {
-        $qb = $this->repository->createQueryBuilder('organization');
-
-        $qb
-            ->andWhere($qb->expr()->eq('organization.userId', ':userId'))
+        return $this->repository
+            ->createQueryBuilder('organization')
+            ->join('organization.memberships', 'membership')
+            ->join('membership.user', 'user')
+            ->andWhere('user.id = :userId')
+            ->andWhere('membership.role = :role')
             ->setParameter('userId', $userId->toBinary())
+            ->setParameter('role', $role->value)
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
-
-        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function findAllByUserId(Uuid $userId): array
     {
         return $this->repository
             ->createQueryBuilder('organization')
-            ->join('organization.recruiters', 'recruiter')
-            ->where('recruiter.id = :userId')
+            ->join('organization.memberships', 'membership')
+            ->join('membership.user', 'user')
+            ->where('user.id = :userId')
             ->setParameter('userId', $userId->toBinary())
             ->getQuery()
             ->getResult()
