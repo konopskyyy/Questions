@@ -76,6 +76,22 @@ class Organization
         }
 
         $membership->setOrganization($this);
+
+        $user = $membership->getUser();
+        $role = $membership->getRole();
+
+        if ($user) {
+            $existingMembership = $this->findMembershipByUser($user);
+
+            if ($existingMembership && $existingMembership !== $membership) {
+                if ($role) {
+                    $existingMembership->setRole($role);
+                }
+
+                return;
+            }
+        }
+
         $this->memberships->add($membership);
     }
 
@@ -208,11 +224,18 @@ class Organization
         return new ArrayCollection(
             $this->memberships
                 ->filter(
-                    static fn (OrganizationMembership $membership): bool => $membership->getRole() === $role
+                    static fn (OrganizationMembership $membership): bool => null !== $membership->getUser()
+                        && $membership->getRole() === $role
                 )
-                ->map(
-                    static fn (OrganizationMembership $membership): User => $membership->getUser()
-                )
+                ->map(function (OrganizationMembership $membership): User {
+                    $user = $membership->getUser();
+
+                    if (!$user) {
+                        throw new \LogicException('Organization membership must have user assigned.');
+                    }
+
+                    return $user;
+                })
                 ->toArray(),
         );
     }
@@ -220,7 +243,7 @@ class Organization
     private function findMembershipByUser(User $user): ?OrganizationMembership
     {
         $memberships = $this->memberships->filter(
-            static fn (OrganizationMembership $membership): bool => $membership->getUser()->getId() == $user->getId()
+            static fn (OrganizationMembership $membership): bool => $membership->getUser()?->getId() == $user->getId()
         );
 
         $membership = $memberships->first();
@@ -231,7 +254,7 @@ class Organization
     private function findMembershipByUserAndRole(User $user, OrganizationRole $role): ?OrganizationMembership
     {
         $memberships = $this->memberships->filter(
-            static fn (OrganizationMembership $membership): bool => $membership->getUser()->getId() == $user->getId()
+            static fn (OrganizationMembership $membership): bool => $membership->getUser()?->getId() == $user->getId()
                 && $membership->getRole() === $role
         );
 

@@ -110,13 +110,31 @@ final class OrganizationAdmin extends AbstractAdmin
 
     protected function prePersist(object $object): void
     {
+        if (!$object instanceof Organization) {
+            return;
+        }
+
+        $this->sanitizeMemberships($object);
         $this->handleFileUpload($object);
     }
 
     protected function preUpdate(object $object): void
     {
-        /* @var Organization $object */
+        if (!$object instanceof Organization) {
+            return;
+        }
+
+        $this->sanitizeMemberships($object);
         $this->handleFileUpload($object);
+    }
+
+    private function sanitizeMemberships(Organization $organization): void
+    {
+        foreach ($organization->getMemberships()->toArray() as $membership) {
+            if (null === $membership->getUser() || null === $membership->getRole()) {
+                $organization->removeMembership($membership);
+            }
+        }
     }
 
     private function handleFileUpload(object $organization): void
