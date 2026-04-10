@@ -28,7 +28,7 @@ class GetOrganizationCollectionByUserIdHandler
 
         /** @var Organization $organization */
         foreach ($organizations as $organization) {
-            $organizationsDtoCollection->add($this->organizationFactory->createDto($organization));
+            $organizationsDtoCollection->add($this->organizationFactory->createDtoForUser($organization, $query->userId));
         }
 
         return $organizationsDtoCollection;

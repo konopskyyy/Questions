@@ -9,6 +9,7 @@ use App\Organization\Domain\Entity\Organization;
 use App\Organization\Domain\Entity\OrganizationMembership;
 use App\Organization\Domain\Enum\OrganizationRole;
 use App\User\Domain\Repository\UserRepositoryInterface;
+use Symfony\Component\Uid\Uuid;
 
 class OrganizationFactory
 {
@@ -47,18 +48,32 @@ class OrganizationFactory
 
     public function createDto(Organization $organization): OrganizationDTO
     {
+        return $this->createDtoWithMembershipFilter($organization);
+    }
+
+    public function createDtoForUser(Organization $organization, Uuid $userId): OrganizationDTO
+    {
+        return $this->createDtoWithMembershipFilter($organization, $userId);
+    }
+
+    private function createDtoWithMembershipFilter(Organization $organization, ?Uuid $userId = null): OrganizationDTO
+    {
         /** @var list<OrganizationMembershipDTO> $memberships */
         $memberships = $organization->getMemberships()
+            ->filter(
+                static fn (OrganizationMembership $membership): bool => null === $userId
+                    || $membership->getUser()->getId() == $userId
+            )
             ->map(function (OrganizationMembership $membership): OrganizationMembershipDTO {
                 $user = $membership->getUser();
-                $userId = $user->getId();
+                $membershipUserId = $user->getId();
 
-                if (!$userId) {
+                if (!$membershipUserId) {
                     throw new \LogicException('Organization membership user must have an id.');
                 }
 
                 return new OrganizationMembershipDTO(
-                    userId: $userId,
+                    userId: $membershipUserId,
                     email: $user->getEmail() ?? 'empty',
                     role: $membership->getRole(),
                 );
