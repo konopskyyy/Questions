@@ -4,7 +4,6 @@ namespace App\Organization\Application\Command\LeaveRecruiterOrganization;
 
 use App\Common\Attribute\AsMessageValidator;
 use App\Common\Exception\ValidationFail;
-use App\Organization\Domain\Enum\OrganizationRole;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -43,10 +42,6 @@ class LeaveRecruiterOrganizationValidator
                 ],
             );
             throw new ValidationFail('User not found');
-        }
-
-        if (!$organization->hasMemberWithRole($user, OrganizationRole::RECRUITER)) {
-            throw new ValidationFail('User is not a recruiter in this organization');
         }
     }
 }
