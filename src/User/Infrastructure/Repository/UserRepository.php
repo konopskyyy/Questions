@@ -52,7 +52,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function isUserInAnotherOrganization(User $user): bool
     {
-        $sql = 'SELECT COUNT(*) as membershipCount FROM organization_membership WHERE user_id = UUID_TO_BIN(:user_id)';
+        $sql = 'SELECT COUNT(*) as membershipCount FROM organization_membership WHERE user_id = :user_id';
 
         /** @var array $result */
         $result = $this
@@ -61,7 +61,7 @@ class UserRepository implements UserRepositoryInterface
             ->fetchAssociative(
                 query: $sql,
                 params: [
-                    'user_id' => $user->getId(),
+                    'user_id' => $user->getId()?->toBinary(),
                 ],
             );
 
