@@ -50,12 +50,8 @@ class OrganizationMembership
         return $this->id;
     }
 
-    public function getOrganization(): Organization
+    public function getOrganization(): ?Organization
     {
-        if (!$this->organization) {
-            throw new \LogicException('Organization membership has no organization assigned.');
-        }
-
         return $this->organization;
     }
 
@@ -66,12 +62,8 @@ class OrganizationMembership
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
-        if (!$this->user) {
-            throw new \LogicException('Organization membership has no user assigned.');
-        }
-
         return $this->user;
     }
 
@@ -82,12 +74,8 @@ class OrganizationMembership
         return $this;
     }
 
-    public function getRole(): OrganizationRole
+    public function getRole(): ?OrganizationRole
     {
-        if (!$this->role) {
-            throw new \LogicException('Organization membership has no role assigned.');
-        }
-
         return $this->role;
     }
 

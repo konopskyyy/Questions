@@ -62,10 +62,16 @@ class OrganizationFactory
         $memberships = $organization->getMemberships()
             ->filter(
                 static fn (OrganizationMembership $membership): bool => null === $userId
-                    || $membership->getUser()->getId() == $userId
+                    || $membership->getUser()?->getId() == $userId
             )
             ->map(function (OrganizationMembership $membership): OrganizationMembershipDTO {
                 $user = $membership->getUser();
+                $role = $membership->getRole();
+
+                if (!$user || !$role) {
+                    throw new \LogicException('Organization membership must have user and role assigned.');
+                }
+
                 $membershipUserId = $user->getId();
 
                 if (!$membershipUserId) {
@@ -75,7 +81,7 @@ class OrganizationFactory
                 return new OrganizationMembershipDTO(
                     userId: $membershipUserId,
                     email: $user->getEmail() ?? 'empty',
-                    role: $membership->getRole(),
+                    role: $role,
                 );
             })
             ->toArray();
