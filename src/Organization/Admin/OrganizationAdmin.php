@@ -82,7 +82,7 @@ final class OrganizationAdmin extends AbstractAdmin
                 'required' => false,
                 'label' => 'Rekruterzy',
                 'choice_label' => 'email',
-            ])      
+            ])
             ->add('memberships', CollectionType::class, [
                 'entry_type' => OrganizationMembershipType::class,
                 'allow_add' => true,
