@@ -8,12 +8,14 @@ use App\Organization\Admin\Type\OrganizationMembershipType;
 use App\Organization\Application\Command\UploadOrganizationLogo\DTO\UploadOrganizationLogoDTO;
 use App\Organization\Application\Command\UploadOrganizationLogo\UploadOrganizationLogoCommand;
 use App\Organization\Domain\Entity\Organization;
+use App\User\Domain\User;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -73,6 +75,14 @@ final class OrganizationAdmin extends AbstractAdmin
             ->add('address.city')
             ->add('address.postalCode')
             ->add('address.country')
+            ->add('recruiters', EntityType::class, [
+                'class' => User::class,
+                'multiple' => true,
+                'by_reference' => false,
+                'required' => false,
+                'label' => 'Rekruterzy',
+                'choice_label' => 'email',
+            ])
             ->add('memberships', CollectionType::class, [
                 'entry_type' => OrganizationMembershipType::class,
                 'allow_add' => true,
