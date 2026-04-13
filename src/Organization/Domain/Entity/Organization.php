@@ -2,12 +2,11 @@
 
 namespace App\Organization\Domain\Entity;
 
+use App\Organization\Domain\Enum\OrganizationRole;
 use App\User\Domain\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\PrePersist;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
@@ -20,17 +19,11 @@ class Organization
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private Uuid $id;
 
-    #[ORM\ManyToMany(targetEntity: User::class)]
-    #[ORM\JoinTable(name: 'organization_recruiters')]
-    #[JoinColumn(name: 'organization_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'recruiters_id', referencedColumnName: 'id')]
-    private Collection $recruiters;
-
-    #[ORM\ManyToMany(targetEntity: User::class)]
-    #[ORM\JoinTable(name: 'organization_candidates')]
-    #[JoinColumn(name: 'organization_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'candidates_id', referencedColumnName: 'id')]
-    private Collection $candidates;
+    /**
+     * @var Collection<int, OrganizationMembership>
+     */
+    #[ORM\OneToMany(targetEntity: OrganizationMembership::class, mappedBy: 'organization', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $memberships;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
@@ -39,7 +32,7 @@ class Organization
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToOne(targetEntity: File::class, cascade: ['persist'], orphanRemoval: true)]
-    #[JoinColumn(name: 'logo_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\JoinColumn(name: 'logo_id', referencedColumnName: 'id', nullable: true)]
     private ?File $logo = null;
 
     public function __construct(
@@ -47,14 +40,13 @@ class Organization
         private string $name,
 
         #[ORM\OneToOne(targetEntity: Address::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-        #[JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
+        #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
         private Address $address,
 
         #[ORM\Column(type: 'string', length: 120)]
         private string $taxId,
     ) {
-        $this->recruiters = new ArrayCollection();
-        $this->candidates = new ArrayCollection();
+        $this->memberships = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -69,9 +61,43 @@ class Organization
         return $this;
     }
 
-    public function getRecruiters(): Collection
+    /**
+     * @return Collection<int, OrganizationMembership>
+     */
+    public function getMemberships(): Collection
     {
-        return $this->recruiters;
+        return $this->memberships;
+    }
+
+    public function addMembership(OrganizationMembership $membership): void
+    {
+        if ($this->memberships->contains($membership)) {
+            return;
+        }
+
+        $membership->setOrganization($this);
+
+        $user = $membership->getUser();
+        $role = $membership->getRole();
+
+        if ($user) {
+            $existingMembership = $this->findMembershipByUser($user);
+
+            if ($existingMembership && $existingMembership !== $membership) {
+                if ($role) {
+                    $existingMembership->setRole($role);
+                }
+
+                return;
+            }
+        }
+
+        $this->memberships->add($membership);
+    }
+
+    public function removeMembership(OrganizationMembership $membership): void
+    {
+        $this->memberships->removeElement($membership);
     }
 
     public function getAddress(): Address
@@ -81,7 +107,7 @@ class Organization
 
     public function getCandidates(): Collection
     {
-        return $this->candidates;
+        return $this->getUsersByRole(OrganizationRole::CANDIDATE);
     }
 
     public function getName(): string
@@ -106,38 +132,135 @@ class Organization
 
     public function addCandidate(User $candidate): void
     {
-        if (!$this->candidates->contains($candidate)) {
-            $this->candidates->add($candidate);
-        }
+        $this->addMember($candidate, OrganizationRole::CANDIDATE);
     }
 
     public function removeCandidate(User $candidate): void
     {
-        $this->candidates->removeElement($candidate);
+        $this->removeMember($candidate, OrganizationRole::CANDIDATE);
     }
 
     public function addRecruiter(User $user): void
     {
-        if (!$this->recruiters->contains($user)) {
-            $this->recruiters->add($user);
-        }
+        $this->addMember($user, OrganizationRole::RECRUITER);
     }
 
-    public function setRecruiters(ArrayCollection $recruiters): self
+    public function addOwner(User $user): void
     {
-        $this->recruiters = $recruiters;
-
-        return $this;
+        $this->addMember($user, OrganizationRole::OWNER);
     }
 
     public function removeRecruiter(User $user): void
     {
-        $this->recruiters->removeElement($user);
+        $this->removeMember($user, OrganizationRole::RECRUITER);
     }
 
     public function findRecruiter(User $user)
     {
-        return $this->recruiters->filter(fn (User $recruiter) => $recruiter->getId() === $user->getId());
+        return $this->getRecruiters()->filter(fn (User $recruiter) => $recruiter->getId() === $user->getId());
+    }
+
+    public function hasMember(User $user): bool
+    {
+        return null !== $this->findMembershipByUser($user);
+    }
+
+    public function hasMemberWithRole(User $user, OrganizationRole $role): bool
+    {
+        return null !== $this->findMembershipByUserAndRole($user, $role);
+    }
+
+    public function addMember(User $user, OrganizationRole $role): void
+    {
+        $membership = $this->findMembershipByUser($user);
+
+        if ($membership) {
+            return;
+        }
+
+        $this->addMembership(new OrganizationMembership($this, $user, $role));
+    }
+
+    public function changeMemberRole(User $user, OrganizationRole $role): void
+    {
+        $membership = $this->findMembershipByUser($user);
+
+        if (!$membership) {
+            $this->addMembership(new OrganizationMembership($this, $user, $role));
+
+            return;
+        }
+
+        $membership->setRole($role);
+    }
+
+    public function removeMember(User $user, ?OrganizationRole $role = null): void
+    {
+        $membership = null === $role
+            ? $this->findMembershipByUser($user)
+            : $this->findMembershipByUserAndRole($user, $role);
+
+        if (!$membership) {
+            return;
+        }
+
+        $this->memberships->removeElement($membership);
+    }
+
+    public function hasRole(OrganizationRole $role): bool
+    {
+        return $this->memberships->exists(
+            static fn (int $key, OrganizationMembership $membership): bool => $membership->getRole() === $role
+        );
+    }
+
+    public function getRecruiters(): Collection
+    {
+        return $this->getUsersByRole(OrganizationRole::RECRUITER);
+    }
+
+    private function getUsersByRole(OrganizationRole $role): Collection
+    {
+        return new ArrayCollection(
+            $this->memberships
+                ->filter(
+                    static fn (OrganizationMembership $membership): bool => null !== $membership->getUser()
+                        && $membership->getRole() === $role
+                )
+                ->map(function (OrganizationMembership $membership): User {
+                    $user = $membership->getUser();
+
+                    if (!$user) {
+                        throw new \LogicException('Organization membership must have user assigned.');
+                    }
+
+                    return $user;
+                })
+                ->toArray(),
+        );
+    }
+
+    private function findMembershipByUser(User $user): ?OrganizationMembership
+    {
+        $memberships = $this->memberships->filter(
+            static fn (OrganizationMembership $membership): bool => $membership->getUser()?->getId() == $user->getId()
+        );
+
+        $membership = $memberships->first();
+
+        return false === $membership ? null : $membership;
+    }
+
+    private function findMembershipByUserAndRole(User $user, OrganizationRole $role): ?OrganizationMembership
+    {
+        $memberships = $this->memberships->filter(
+            static fn (OrganizationMembership $membership): bool => $membership->getUser()?->getId() == $user->getId()
+                && $membership->getRole() === $role
+        );
+
+        $membership = $memberships->first();
+
+        return false === $membership ? null : $membership;
     }
 
     public function getTaxId(): string
@@ -173,7 +296,7 @@ class Organization
         return $this;
     }
 
-    #[PrePersist]
+    #[ORM\PrePersist]
     public function preCreate(): void
     {
         $this->createdAt = new \DateTimeImmutable();

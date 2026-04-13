@@ -34,7 +34,7 @@ class CreateOrganizationHandler
             id: $command->userId,
         );
 
-        $organization->addRecruiter(
+        $organization->addOwner(
             user: $user,
         );
 

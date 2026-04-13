@@ -1,0 +1,16 @@
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+
+{% block field %}
+    {% for membership in value %}
+        {% set user = membership.getUser() %}
+        {% set role = membership.getRole() %}
+        {% if user and role %}
+        <p>
+            <a href="{{ path('user_show', {'id': user.getId()}) }}">{{ user.getEmail() }}</a>
+            ({{ role.value }})
+        </p>
+        {% endif %}
+    {% else %}
+        <p>No members</p>
+    {% endfor %}
+{% endblock %}
