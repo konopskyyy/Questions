@@ -25,6 +25,11 @@ final class UserAdmin extends AbstractAdmin
         ;
     }
 
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollectionInterface $collection): void
+    {
+        $collection->add('reset_password', $this->getRouterIdParameter().'/reset-password');
+    }
+
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -37,6 +42,9 @@ final class UserAdmin extends AbstractAdmin
                     'show' => [],
                     'edit' => [],
                     'delete' => [],
+                    'reset_password' => [
+                        'template' => 'admin/user/list__action_reset_password.html.twig',
+                    ],
                 ],
             ]);
     }

@@ -48,7 +48,7 @@ services:
     admin.user:
         class: App\User\Admin\UserAdmin
         tags:
-            - { name: sonata.admin, model_class: App\User\Domain\User, controller: ~, manager_type: orm, group: admin, label: User }
+            - { name: sonata.admin, model_class: App\User\Domain\User, controller: App\User\UserInterface\Controller\Admin\UserAdminController, manager_type: orm, group: admin, label: User }
 
     admin.organization:
         class: App\Organization\Admin\OrganizationAdmin
