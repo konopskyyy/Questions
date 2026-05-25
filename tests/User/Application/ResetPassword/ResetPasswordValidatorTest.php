@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace User\Application\ResetPassword;
 
 use App\User\Application\ResetPassword\ResetPasswordCommand;
-use App\User\Application\ResetPassword\ResetPasswordCommandValidator;
+use App\User\Application\ResetPassword\ResetPasswordValidator;
 use App\User\Domain\User;
 use App\User\Domain\Validation\ValidationContextFactory;
 use App\User\Infrastructure\Repository\UserRepository;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-class ResetPasswordCommandValidatorTest extends TestCase
+class ResetPasswordValidatorTest extends TestCase
 {
     private UserRepository $userRepository;
     private ValidationContextFactory $validationContextFactory;
@@ -29,7 +29,7 @@ class ResetPasswordCommandValidatorTest extends TestCase
         $email = 'nonexistent@example.com';
         $this->userRepository->method('findByEmail')->with($email)->willReturn(null);
 
-        $validator = new ResetPasswordCommandValidator(
+        $validator = new ResetPasswordValidator(
             $this->userRepository,
             $this->validationContextFactory
         );
@@ -47,7 +47,7 @@ class ResetPasswordCommandValidatorTest extends TestCase
         $user = new User();
         $this->userRepository->method('findByEmail')->with($email)->willReturn($user);
 
-        $validator = new ResetPasswordCommandValidator(
+        $validator = new ResetPasswordValidator(
             $this->userRepository,
             $this->validationContextFactory
         );

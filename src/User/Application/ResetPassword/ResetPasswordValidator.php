@@ -10,7 +10,7 @@ use App\User\Domain\Validation\ValidationContextFactory;
 use App\User\Infrastructure\Repository\UserRepository;
 
 #[AsMessageValidator]
-class ResetPasswordCommandValidator
+class ResetPasswordValidator
 {
     public function __construct(
         private readonly UserRepository $userRepository,
