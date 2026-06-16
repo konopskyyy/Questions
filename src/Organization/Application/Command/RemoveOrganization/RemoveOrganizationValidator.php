@@ -3,7 +3,7 @@
 namespace App\Organization\Application\Command\RemoveOrganization;
 
 use App\Common\Attribute\AsMessageValidator;
-use App\Common\Exception\ValidationFail;
+use App\Organization\Application\Exception\OrganizationNotFoundException;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -28,7 +28,7 @@ class RemoveOrganizationValidator
                 ],
             );
 
-            throw new ValidationFail('Organization not found');
+            throw new OrganizationNotFoundException();
         }
     }
 }

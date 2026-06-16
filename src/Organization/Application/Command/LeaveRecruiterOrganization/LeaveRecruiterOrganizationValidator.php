@@ -4,6 +4,7 @@ namespace App\Organization\Application\Command\LeaveRecruiterOrganization;
 
 use App\Common\Attribute\AsMessageValidator;
 use App\Common\Exception\ValidationFail;
+use App\Organization\Application\Exception\OrganizationNotFoundException;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -29,7 +30,7 @@ class LeaveRecruiterOrganizationValidator
                     'organization_id' => $command->leaveRecruiterOrganizationDTO->organizationId,
                 ],
             );
-            throw new ValidationFail('Organization not found');
+            throw new OrganizationNotFoundException();
         }
 
         $user = $this->userRepository->findById($command->leaveRecruiterOrganizationDTO->recruiterId);

@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -70,10 +71,7 @@ class OrganizationController extends AbstractController
 
             $organizationDto = $envelope->last(HandledStamp::class)?->getResult();
         } catch (\Exception|ExceptionInterface $exception) {
-            return new JsonResponse(
-                data: $exception->getMessage(),
-                status: Response::HTTP_BAD_REQUEST,
-            );
+            return $this->createErrorResponse($exception);
         }
 
         return $this->json(
@@ -112,10 +110,7 @@ class OrganizationController extends AbstractController
 
             $organizationDto = $envelope->last(HandledStamp::class)?->getResult();
         } catch (\Exception|ExceptionInterface $exception) {
-            return new JsonResponse(
-                data: $exception->getMessage(),
-                status: Response::HTTP_BAD_REQUEST,
-            );
+            return $this->createErrorResponse($exception);
         }
 
         return $this->json(
@@ -148,14 +143,11 @@ class OrganizationController extends AbstractController
             }
         } catch (OrganizationNotFoundException $exception) {
             return new JsonResponse(
-                data: null,
-                status: Response::HTTP_NO_CONTENT,
+                data: $exception->getMessage(),
+                status: Response::HTTP_NOT_FOUND,
             );
         } catch (\Exception|ExceptionInterface $exception) {
-            return new JsonResponse(
-                data: $exception->getMessage(),
-                status: Response::HTTP_BAD_REQUEST,
-            );
+            return $this->createErrorResponse($exception);
         }
 
         return $this->json(
@@ -181,10 +173,7 @@ class OrganizationController extends AbstractController
                 ),
             );
         } catch (\Exception|ExceptionInterface $exception) {
-            return new JsonResponse(
-                data: $exception->getMessage(),
-                status: Response::HTTP_BAD_REQUEST,
-            );
+            return $this->createErrorResponse($exception);
         }
 
         return new JsonResponse(status: Response::HTTP_NO_CONTENT);
@@ -405,6 +394,25 @@ class OrganizationController extends AbstractController
         return $this->json(
             data: $envelope->last(HandledStamp::class)?->getResult(),
             status: Response::HTTP_OK
+        );
+    }
+
+    private function createErrorResponse(\Throwable $exception): JsonResponse
+    {
+        if ($exception instanceof HandlerFailedException) {
+            $exception = $exception->getPrevious() ?? $exception;
+        }
+
+        if ($exception instanceof HttpExceptionInterface) {
+            return new JsonResponse(
+                data: $exception->getMessage(),
+                status: $exception->getStatusCode(),
+            );
+        }
+
+        return new JsonResponse(
+            data: $exception->getMessage(),
+            status: Response::HTTP_BAD_REQUEST,
         );
     }
 }

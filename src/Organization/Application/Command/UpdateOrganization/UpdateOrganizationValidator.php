@@ -3,7 +3,7 @@
 namespace App\Organization\Application\Command\UpdateOrganization;
 
 use App\Common\Attribute\AsMessageValidator;
-use App\Common\Exception\ValidationFail;
+use App\Organization\Application\Exception\OrganizationNotFoundException;
 use App\Organization\Domain\Repository\OrganizationRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -28,7 +28,7 @@ class UpdateOrganizationValidator
                 ],
             );
 
-            throw new ValidationFail(message: 'Organization not found');
+            throw new OrganizationNotFoundException();
         }
     }
 }
